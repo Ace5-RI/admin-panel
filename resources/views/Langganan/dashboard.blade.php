@@ -20,19 +20,34 @@
 
     <div class="container">
     <div class="total">
-        <p style="margin-left: -230px">Total Klien</p>
-        <img src="{{ asset('img/profile.png') }}" alt="" class="profile">
-
+        <h4>Total Klien</h4>
+        <h1 id="totalClient"></h1>
+        <div class="percentage green" id="clientPercent"></div>
     </div>
-    <div class="total"></div>
-    <div class="total"></div>
-    <div class="total"></div>
 
+    <div class="total">
+        <h4>Total Transaksi</h4>
+        <h1 id="totalTransaction"></h1>
+        <div class="percentage green" id="transactionPercent"></div>
     </div>
+
+    <div class="total">
+        <h4>Klien Aktif</h4>
+        <h1 id="activeClient"></h1>
+        <div class="percentage green" id="activePercent"></div>
+    </div>
+
+    <div class="total">
+        <h4>Klien Nonaktif</h4>
+        <h1 id="inactiveClient"></h1>
+        <div class="percentage red" id="inactivePercent"></div>
+    </div>
+</div>
     </div>
 </div>
 
     
 </div>
+<script src="js/dashboard.js"></script>
 </body>
 </html>

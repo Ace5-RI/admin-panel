@@ -81,3 +81,52 @@ body {
     margin-left: 240px;
     margin-top: -40px;
 }
+
+.title {
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: gray;
+    margin-bottom: 30px;
+}
+
+.container {
+    display: flex;
+    gap: 25px;
+}
+
+.total {
+    width: 220px;
+    height: 130px;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.total:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.total h4 {
+    margin: 0;
+    color: gray;
+    font-weight: 500;
+}
+
+.total h1 {
+    margin: 10px 0 5px 0;
+    font-size: 28px;
+}
+
+.percentage {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.green { color: #2ecc71; }
+.red { color: #e74c3c; }
