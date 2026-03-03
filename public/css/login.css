@@ -1,0 +1,175 @@
+body {
+    
+    background-color: black;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.logo {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+}
+
+.overlay {
+    position: absolute;
+    top: 18%;
+    left: 29%;
+    transform: translate(-50%, -50%);
+    
+    
+
+}
+
+.text {
+    position:fixed;
+    left: 680%;
+    top: -7%;
+    align-items: center;
+    width: 400px;
+    ; 
+}
+
+.posisi{
+    position: inherit;
+    width: 300px;
+    margin-top: -18px;
+    color: #899099;
+    
+}
+
+.kiri{
+    position: inherit;
+    width: 300px;
+    margin-top: -60px;
+    color: white;
+    margin-left: -380px;
+}
+
+.klien{
+    position: inherit;
+    width: 300px;
+    margin-top: 30px;
+    color: white;
+    margin-left: -430px;
+    font-size: 30px;
+    font-family: Arial, sans-serif;
+}
+
+.email{
+    position: inherit;
+    width: 300px;
+    margin-top: 60px;
+    color: black;
+    margin-left: 5px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+}
+
+.input-email{
+    position: inherit;
+    width: 370px;
+    height: 33px;
+    margin-top: 30px;
+    color: black;
+    margin-left: -40px;
+    padding: 10px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.password{
+    position: inherit;
+    width: 300px;
+    margin-top: 180px;
+    color: black;
+    margin-left: 5px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+}
+
+.input-password{
+    position: inherit;
+    width: 370px;
+    height: 33px;
+    margin-top: 30px;
+    color: black;
+    margin-left: -70px;
+    padding: 10px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.select-container{
+    display: flex;
+    gap: 20px;
+    width: 500px;
+}
+
+.select-btn{
+
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid #20b486;
+    background-color: white;
+  text-align: center;
+    font-weight: bold;
+    margin-top: 350px;
+    cursor: pointer;
+    width: 188px;
+    height: 55px;
+    transition: 0.3s;
+}
+
+.select-btn.active{
+    background-color: #20b486;
+    color: white;
+}
+
+.submit-btn{
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid #20b486;
+    background-color: #20b486;
+    color: white ;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+    cursor: pointer;
+    width: 100%;
+    height: 55px;
+    transition: 0.3s;
+}
+
+.txt {
+    position: inherit;
+    width: 300px;
+    margin-top: 310px;
+    color: black;
+    margin-left: 5px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+}
+
+.register {
+    position: inherit;
+    width: 300px;
+    margin-top: 500px;
+    color: black;
+    margin-left: 100px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+}
+
+.tombol {
+    color: green;
+}

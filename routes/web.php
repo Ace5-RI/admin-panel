@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LanggananController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('langganan.login');
 });
 
-Route::resource('/Langganan', LanggananController::class);
+Route::get('/dashboard', function () {
+    return view('langganan.dashboard');
+})->name('dashboard');
