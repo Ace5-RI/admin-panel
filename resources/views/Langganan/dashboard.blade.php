@@ -20,7 +20,8 @@
 
     <div class="container">
     <div class="total">
-        <p style="margin-left: -250px">Total Klien</p>
+        <p style="margin-left: -230px">Total Klien</p>
+        <img src="{{ asset('img/profile.png') }}" alt="" class="profile">
 
     </div>
     <div class="total"></div>
