@@ -21,25 +21,25 @@
     <div class="container">
     <div class="total">
         <h4>Total Klien</h4>
-        <h1 id="totalClient"></h1>
+        <h1 id="totalClient" style="margin-left:-270px"></h1>
         <div class="percentage green" id="clientPercent"></div>
     </div>
 
     <div class="total">
-        <h4>Total Transaksi</h4>
-        <h1 id="totalTransaction"></h1>
+        <h4 style="margin-left: -145px">Total Transaksi</h4>
+        <h1 id="totalTransaction" style="margin-left:-270px"></h1>
         <div class="percentage green" id="transactionPercent"></div>
     </div>
 
     <div class="total">
         <h4>Klien Aktif</h4>
-        <h1 id="activeClient"></h1>
+        <h1 id="activeClient" style="margin-left:-270px"></h1>
         <div class="percentage green" id="activePercent"></div>
     </div>
 
     <div class="total">
-        <h4>Klien Nonaktif</h4>
-        <h1 id="inactiveClient"></h1>
+        <h4 style="margin-left: -145px">Klien Nonaktif</h4>
+        <h1 id="inactiveClient" style="margin-left:-270px"></h1>
         <div class="percentage red" id="inactivePercent"></div>
     </div>
 </div>

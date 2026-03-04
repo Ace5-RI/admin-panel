@@ -93,15 +93,15 @@ body {
 
 .container {
     display: flex;
-    gap: 25px;
+    gap: 35px;
 }
 
 .total {
-    width: 220px;
-    height: 130px;
+    width: 310px;
+    height: 170px;
     background: white;
     border-radius: 15px;
-    padding: 20px;
+    padding: 15px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
     cursor: pointer;
@@ -116,11 +116,15 @@ body {
     margin: 0;
     color: gray;
     font-weight: 500;
+    margin-left: -200px;
+    margin-top: 10px;
+    font-size: 23px;
 }
 
 .total h1 {
     margin: 10px 0 5px 0;
-    font-size: 28px;
+    font-size: 32px;
+
 }
 
 .percentage {
