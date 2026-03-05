@@ -31,3 +31,85 @@ let transactionPercent = 25;
 
 document.getElementById("totalTransaction").innerText = totalTransaction;
 document.getElementById("transactionPercent").innerText = transactionPercent + "%";
+
+const ctx = document.getElementById("userChart");
+
+const chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+        labels: ["User", "Admin"],
+        datasets: [{
+            data: [10, 15], // demo data
+            backgroundColor: "#22c55e",
+            borderRadius: 10,
+            barThickness:250,
+            responsive:true
+        }]
+    },
+    options: {
+        plugins:{
+            legend:{
+                display:false
+            }
+        },
+        layout:{
+ padding:10
+},
+        scales:{
+            y:{
+                beginAtZero:true
+            }
+        }
+    }
+});
+
+setInterval(() => {
+
+    chart.data.datasets[0].data = [
+        Math.floor(Math.random()*20),
+        Math.floor(Math.random()*20)
+    ];
+
+    chart.update();
+
+},10000);
+
+const ctx2 = document.getElementById("activityChart");
+
+const activityChart = new Chart(ctx2, {
+    type: "line",
+    data: {
+        labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","August","Sep","Okt","Nov","Des"],
+        datasets: [{
+            label: "User Activity",
+            data: [5,10,8,15,12,18,15,10,10,30,28,34,1,2,1,2],
+            borderColor: "#3b82f6",
+            backgroundColor: "rgba(59,130,246,0.2)",
+            tension: 0.5,
+            fill: false
+        }]
+    },
+    options: {
+        plugins:{
+            legend:{
+                display:false
+            }
+        },
+        layout:{
+            padding:10
+        },
+        scales:{
+            x:{
+                grid:{
+                    display:false
+                }
+            },
+            y:{
+                beginAtZero:true,
+                grid:{
+                    color:"#eee"
+                }
+            }
+        }
+    }
+});

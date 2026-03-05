@@ -150,10 +150,32 @@ body {
     margin-top: -80px;
 }
 
+.aktif{
+    width: 55px;
+    height: 52px;
+    margin-left: 240px;
+    margin-top: -100px;
+}
+
+.tanggal{
+    width: 55px;
+    height: 52px;
+    margin-left: 240px;
+    margin-top: -100px;
+}
+
+.keuangan{
+    width: 55px;
+    height: 52px;
+    margin-left: 240px;
+    margin-top: -100px;
+}
+
+
 
 
 .table {
-       width: 690px;
+       width: 650px;
     height: 350px;
     background: white;
     border-radius: 15px;
@@ -161,7 +183,13 @@ body {
      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
     margin-left: -20px;
     gap: 10px;
+    padding:20px;
     
+}
+
+#userChart {
+    width:200px;
+    height:100px;
 }
 
 .container2{
@@ -174,6 +202,8 @@ body {
     
 }
 
+
+
 .info {
     width: 1415px;
     height: 150px;
@@ -185,3 +215,4 @@ body {
     gap: 10px;
     background: linear-gradient(to right, #06B6D4 38%, #10B981 100%);;
 }
+

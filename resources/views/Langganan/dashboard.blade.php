@@ -27,32 +27,47 @@
     </div>
 
     <div class="total">
-        <h4 style="margin-left: -145px">Total Transaksi</h4>
+        <h4 style="margin-left: -185px">Klien Aktif</h4>
         <h1 id="totalTransaction" style="margin-left:-270px"></h1>
         <div class="percentage green" id="transactionPercent"></div>
+        <img src="{{ asset('img/upline.png') }}" alt="" class="aktif">
     </div>
 
     <div class="total">
-        <h4>Klien Aktif</h4>
+        <h4 style="margin-left: -145px">Akan Berakhir</h4>
         <h1 id="activeClient" style="margin-left:-270px"></h1>
         <div class="percentage green" id="activePercent" ></div>
+        <img src="{{ asset('img/tanggal.png') }}" alt="" class="tanggal">
         
     </div>
 
     <div class="total">
-        <h4 style="margin-left: -145px">Klien Nonaktif</h4>
+        <h4 style="margin-left: -125px">Total Pendapatan</h4>
         <h1 id="inactiveClient" style="margin-left:-270px"></h1>
         <div class="percentage red" id="inactivePercent"></div>
+        <img src="{{ asset('img/cash.png') }}" alt="" class="keuangan">
     </div>
      
     <div class="container2">
-<div class="table"></div>
-<div class="table"></div>
+<div class="table">
+    <canvas id="userChart"></canvas>
+</div>
+<div class="table">
+    <canvas id="activityChart"></canvas>
 </div>
 
-<div class="container3">
-    <div class="info"></div>
+    
 </div>
+</div>
+
+<div class="container">
+
+    <div class="info">
+        
+    </div>
+
+</div>
+
 
 </div>
 
@@ -63,6 +78,8 @@
 
     
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="js/dashboard.js"></script>
 </body>
 </html>
