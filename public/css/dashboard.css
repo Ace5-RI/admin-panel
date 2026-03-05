@@ -24,6 +24,7 @@ body {
 .title {
     margin-top:14px;
     margin-left: -20px;
+    font-size: 48px;
 }
 
 .logo {
@@ -65,6 +66,12 @@ body {
     
 }
 
+.subtitle {
+    font-size: 18px;
+    margin-left: -19px;
+    margin-top: -3px;
+}
+
 .total:nth-child(2) {
     margin-right: 20px; /* jarak tengah */
 }
@@ -93,7 +100,7 @@ body {
 
 .container {
     display: flex;
-    gap: 35px;
+    gap: 40px;
 }
 
 .total {
@@ -101,7 +108,7 @@ body {
     height: 170px;
     background: white;
     border-radius: 15px;
-    padding: 15px;
+    padding: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
     cursor: pointer;
@@ -114,7 +121,7 @@ body {
 
 .total h4 {
     margin: 0;
-    color: gray;
+    color: black;
     font-weight: 500;
     margin-left: -200px;
     margin-top: 10px;
@@ -128,9 +135,53 @@ body {
 }
 
 .percentage {
-    font-size: 14px;
+    font-size: 20px;
     font-weight: bold;
+    margin-left: -250px;
 }
 
 .green { color: #2ecc71; }
 .red { color: #e74c3c; }
+
+.profile{
+    width: 55px;
+    height: 52px;
+    margin-left: 240px;
+    margin-top: -80px;
+}
+
+
+
+.table {
+       width: 690px;
+    height: 350px;
+    background: white;
+    border-radius: 15px;
+    outline: black solid 1px;
+     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    margin-left: -20px;
+    gap: 10px;
+    
+}
+
+.container2{
+    display: flex;
+    gap: 55px;
+}
+
+.container3 {
+    display: flex
+    
+}
+
+.info {
+    width: 1415px;
+    height: 150px;
+    background: white;
+    border-radius: 15px;
+    outline: black solid 1px;
+     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    margin-left: -20px;
+    gap: 10px;
+    background: linear-gradient(to right, #06B6D4 38%, #10B981 100%);;
+}

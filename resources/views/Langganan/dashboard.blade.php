@@ -16,13 +16,14 @@
 
     <div class="main">
     <h1 class="title">Dashboard</h1>
-    <p  style="margin-left: -18px">Selamat Datang Kembali</p>
+    <p class="subtitle">Selamat Datang Kembali</p>
 
     <div class="container">
     <div class="total">
         <h4>Total Klien</h4>
         <h1 id="totalClient" style="margin-left:-270px"></h1>
         <div class="percentage green" id="clientPercent"></div>
+        <img src="{{ asset('img/profile.png') }}" alt="" class="profile">
     </div>
 
     <div class="total">
@@ -34,7 +35,8 @@
     <div class="total">
         <h4>Klien Aktif</h4>
         <h1 id="activeClient" style="margin-left:-270px"></h1>
-        <div class="percentage green" id="activePercent"></div>
+        <div class="percentage green" id="activePercent" ></div>
+        
     </div>
 
     <div class="total">
@@ -42,8 +44,21 @@
         <h1 id="inactiveClient" style="margin-left:-270px"></h1>
         <div class="percentage red" id="inactivePercent"></div>
     </div>
+     
+    <div class="container2">
+<div class="table"></div>
+<div class="table"></div>
 </div>
+
+<div class="container3">
+    <div class="info"></div>
+</div>
+
+</div>
+
+
     </div>
+   
 </div>
 
     
