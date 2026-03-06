@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,43 +8,56 @@
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
     <title>Document</title>
 </head>
+
 <body>
     <div class="login-container">
-    
-    <img src="{{ asset('img/login.png') }}" alt="Login Image">
-    <div class="overlay">
-        <img src="{{ asset('img/logo.png') }}" class="main-img">
-    <div class="text">
-        <h2>Welcome To Login Page</h2><br>
-        <p style="margin-left: 4px" class="posisi">Silahkan Login Untuk Melanjutkan</p>
-        <h2 class="kiri">Admin Portal</h2>
 
-        <p class="klien">Kelola Klien Dengan Lebih Mudah</p>
-        <p class="email">Email
-        <input type="text" name="email" class="input-email" placeholder="Masukkan Email">
-        </p>
+        <img src="{{ asset('img/login.png') }}" alt="Login Image">
+        <div class="overlay">
+            <img src="{{ asset('img/logo.png') }}" class="main-img">
+            <div class="text">
+                <h2>Welcome To Login Page</h2><br>
+                <p style="margin-left: 4px" class="posisi">Silahkan Login Untuk Melanjutkan</p>
+                <h2 class="kiri">Admin Portal</h2>
 
-     
-        <p class="password">Password
-        <input type="password" name="password" class="input-password" placeholder="Masukkan Password">
-        </p>
+                <hr>
+                @if(session('error'))
+                    <div class="alert alert-danger">
+                        <b>Try Again!</b> {{ session('error') }}
+                    </div>
+                @endif
+                <form action="{{ route('actionlogin') }}" method="post">
+                    @csrf
 
-        <p class="txt">Masuk Sebagai</p>
-
-        <p class="register">Belum Punya Akun <a href="register.html" class="tombol">Register</a></p>
-        <div class="select-container">
-            
-    <button class="select-btn">Admin</button>
-    <button class="select-btn">User</button>
-</div>
-<button type="submit" class="submit-btn">Masuk</button>
-    </div>
+                    <p class="klien">Kelola Klien Dengan Lebih Mudah</p>
+                    <p class="email">Email
+                        <input type="text" name="email" class="input-email" placeholder="Masukkan Email" value="{{ old('email') }} required">
+                        @error('email')
+                        <small style="color: red;">{{ $message }}</small>   
+                        @enderror
+                    </p>
 
 
-    
-       
-    </div>
+                    <p class="password">Password
+                        <input type="password" name="password" class="input-password" placeholder="Masukkan Password" required>
+                    </p>
+                    @error('password')
+                    <small style="color: red;">{{ $message }}</small>
+                    @enderror
+
+                    <p class="txt">Masuk Sebagai</p>
+
+                    <p class="register">Belum Punya Akun <a href="register.html" class="tombol">Register</a></p>
+                    <div class="select-container">
+                        
+                        <button class="select-btn">Admin</button>
+                        <button class="select-btn">User</button>
+                </form>
+
+            </div>
+        </div>
     </div>
     <script src="{{ asset('js/login.js') }}"></script>
 </body>
+
 </html>
