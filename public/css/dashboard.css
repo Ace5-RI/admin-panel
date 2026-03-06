@@ -202,11 +202,16 @@ body {
     
 }
 
-
+.danger{
+    width: 45px;
+    height: 45px;
+    margin-left: 30px;
+    margin-top: 20px;
+}
 
 .info {
     width: 1415px;
-    height: 150px;
+    height: 180px;
     background: white;
     border-radius: 15px;
     outline: black solid 1px;
@@ -216,3 +221,34 @@ body {
     background: linear-gradient(to right, #06B6D4 38%, #10B981 100%);;
 }
 
+.lokasi {
+    color: white;
+    margin-left: 90px;
+    margin-top: -35px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.lokasi1{
+     color: white;
+    margin-left: 35px;
+    margin-top: 30px;
+    font-size: 20px;
+    
+}
+
+.card {
+    margin-top: 30px;
+    width: 650px;
+    height: 500px;
+    border-radius: 20px;
+    background-color: white;
+    outline: black solid 1px;
+    margin-left: -20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.container4{
+    display: flex;
+    gap: 80px;
+}

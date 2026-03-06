@@ -59,12 +59,22 @@
     
 </div>
 </div>
-
-<div class="container">
+<br><br>
+<div class="container3">
 
     <div class="info">
-        
+        <img src="{{ asset('img/Danger.png') }}" alt="" srcset="" class="danger">
+        <p class="lokasi">Perhatian : Langganan Akan Berakhir</p>
+        <p class="lokasi1">Terdapat 2 klien dengan langganan yang akan berakhir dalam 30 hari. Segera hubungi Mereka untuk 
+           <br> perpanjangan</p>
     </div>
+
+</div>
+
+<div class="container4">
+    <div class="card"></div>
+    <div class="card"></div>
+    <div class="card"></div>
 
 </div>
 
