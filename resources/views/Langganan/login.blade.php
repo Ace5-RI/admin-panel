@@ -10,42 +10,44 @@
 </head>
 
 <body>
-    <div class="login-container">
-    
-    <img src="{{ asset('img/login.png') }}" alt="Login Image">
-    <div class="overlay">
-        <img src="{{ asset('img/logo.png') }}" class="main-img">
-    <div class="text">
-        <h2>Welcome To Login Page</h2><br>
-        <p style="margin-left: 4px" class="posisi">Silahkan Login Untuk Melanjutkan</p>
-        <h2 class="kiri">Admin Portal</h2>
+    <div class="wrapper">
 
-        <p class="klien">Kelola Klien Dengan Lebih Mudah</p>
-        <p class="email">Email
-        <input type="text" name="email" class="input-email" placeholder="Masukkan Email">
-        </p>
+    <div class="login-card">
 
-     
-        <p class="password">Password
-        <input type="password" name="password" class="input-password" placeholder="Masukkan Password">
-        </p>
+        <div class="left-panel">
+            <img src="{{ asset('img/logo.png') }}" class="logo">
+            <h2>Admin Portal</h2>
 
-        <p class="txt">Masuk Sebagai</p>
+            <h1>Kelola Klien Dengan<br>Lebih Mudah</h1>
+        </div>
 
-        <p class="register">Belum Punya Akun <a href="register.html" class="tombol">Register</a></p>
-        <div class="select-container">
-            
-    <button class="select-btn">Admin</button>
-    <button class="select-btn">User</button>
+        <div class="right-panel">
+
+            <h2>Welcome To Login Page</h2>
+            <p class="sub">Silahkan Login Untuk Melanjutkan</p>
+
+            <label>Email</label>
+            <input type="text" placeholder="Masukkan Email">
+
+            <label>Password</label>
+            <input type="password" placeholder="Masukkan Password">
+
+            <p class="masuk">Masuk Sebagai</p>
+
+            <div class="select-container">
+                <button class="select-btn">Admin</button>
+                <button class="select-btn">User</button>
+            </div>
+
+            <button class="submit-btn">Masuk</button>
+
+            <p class="register">Belum Punya Akun <a href="#">Register</a></p>
+
+        </div>
+
+    </div>
+
 </div>
-<button type="submit" class="submit-btn">Masuk</button>
-    </div>
-
-
-    
-       
-    </div>
-    </div>
     <script src="{{ asset('js/login.js') }}"></script>
 </body>
 
