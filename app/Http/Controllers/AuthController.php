@@ -1,46 +1,41 @@
 <?php
 
 use App\Http\Controllers\Controller;
+use illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Session;
 
 use illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-   public function index()
-   {
-    
-    return view('Langganan.dashboard');
-   }
+  public function login(Request $request)
+  {
+    if (Auth::check()) {
+        return redirect('langganan.dashboard');
+    }else{
+        return view('langganan.login');
+    }
+  }
 
-   public function create()
-   {
+  public function actionlogin(Request $request)
+  {
+    $data = [
+        'email' => $request->input('email'),
+        'password' => $request->input('password')
+    ];
 
-   }
+    if (Auth::attempt($data)) {
+        return redirect('home');
+    }else{
+        Session::flash('error', 'Email atau Password Salah');
+        return redirect('/');
+    }
+  }
 
-   public function store()
-   {
-
-   }
-
-   public function edit()
-   {
-
-   }
-
-   public function delete()
-   {
-
-   }
-
-
-   public function login(Request $request)
-   {
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
-   }
-
-   
+  public function actionlogout()
+  {
+    Auth::logout();
+    return redirect('/');
+  }
 }
