@@ -41,7 +41,7 @@
 
             <button class="submit-btn">Masuk</button>
 
-            <p class="register">Belum Punya Akun <a href="#">Register</a></p>
+            <p class="register">Belum Punya Akun <a href="#" style="color: green">Register</a></p>
 
         </div>
 
