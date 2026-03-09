@@ -15,7 +15,7 @@ return new class extends Migration
 
             $table->foreignId('client_id')
             ->constrained('clients')
-            ->onDelete('cascede');
+            ->onDelete('cascade');
 
             // Informasi paket langganan
             $table->string('package_name');

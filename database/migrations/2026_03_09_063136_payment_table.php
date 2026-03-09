@@ -20,7 +20,7 @@ return new class extends Migration
 
             $table->foreignId('subscription_id')
             ->nullable()
-            ->constrained('subscriptions')
+            ->constrained('payments')
             ->onDelete('set null');
 
             $table->string('invoice_number')->unique();
@@ -68,6 +68,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropUfExists('Payments');
+        Schema::dropIfExists('payments');
     }
 };
