@@ -97,89 +97,8 @@ input{
     cursor:pointer;
 }
 
-.regis-btn{
-    width:100%;
-    margin-top:18%;
-    padding:15px;
-    border:none;
-    border-radius:12px;
-    background:#20b486;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-}
-
 .register{
     text-align:center;
     margin-top:20px;
    
-}
-
-.login-card{
-    position: relative;
-    overflow: hidden;
-}
-
-.register-panel{
-    position: absolute;
-    top: 0;
-    right: -100%;
-    width: 50%;
-    height: 100%;
-    background: white;
-    padding: 40px;
-    transition: 0.5s;
-}
-
-.register-panelg{
-    position:absolute;
-    top:0;
-    right:-100%;
-    width:50%;
-    height:100%;
-    background:#20b486;
-    padding:40px;
-    transition:0.5s;
-    color:white;
-}
-
-.right-panel{
-    transition: 0.5s;
-    
-}
-
-.login-card.active .right-panel{
-    transform:translateX(-100%);
-}
-
-.login-card.active .register-wrapper{
-    right:0;
-}
-
-
-
-
-
-
-.register-wrapper{
-    position:absolute;
-    top:0;
-    right:-100%;
-    width:100%;
-    height:100%;
-    display:flex;
-    transition:0.5s;
-}
-
-.register-form{
-    width:50%;
-    background:#efefef;
-    padding:50px;
-}
-
-.register-info{
-    width:50%;
-    background:#20b486;
-    color:white;
-    padding:50px;
 }

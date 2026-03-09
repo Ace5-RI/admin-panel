@@ -28,12 +28,12 @@ body {
 }
 
 .logo {
-    width: 350px;
-    height: 250px;
+    width: 250px;
+    height: 180px;
     
     
-    margin-top: -10px;
-    margin-left: 20px;
+    margin-top: 20px;
+    margin-left: 65px;
 }
 
 .gray{
@@ -198,7 +198,7 @@ body {
 }
 
 .container3 {
-    display: flex
+    display: flex;
     
 }
 
@@ -252,3 +252,4 @@ body {
     display: flex;
     gap: 80px;
 }
+
