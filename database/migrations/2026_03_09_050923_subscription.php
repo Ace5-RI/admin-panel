@@ -10,11 +10,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('Subcription', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('client_id')
-            ->constrained('clients')
+            $table->foreignId('subcription_id')
+            ->constrained('subcription')
             ->onDelete('cascade');
 
             // Informasi paket langganan
@@ -38,7 +38,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index('client_id');
+            $table->index('subcription_id');
             $table->index('status');
             $table->index('end_date');
             $table->index(['start_date', 'end_date']);
@@ -51,6 +51,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('subcription');
     }
 };

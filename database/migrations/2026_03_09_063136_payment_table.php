@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('client_id')
-            ->constrained('clients')
+            $table->foreignId('subcription_id')
+            ->constrained('subcription')
             ->onDelete('cascade');
 
-            $table->foreignId('subscription_id')
+            $table->foreignId('payment_id')
             ->nullable()
             ->constrained('payments')
             ->onDelete('set null');
@@ -55,8 +55,8 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index('client_id');
-            $table->index('subscription_id');
+            $table->index('payment_id');
+            $table->index('subcription_id');
             $table->index('status');
             $table->index('payment_date');
             $table->index('invoice_number');           
