@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use function Illuminate\Support\days;
 
 class subscription extends Model
 {
@@ -74,8 +75,43 @@ class subscription extends Model
 
     public function getExpiredSoonAttribute()
     {
-        if ($this->status !== 'active') return false;
+        if ($this->status !== 'active') return 0;
+        if(!$this->end_date) return 0;
+
+        $days = now()->diffInDays($this->end_date, false);
+        return $days > 0 ? $days : 0;
     }
 
+    public function getAboutExpiredAttribute()
+    {
+        return $this->end_date && $this->end_date < now();
+    }
 
+    public function getSoonExpiredAttribute()
+    {
+        if($this->status !== 'active') return false;
+        if(!$this->end_date) return false;
+
+        $daysleft = $this->days_left;
+        return $daysleft > 0 && $daysleft <= 30;
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active')
+        ->where('end_date', '>=', now());
+    }
+
+    public function scopeExpiredSoon($query, $days = 30)
+    {
+        return $query->where('status', 'active')
+        ->where('end_date', '<=', now()->addDays($days))
+        ->where('end_date', '>', now());
+    }
+
+    public function scopeExpired($query)
+    {
+        return $query->where('status', 'active')
+        ->where('end_date', '<', now());
+    }
 }
