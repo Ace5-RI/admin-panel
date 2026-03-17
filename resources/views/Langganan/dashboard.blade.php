@@ -11,7 +11,71 @@
     <div class="panel">
         <img src="{{ asset('img/logos.png') }}" alt="" class="logo">
         <h1>Admin Panel</h1>
-        <p style="margin-top: -20px" class="gray">Manajemen Klien</p>
+        <p>Manajemen Klien</p>
+
+<div class="menu">
+
+<a class="menu-btn {{ request()->is('dashboard') ? 'active' : '' }}" href="/dashboard">
+    <img src="{{ asset('img/menu.png') }}">
+    Dashboard
+</a>
+
+<a class="menu-btn {{ request()->is('klien') ? 'active' : '' }}" href="/klien">
+    <img src="{{ asset('img/klien.png') }}">
+    Klien
+</a>
+
+<a class="menu-btn {{ request()->is('analistik') ? 'active' : '' }}" href="/analistik">
+    <img src="{{ asset('img/analis.png') }}">
+    Analistik
+</a>
+
+<hr class="hr" style="margin-top: 5px">
+
+<a class="menu-btn {{ request()->is('bantuan') ? 'active' : '' }}" href="/help">
+    <img src="{{ asset('img/help.png') }}">
+    Bantuan
+</a>
+<hr class="hr" style="margin-top: 5px">
+
+<div class="user-card">
+
+    <div class="user-icon">
+        A
+    </div>
+
+    <div class="user-info">
+        <div class="user-name" id="userName">
+            Admin User
+        </div>
+
+        <div class="user-role" id="userRole">
+            ADMIN
+        </div>
+
+        <div class="user-email" id="userEmail">
+            admin@adminportal.com
+        </div>
+    </div>
+
+
+
+</div>
+
+
+<button class="menu-lgt menu-bottom2" onclick="window.location.href='/'">
+    <img src="{{ asset('img/Logout.png') }}">
+    Log Out
+</button> 
+
+</div>
+
+
+
+
+
+
+
     </div>
 
     <div class="main">
@@ -21,29 +85,29 @@
     <div class="container">
     <div class="total">
         <h4>Total Klien</h4>
-        <h1 id="totalClient" style="margin-left:-270px"></h1>
+        <h1 id="totalClient"></h1>
         <div class="percentage green" id="clientPercent"></div>
         <img src="{{ asset('img/profile.png') }}" alt="" class="profile">
     </div>
 
     <div class="total">
-        <h4 style="margin-left: -185px">Klien Aktif</h4>
-        <h1 id="totalTransaction" style="margin-left:-270px"></h1>
+        <h4 style=>Klien Aktif</h4>
+        <h1 id="totalTransaction" ></h1>
         <div class="percentage green" id="transactionPercent"></div>
         <img src="{{ asset('img/upline.png') }}" alt="" class="aktif">
     </div>
 
     <div class="total">
-        <h4 style="margin-left: -145px">Akan Berakhir</h4>
-        <h1 id="activeClient" style="margin-left:-270px"></h1>
+        <h4 >Akan Berakhir</h4>
+        <h1 id="activeClient" style=></h1>
         <div class="percentage green" id="activePercent" ></div>
         <img src="{{ asset('img/tanggal.png') }}" alt="" class="tanggal">
         
     </div>
 
     <div class="total">
-        <h4 style="margin-left: -125px">Total Pendapatan</h4>
-        <h1 id="inactiveClient" style="margin-left:-270px"></h1>
+        <h4>Total Pendapatan</h4>
+        <h1 id="inactiveClient" "></h1>
         <div class="percentage red" id="inactivePercent"></div>
         <img src="{{ asset('img/cash.png') }}" alt="" class="keuangan">
     </div>
@@ -72,10 +136,131 @@
 </div>
 
 <div class="container4">
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
+    <div class="card">
 
+        <div class="avatar" id="avatarUser">SN</div>
+
+        <div class="card-header">
+            <h2 id="userName">Siti Nurhaliza</h2>
+            <p id="userCompany">Innovate Solutions</p>
+        </div>
+
+        <div class="days-left">
+            <span id="daysLeft">15 hari lagi</span>
+        </div>
+
+        <div class="card-body">
+
+            <div class="card-info">
+                📧 <span id="userEmail">siti.n@innovate.id</span>
+            </div>
+
+            <div class="card-info">
+                🏢 <span id="userCompany2">Innovate Solutions</span>
+            </div>
+
+            <div class="card-info">
+                📅 <span id="expiredDate">28/3/2026</span>
+            </div>
+
+            <div class="card-info price">
+                📈 <span id="price">Rp 32.000.000</span>
+            </div>
+
+        </div>
+
+        <div class="warning">
+            ⚠️ <span id="warningText">Langganan akan berakhir dalam 15 hari</span>
+        </div>
+
+    </div>
+       <div class="card">
+
+        <div class="avatar" id="avatarUser">SN</div>
+
+        <div class="card-header">
+            <h2 id="userName">Siti Nurhaliza</h2>
+            <p id="userCompany">Innovate Solutions</p>
+        </div>
+
+        <div class="days-left">
+            <span id="daysLeft">15 hari lagi</span>
+        </div>
+
+        <div class="card-body">
+
+            <div class="card-info">
+                📧 <span id="userEmail">siti.n@innovate.id</span>
+            </div>
+
+            <div class="card-info">
+                🏢 <span id="userCompany2">Innovate Solutions</span>
+            </div>
+
+            <div class="card-info">
+                📅 <span id="expiredDate">28/3/2026</span>
+            </div>
+
+            <div class="card-info price">
+                📈 <span id="price">Rp 32.000.000</span>
+            </div>
+
+        </div>
+
+        <div class="warning">
+            ⚠️ <span id="warningText">Langganan akan berakhir dalam 15 hari</span>
+        </div>
+
+    </div>
+      <div class="card">
+
+        <div class="avatar" id="avatarUser">SN</div>
+
+        <div class="card-header">
+            <h2 id="userName">Siti Nurhaliza</h2>
+            <p id="userCompany">Innovate Solutions</p>
+        </div>
+
+        <div class="days-left">
+            <span id="daysLeft">15 hari lagi</span>
+        </div>
+
+        <div class="card-body">
+
+            <div class="card-info">
+                📧 <span id="userEmail">siti.n@innovate.id</span>
+            </div>
+
+            <div class="card-info">
+                🏢 <span id="userCompany2">Innovate Solutions</span>
+            </div>
+
+            <div class="card-info">
+                📅 <span id="expiredDate">28/3/2026</span>
+            </div>
+
+            <div class="card-info price">
+                📈 <span id="price">Rp 32.000.000</span>
+            </div>
+
+        </div>
+
+        <div class="warning">
+            ⚠️ <span id="warningText">Langganan akan berakhir dalam 15 hari</span>
+        </div>
+
+    </div>
+
+</div>
+
+ 
+
+</div>
+        
+
+
+    </div>
+    
 </div>
 
 
