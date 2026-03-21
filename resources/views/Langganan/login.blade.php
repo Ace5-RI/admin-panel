@@ -36,10 +36,10 @@
             <h2>Welcome To Login Page</h2>
             <p class="sub">Silahkan Login Untuk Melanjutkan</p>
 
-            <label>Email</label>
+            <label style="margin-top: 10%">Email</label>
             <input type="text" placeholder="Masukkan Email">
 
-            <label>Password</label>
+            <label style="margin-top: 5%">Password</label>
             <input type="password" placeholder="Masukkan Password">
 
             <p class="masuk">Masuk Sebagai</p>
@@ -51,12 +51,40 @@
 
             <button class="submit-btn">Masuk</button>
 
-            <p class="register">Belum Punya Akun <a href="#">Register</a></p>
-
-        </div>
+            <p class="register">Belum Punya Akun <a href="#" id="showRegister" style="color: green">Register</a>
+</p>
 
     </div>
+    <div class="register-wrapper">
 
+    <div class="register-form">
+        <h2>Register Account</h2>
+        <p class="sub">Silahkan buat akun baru</p>
+
+        <label style="margin-top: 10%">Username</label>
+        <input type="text" placeholder="Masukkan Username">
+
+        <label>Email</label>
+        <input type="text" placeholder="Masukkan Email">
+
+        <label>Password</label>
+        <input type="password" placeholder="Masukkan Password">
+
+        <button class="regis-btn">Register</button>
+
+       
+            
+           <p class="register">Sudah punya akun <a href="#" id="showLogin" style="color: green">login</a>
+        
+    </div>
+
+    <div class="register-info">
+        <h2>Welcome!</h2>
+        <p>Silahkan buat akun untuk menggunakan sistem</p>
+    </div>
+
+</div>
+    
 </div>
     <script src="{{ asset('js/login.js') }}"></script>
 </body>

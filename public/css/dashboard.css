@@ -4,6 +4,18 @@ body {
     padding: 0;
 }
 
+*{
+    box-sizing: border-box;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .panel {
     position: fixed;
     left: 0;
@@ -15,240 +27,419 @@ body {
     padding: 20px;
 }
 
-.main {
-    margin-left: 460px; /* JARAK dari sidebar */
-    padding: 20px;
-    
+.menu{
+    margin-top: 310px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-decoration: none;
 }
 
-.title {
-    margin-top:14px;
-    margin-left: -20px;
-    font-size: 48px;
+.menu-btn{
+    width: 350px;
+    height: 70px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding-left: 20px;
+    font-size: 18px;
+}
+
+.menu-lgt{
+    width: 350px;
+    height: 70px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding-left: 20px;
+    font-size: 18px;
+}
+
+.hr {
+    width:350px;
+    height: 0.5px;
+    outline-color: gray;
+}
+
+.menu-bottom{
+    margin-top: -10px;
+}
+
+.menu-bottom2{
+    margin-top: 30px;
+}
+
+/* warna saat aktif */
+.menu-btn.active {
+    background-color: #1fb381;
+}
+
+
+
+.menu-btn:hover{
+    background-color:#18a374;
+}
+
+
+
+
+
+.menu-lgt:hover{
+    background-color:red;
+}
+
+.panel h1 {
+    position: absolute;
+    top: 210px;
+}
+
+.panel p {
+    position: absolute;
+    top: 260px;
 }
 
 .logo {
-    width: 350px;
-    height: 250px;
-    
-    
-    margin-top: -10px;
-    margin-left: 20px;
+    position: absolute;
+    width: 250px;
+    height: 180px;
+    top: 25px;
+    left: 65px;
 }
 
 .gray{
     color: gray;
 }
 
-.container {
-    display: flex;
-    gap: 20px;
-    margin-top: 20px;
-    flex-wrap: wrap;
-    gap: 40px;
-}
+/* MAIN */
 
-.total {
-    width: 330px;
-    height: 180px;
-    background: white;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    
-    align-items: center;
-    margin-top: 20px;
-    margin-left: -18px;
-    outline: black solid 1px;
-    padding: 3px;
-    transition: all 0.3s ease; /* biar smooth */
-    cursor: pointer;
-    
-}
-
-.subtitle {
-    font-size: 18px;
-    margin-left: -19px;
-    margin-top: -3px;
-}
-
-.total:nth-child(2) {
-    margin-right: 20px; /* jarak tengah */
-}
-
-.total:hover {
-    transform: translateY(-8px); /* naik dikit */
-    box-shadow: 0 20px 25px rgba(0,0,0,0.20); /* bayangan */
-  
-}
-
-.profile{
-    width: 55px;
-    height: 52px;
-    margin-left: 240px;
-    margin-top: -40px;
+.main{
+    margin-left:400px;
+    padding:30px;
+    width:calc(100% - 400px);
+    max-width:1600px;
 }
 
 .title {
-    margin-bottom: 5px;
+    font-size: 48px;
+    margin-bottom:5px;
 }
 
 .subtitle {
     color: gray;
-    margin-bottom: 30px;
+    font-size:18px;
+    margin-bottom:30px;
 }
 
-.container {
-    display: flex;
-    gap: 40px;
+/* CARD CLIENT */
+
+.container{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+    justify-content:center;
 }
 
-.total {
-    width: 310px;
-    height: 170px;
-    background: white;
-    border-radius: 15px;
-    padding: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
+.total{
+    flex:1 1 250px;
+    max-width:400px;
+    height:200px;
 
-.total:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-}
-
-.total h4 {
-    margin: 0;
-    color: black;
-    font-weight: 500;
-    margin-left: -200px;
-    margin-top: 10px;
-    font-size: 23px;
-}
-
-.total h1 {
-    margin: 10px 0 5px 0;
-    font-size: 32px;
-
-}
-
-.percentage {
-    font-size: 20px;
-    font-weight: bold;
-    margin-left: -250px;
-}
-
-.green { color: #2ecc71; }
-.red { color: #e74c3c; }
-
-.profile{
-    width: 55px;
-    height: 52px;
-    margin-left: 240px;
-    margin-top: -80px;
-}
-
-.aktif{
-    width: 55px;
-    height: 52px;
-    margin-left: 240px;
-    margin-top: -100px;
-}
-
-.tanggal{
-    width: 55px;
-    height: 52px;
-    margin-left: 240px;
-    margin-top: -100px;
-}
-
-.keuangan{
-    width: 55px;
-    height: 52px;
-    margin-left: 240px;
-    margin-top: -100px;
-}
-
-
-
-
-.table {
-       width: 650px;
-    height: 350px;
-    background: white;
-    border-radius: 15px;
-    outline: black solid 1px;
-     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    margin-left: -20px;
-    gap: 10px;
+    background:white;
+    border-radius:15px;
     padding:20px;
+    position:relative;
+    outline:black solid 1px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    transition: 0.3s;
     
 }
 
-#userChart {
-    width:200px;
-    height:100px;
+.avatar-lgt {
+        position:absolute;
+    top:690px;
+    left:25px;
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:#10B981;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
 }
 
-.container2{
+.user-card{
     display: flex;
-    gap: 55px;
+    align-items: center;
+    background: #111;
+    padding: 15px;
+    border-radius: 12px;
+    width: 260px;
 }
 
-.container3 {
-    display: flex
+.user-icon{
+    width: 40px;
+    height: 40px;
+    background: #10b981;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.user-name{
+    color: white;
+    font-weight: bold;
+}
+
+.user-role{
+    color: #22c55e;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.user-email{
+    color: #aaa;
+    font-size: 13px;
+}
+
+
+.total:hover{
+    transform: translateY(-8px);
+    box-shadow:0 15px 30px rgba(0,0,0,0.15);
     
+}
+
+.total h4{
+    margin:0;
+    font-size:23px;
+    font-weight:500;
+}
+
+.total h1{
+    margin:10px 0;
+    font-size:32px;
+}
+
+.percentage{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.green{color:#2ecc71;}
+.red{color:#e74c3c;}
+
+/* ICON CARD */
+
+.profile,
+.aktif,
+.tanggal,
+.keuangan{
+    position:absolute;
+    right:20px;
+    top:20px;
+    width:55px;
+    height:52px;
+}
+
+/* CHART */
+
+
+   .container2{
+    width:100%;
+    display:flex;
+    gap:40px;
+    margin-top:30px;
+    flex-wrap:wrap;
+}
+
+
+.table{
+    flex:1 1 500px;
+    height:350px;
+    background:white;
+    border-radius:15px;
+    outline:black solid 1px;
+    padding:20px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+canvas{
+    width:100% !important;
+    height:100% !important;
+}
+
+/* INFO */
+
+.container3{
+    margin-top:40px;
+}
+
+.info{
+    width:100%;
+    height:180px;
+    border-radius:15px;
+    outline:black solid 1px;
+    padding:20px;
+    background: linear-gradient(to right,#06B6D4 38%,#10B981 100%);
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
 }
 
 .danger{
-    width: 45px;
-    height: 45px;
-    margin-left: 30px;
-    margin-top: 20px;
+    width:45px;
+    height:45px;
 }
 
-.info {
-    width: 1415px;
-    height: 180px;
-    background: white;
-    border-radius: 15px;
-    outline: black solid 1px;
-     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    margin-left: -20px;
-    gap: 10px;
-    background: linear-gradient(to right, #06B6D4 38%, #10B981 100%);;
-}
-
-.lokasi {
-    color: white;
-    margin-left: 90px;
-    margin-top: -35px;
-    font-size: 20px;
-    font-weight: bold;
+.lokasi{
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+    margin-left:60px;
+    margin-top:-40px;
 }
 
 .lokasi1{
-     color: white;
-    margin-left: 35px;
-    margin-top: 30px;
-    font-size: 20px;
-    
+    color:white;
+    font-size:20px;
+    margin-left:35px;
+    margin-top:20px;
 }
 
-.card {
-    margin-top: 30px;
-    width: 650px;
-    height: 500px;
-    border-radius: 20px;
-    background-color: white;
-    outline: black solid 1px;
-    margin-left: -20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-}
+/* CARD BAWAH */
 
 .container4{
-    display: flex;
-    gap: 80px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit, 400px);
+    gap:89px;
+    margin-top:40px;
+    justify-content:center;
+    margin-left: -70px;
 }
+
+.card{
+    width:465px;
+    height: 500px;
+    position: relative;
+    background:white;
+    border-radius:20px;
+    outline:black solid 1px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    padding-bottom:20px;
+}
+
+.avatar{
+    position:absolute;
+    top:30px;
+    left:25px;
+    width:62px;
+    height:65px;
+    border-radius:50%;
+    background:#10B981;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:22px;
+    font-weight:bold;
+}
+
+
+@media (max-width:1200px){
+
+.panel{
+    width:260px;
+}
+
+.main{
+    margin-left:260px;
+    width:calc(100% - 260px);
+}
+
+
+
+}
+
+@media (max-width:768px){
+
+.panel{
+    position:relative;
+    width:100%;
+    height:auto;
+}
+
+.main{
+    margin-left:0;
+    width:100%;
+}
+
+}
+
+.card-header{
+    margin-left:110px;
+    margin-top:30px;
+}
+
+.card-header h2{
+    margin:0;
+}
+
+.card-header p{
+    margin:0;
+    color:gray;
+}
+
+.days-left{
+    position:absolute;
+    right:20px;
+    top:30px;
+    background:#c8ecf4;
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:14px;
+}
+
+.card-body{
+    margin-top:40px;
+    padding:15px;
+    line-height:35px;
+    margin-left: 20px;
+}
+
+.card-info{
+    margin-bottom:10px;
+    font-size: 18px;
+}
+
+.price{
+    color:green;
+    font-weight:bold;
+}
+
+.warning{
+    margin-top:90px;
+    padding:12px;
+    background:#dff2f7;
+    border-radius:15px;
+    width: 430px;
+    margin-left: 18px;
+    height: 50px;
+}
+
+

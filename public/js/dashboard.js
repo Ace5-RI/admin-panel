@@ -113,3 +113,55 @@ const activityChart = new Chart(ctx2, {
         }
     }
 });
+
+const username = "Wayan Mahendra";
+
+const avatar = document.getElementById("avatarUser");
+
+const initials = username
+  .split(" ")              // pisahkan jadi ["Wayan", "Mahendra"]
+  .map(word => word.charAt(0)) // ambil huruf pertama tiap kata
+  .join("")                // gabung jadi "WM"
+  .toUpperCase();
+
+avatar.textContent = initials;
+
+const buttons = document.querySelectorAll(".menu-btn, .menu-lgt");
+
+buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+
+        buttons.forEach(b => b.classList.remove("active"));
+
+        btn.classList.add("active");
+
+    });
+});
+
+
+
+const user = {
+name: "Siti Nurhaliza",
+company: "Innovate Solutions",
+email: "siti.n@innovate.id",
+expire: "28/3/2026",
+price: "Rp 32.000.000",
+daysLeft: 15
+}
+
+document.getElementById("userName").textContent = user.name
+document.getElementById("userCompany").textContent = user.company
+document.getElementById("userCompany2").textContent = user.company
+document.getElementById("userEmail").textContent = user.email
+document.getElementById("expiredDate").textContent = user.expire
+document.getElementById("price").textContent = user.price
+
+document.getElementById("daysLeft").textContent = user.daysLeft + " hari lagi"
+
+document.getElementById("warningText").textContent =
+"Langganan akan berakhir dalam " + user.daysLeft + " hari"
+
+// avatar huruf pertama
+document.getElementById("avatarUser").textContent =
+user.name.charAt(0) + user.name.split(" ")[1].charAt(0)
+
