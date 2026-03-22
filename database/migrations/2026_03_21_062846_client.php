@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('subscription_end_date');
             $table->enum('status',['aktif','nonaktif','berakhir'])->default('aktif');
-            $table->decimal('revenue',15,2);
+            $table->decimal('revenue',15,2)->default(0);
             $table->text('address')->nullable();
             $table->timestamps();
         });
