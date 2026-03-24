@@ -12,6 +12,9 @@
 </style>
 </head>
 <body>
+    @extends('layouts.app')
+
+    @section('content')
     <div class="panel">
         <img src="{{ asset('img/logos.png') }}" alt="" class="logo">
         <h1>Admin Panel</h1>
@@ -19,24 +22,24 @@
 
 <div class="menu">
 
-<a class="menu-btn {{ request()->is('dashboard') ? 'active' : '' }}" href="/dashboard">
+<a class="menu-btn {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
     <img src="{{ asset('img/menu.png') }}">
     Dashboard
 </a>
 
-<a class="menu-btn {{ request()->is('klien') ? 'active' : '' }}" href="/klien">
+<a class="menu-btn {{ request()->is('klien') ? 'active' : '' }}" href="{{ route('klien') }}">
     <img src="{{ asset('img/klien.png') }}">
     Klien
 </a>
 
-<a class="menu-btn {{ request()->is('analistik') ? 'active' : '' }}" href="/analistik">
+<a class="menu-btn {{ request()->is('analistik') ? 'active' : '' }}" href="{{ route('amalitik') }}">
     <img src="{{ asset('img/analis.png') }}">
     Analistik
 </a>
 
 <hr class="hr" style="margin-top: 5px">
 
-<a class="menu-btn {{ request()->is('bantuan') ? 'active' : '' }}" href="/help">
+<a class="menu-btn {{ request()->is('bantuan') ? 'active' : '' }}" href="{{ route('help') }}">
     <img src="{{ asset('img/help.png') }}">
     Bantuan
 </a>
@@ -45,20 +48,20 @@
 <div class="user-card">
 
     <div class="user-icon">
-        A
+        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
     </div>
 
     <div class="user-info">
         <div class="user-name" id="userName">
-            Admin User
+            {{ Auth::user()->name }}
         </div>
 
         <div class="user-role" id="userRole">
-            ADMIN
+            {{ strtoupper(Auth::user()->role) }}
         </div>
 
         <div class="user-email" id="userEmail">
-            admin@adminportal.com
+            {{Auth::user()->email}}
         </div>
     </div>
 
@@ -66,11 +69,13 @@
 
 </div>
 
-
-<button class="menu-lgt menu-bottom2" onclick="window.location.href='/'">
+<form method="POST" action="{{ route('logout') }}">
+    @csrf
+    <button class="menu-lgt menu-bottom2" onclick="window.location.href='/'">
     <img src="{{ asset('img/Logout.png') }}">
     Log Out
 </button> 
+</form>
 
 </div>
 
