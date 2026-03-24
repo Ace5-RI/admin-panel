@@ -67,7 +67,8 @@ class ClientController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $client = Client::findOrFail($id);
+        return view('langganan.klien',compact('client'));
     }
 
     /**
@@ -75,7 +76,8 @@ class ClientController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $client = Client::findOrFail($id);
+        return view('Langganan.editklien', compact('client'));
     }
 
     /**
@@ -83,7 +85,27 @@ class ClientController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $client = Client::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+           'name' => 'required|string|max:255',
+           'company' => 'required|string|max:255',
+           'email' => 'required|email|unique:clients,email' . $id,
+           'subscription_end_date' => 'required|date',
+           'revenue' => 'required|numeric|min:0',
+           'address' => 'nullable|string',
+           'status'  => 'required|in:active,inactive.nonactive',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+            ->withErrors($validator)
+            ->withInput();
+        }
+
+        $client->update($request->all());
+
+        return redirect()->route('Langganan.klien')->with('success','Klien sukses diperbarui!');
     }
 
     /**
@@ -91,6 +113,9 @@ class ClientController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $client = Client::findOrFail($id);
+        $client->delete();
+
+        return redirect()->route('Langgannan.klien')->with('success','Data klien berhasil dihapus!');
     }
 }
