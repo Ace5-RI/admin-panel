@@ -89,7 +89,9 @@
             <p class="subtitle">Kelola dan Pantau Klien</p>
         </div>
 
-<button id="open-add" class="buttonadd">Tambahkan Klien</button>
+<button class="buttonadd open-add" data-type="tambah">
+    Tambahkan Klien
+</button>
 </div>
 
 <!-- ================= POPUP TAMBAH ================= -->
@@ -141,7 +143,7 @@
 
             <div class="form-action">
                 <button type="submit" class="submit-btn">Tambah Klien</button>
-                <button type="button" class="cancel-btn" id="closeadd">Batal</button>
+                <button class="btn-tutup close">Tutup</button>
             </div>
         </form>
     </div>
@@ -162,22 +164,22 @@
                 <h3 id="lihatNama">Ahmad Rizki</h3>
                 <p id="lihatPerusahaan">TechCorp Indonesia</p>
             </div>
-            <span class="close-x">&times;</span>
+            
         </div>
 
         <!-- STATUS -->
-        <div class="status">Aktif</div>
+        <div class="status aktif2">Aktif</div>
 
         <!-- INFO GRID -->
         <div class="lihat-grid">
             <div class="card">
                 <span>Email</span>
-                <strong id="lihatEmail">-</strong>
+                <strong id="lihatEmail">ahmad.rizki@techcorp.co.id</strong>
             </div>
 
             <div class="card">
                 <span>Perusahaan</span>
-                <strong id="lihatPerusahaan2">-</strong>
+                <strong id="lihatPerusahaan2">TechCorp Indonesia</strong>
             </div>
 
             <div class="card">
@@ -215,27 +217,94 @@
         </div>
 
         <!-- BUTTON -->
-        <button class="btn-tutup close">Tutup</button>
+        <button class="btn-tutup2 close">Tutup</button>
 
     </div>
 </div>
 
 <!-- ================= POPUP EDIT ================= -->
 <div class="add" id="popupEdit">
-    <div class="addklien">
-        <h2>Edit Klien</h2>
-        <p>Form edit nanti di sini</p>
-        <button class="close">Tutup</button>
+    
+        <div class="addklien">
+
+        <div class="modal-header">
+            <h2>Tambah Klien Baru</h2>
+        </div>
+
+        <form id="formKlien">
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" placeholder="Contoh: Ahmad Rizki" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="email@perusahaan.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Perusahaan</label>
+                    <input type="text" placeholder="Nama Perusahaan" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Total Pendapatan (Rp)</label>
+                    <input type="number" value="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Mulai Langganan</label>
+                    <input type="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Berakhir Langganan</label>
+                    <input type="date" required>
+                </div>
+
+            </div>
+
+            <div class="info-box">
+                💡 Tip: Masa langganan standar adalah 1 tahun (365 hari).
+            </div>
+
+            <div class="form-action">
+                <button type="submit" class="simpan-btn">Simpan</button>
+                <button class="btn-tutup close">Tutup</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+  </div>
+        
     </div>
 </div>
 
 <!-- ================= POPUP HAPUS ================= -->
 <div class="add" id="popupHapus">
-    <div class="addklien">
-        <h2>Hapus Klien</h2>
-        <p>Yakin mau hapus?</p>
-        <button>Ya</button>
-        <button class="close">Batal</button>
+    <div class="hapusklien">
+        <br>
+        <div class="header-konfirmasi">
+    <img src="{{ asset('img/peringatan.png') }}" class="peringatan" alt="">
+    <h2>Konfirmasi Hapus</h2>
+</div>
+        <br>
+        <hr>
+        <p style="font-size: 18px">Apakah Anda Yakin Untuk Menghapus Klien Berikut?</p>
+        
+        <p style="font-size: 18px">"Ahmad Rizki"</p>
+            <div class="danger-box">
+                ⚠️Peringatan: Tindakan ini tidak dapat dibatalkan. Semua data terkait klien ini akan dihapus secara permanen.
+            </div>
+        
+        <br>
+        
+
+        <button class="hapusred">Ya, Hapus</button>
+        <button class="close2">Batal</button>
     </div>
 </div>
 
@@ -255,6 +324,14 @@
 <div class="view-buttons">
     <button onclick="showTable()" class="view-button">Tampilan Tabel</button>
     <button onclick="showCard()" class="view-button">Tampilan Kartu</button>
+</div>
+<div class="dropdown">
+  <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+  <div id="myDropdown" class="dropdown-content">
+    <a href="#">Link 1</a>
+    <a href="#">Link 2</a>
+    <a href="#">Link 3</a>
+  </div>
 </div>
 </div>
 <!-- Tampilan tabel -->
@@ -296,8 +373,8 @@
 
                 <tr>
             <td class="klien">
-                <div class="avatar">AR</div>
-                <span>Ahmad Rizki</span>
+                <div class="avatar">HS</div>
+                <span>Hendra Sumanto</span>
             </td>
             <td>TechCorp Indonesia</td>
             <td>ahmad.rizki@techcorp.co.id</td>
@@ -319,8 +396,8 @@
 
                 <tr>
             <td class="klien">
-                <div class="avatar">AR</div>
-                <span>Ahmad Rizki</span>
+                <div class="avatar">MS</div>
+                <span>Made Sukawati</span>
             </td>
             <td>TechCorp Indonesia</td>
             <td>ahmad.rizki@techcorp.co.id</td>
@@ -342,8 +419,8 @@
 
                 <tr>
             <td class="klien">
-                <div class="avatar">AR</div>
-                <span>Ahmad Rizki</span>
+                <div class="avatar">RR</div>
+                <span>Rasyah Rasyid</span>
             </td>
             <td>TechCorp Indonesia</td>
             <td>ahmad.rizki@techcorp.co.id</td>

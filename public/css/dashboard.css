@@ -112,10 +112,10 @@ body {
 
 .logo {
     position: absolute;
-    width: 250px;
-    height: 180px;
-    top: 25px;
-    left: 65px;
+    width: 200px;
+    height: 140px;
+    top: 50px;
+    left: 85px;
 }
 
 .gray{
@@ -433,7 +433,7 @@ canvas{
 }
 
 .warning{
-    margin-top:90px;
+    margin-top:20px;
     padding:12px;
     background:#dff2f7;
     border-radius:15px;
@@ -442,6 +442,23 @@ canvas{
     height: 50px;
 }
 
+.invoice {
+    width: 200px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid black ;
+    margin-left: 53%;
+    margin-top: 40px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    
+}
 
+.invoice-link{
+    text-decoration: none;
+    
+    color: black;
+}
 
 
