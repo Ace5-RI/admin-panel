@@ -117,10 +117,10 @@ body {
 
 .logo {
     position: absolute;
-    width: 200px;
-    height: 140px;
+    width: 180px;
+    height: 120px;
     top: 50px;
-    left: 85px;
+    left: 100px;
 }
 
 .gray{
@@ -221,6 +221,7 @@ body {
 }
 
 .header {
+    margin-top: -90px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -402,31 +403,46 @@ body {
     opacity: 0.8;
 }
 
-
+.hidden {
+    display: none;
+}
 
 .table {
-    width: calc(100% - 450px); /* 430 + margin kanan */
+    width: calc(100% - 450px);
     margin-left: 430px;
+    margin-right: 20px;
     border-collapse: collapse;
     background: white;
     border-radius: 10px;
     overflow: hidden;
     margin-top: 50px;
+    /* HAPUS table-layout */
+}
+
+.table tr {
+    height: 70px;
+}
+
+.table td:nth-child(3) {
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 18px 20px;
+    line-height: 1.5;
+    
 }
 
 .table th {
     text-align: left;
-    padding: 15px;
     font-size: 12px;
     color: #888;
     background: #f9fafb;
+    
+    padding: 15px 20px;
 }
 
-.table td {
-    padding: 15px;
-    border-top: 1px solid #eee;
-    vertical-align: middle !important;
-}
+
 
 /* Avatar + Nama */
 .klien {

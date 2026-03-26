@@ -10,6 +10,21 @@
     <style>
 
 </style>
+@php
+    $user = Auth::user();
+@endphp
+
+<div class="user-icon">
+    {{ strtoupper(substr($user->name ?? 'G', 0, 1)) }}
+</div>
+
+<div class="user-name">
+    {{ $user->name ?? 'Guest User' }}
+</div>
+
+<div class="user-role">
+    {{ strtoupper($user->role ?? 'guest') }}
+</div>
 </head>
 <body>
     @extends('layouts.app')
@@ -32,7 +47,7 @@
     Klien
 </a>
 
-<a class="menu-btn {{ request()->is('analistik') ? 'active' : '' }}" href="{{ route('amalitik') }}">
+<a class="menu-btn {{ request()->is('analitik') ? 'active' : '' }}" href="{{ route('analitik') }}">
     <img src="{{ asset('img/analis.png') }}">
     Analistik
 </a>
@@ -48,33 +63,31 @@
 <div class="user-card">
 
     <div class="user-icon">
-        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+        {{ strtoupper(substr($user->name ?? 'G', 0, 1)) }}
     </div>
 
     <div class="user-info">
-        <div class="user-name" id="userName">
-            {{ Auth::user()->name }}
+        <div class="user-name">
+            {{ $user->name ?? 'Guest User' }}
         </div>
 
-        <div class="user-role" id="userRole">
-            {{ strtoupper(Auth::user()->role) }}
+        <div class="user-role">
+            {{ strtoupper($user->role ?? 'guest') }}
         </div>
 
-        <div class="user-email" id="userEmail">
-            {{Auth::user()->email}}
+        <div class="user-email">
+            {{ $user->email ?? 'guest@email.com' }}
         </div>
     </div>
 
-
-
 </div>
 
-<form method="POST" action="{{ route('logout') }}">
+
     @csrf
-    <button class="menu-lgt menu-bottom2" onclick="window.location.href='/'">
+  <button class="menu-lgt menu-bottom2" onclick="window.location.href='/'">
     <img src="{{ asset('img/Logout.png') }}">
     Log Out
-</button> 
+</button>
 </form>
 
 </div>
@@ -107,32 +120,32 @@
 
                 <div class="form-group">
                     <label>Nama Lengkap</label>
-                    <input type="text" placeholder="Contoh: Ahmad Rizki" required>
+                    <input type="text" id="nama" placeholder="Contoh: Ahmad Rizki" required>
                 </div>
 
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" placeholder="email@perusahaan.com" required>
+                    <input type="email" id="emaik" placeholder="email@perusahaan.com" required>
                 </div>
 
                 <div class="form-group">
                     <label>Perusahaan</label>
-                    <input type="text" placeholder="Nama Perusahaan" required>
+                    <input type="text" id="perusahaan" placeholder="Nama Perusahaan" required>
                 </div>
 
                 <div class="form-group">
                     <label>Total Pendapatan (Rp)</label>
-                    <input type="number" value="0">
+                    <input type="number" id="pendapatan" value="0">
                 </div>
 
                 <div class="form-group">
                     <label>Mulai Langganan</label>
-                    <input type="date" required>
+                    <input type="date" id="mulai" required>
                 </div>
 
                 <div class="form-group">
                     <label>Berakhir Langganan</label>
-                    <input type="date" required>
+                    <input type="date" id="akhir" required>
                 </div>
 
             </div>
@@ -319,23 +332,25 @@
 <br>
 <div class="search">
 
-<input type="text" class="search2" placeholder="Cari Klien Berdasarkan Nama, Email Atau Perusahaan">
+<input type="text" id="searchInput" class="search2" placeholder="Cari Klien Berdasarkan Nama, Email Atau Perusahaan">
 
 <div class="view-buttons">
     <button onclick="showTable()" class="view-button">Tampilan Tabel</button>
     <button onclick="showCard()" class="view-button">Tampilan Kartu</button>
 </div>
 <div class="dropdown">
-  <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+  <button onclick="toggleDropdown()" class="dropbtn">Filter Status</button>
+
   <div id="myDropdown" class="dropdown-content">
-    <a href="#">Link 1</a>
-    <a href="#">Link 2</a>
-    <a href="#">Link 3</a>
+    <a href="#" onclick="filterStatus('all')">Semua</a>
+    <a href="#" onclick="filterStatus('aktif')">Aktif</a>
+    <a href="#" onclick="filterStatus('tidak')">Tidak Aktif</a>
   </div>
 </div>
 </div>
+</div>
 <!-- Tampilan tabel -->
-<table class="table">
+<table class="table" id="tableView">
     <thead>
         <tr>
             <th>KLIEN</th>
@@ -347,7 +362,7 @@
             <th>AKSI</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tableBody">
         <tr>
             <td class="klien">
                 <div class="avatar">AR</div>
@@ -439,7 +454,7 @@
 
 
         </tr>
-    </tbody>
+    </tbody >
 </table>
 
 </div>

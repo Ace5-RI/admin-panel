@@ -1,12 +1,14 @@
+let deleteRow = null;
+
 // ================= VIEW =================
 function showTable(){
-    document.getElementById("tableView").style.display = "block";
-    document.getElementById("cardView").style.display = "none";
+    document.getElementById("tableView").classList.remove("hidden");
+    document.getElementById("cardView").classList.add("hidden");
 }
 
 function showCard(){
-    document.getElementById("tableView").style.display = "none";
-    document.getElementById("cardView").style.display = "block";
+    document.getElementById("tableView").classList.add("hidden");
+    document.getElementById("cardView").classList.remove("hidden");
 }
 
 // ================= POPUP CONTROL =================
@@ -70,7 +72,7 @@ document.querySelectorAll(".open-add").forEach(btn => {
 });
 
 // ================= DROPDOWN =================
-function myFunction() {
+function toggleDropdown() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
 
@@ -81,3 +83,231 @@ window.onclick = function(event) {
         });
     }
 };
+
+function filterStatus(status) {
+    const rows = document.querySelectorAll("#tableView tbody tr");
+
+    rows.forEach(row => {
+        const statusText = row.querySelector(".status").innerText.toLowerCase();
+
+        if (status === "all") {
+            row.style.display = "";
+        } else if (status === "aktif" && statusText.includes("aktif")) {
+            row.style.display = "";
+        } else if (status === "tidak" && !statusText.includes("aktif")) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+}
+
+window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+        document.querySelectorAll(".dropdown-content").forEach(drop => {
+            drop.classList.remove("show");
+        });
+    }
+};
+
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener("keyup", function () {
+    const keyword = this.value.toLowerCase();
+    const rows = document.querySelectorAll("#tableView tbody tr");
+
+    rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+
+        if (text.includes(keyword)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const btnHapus = document.querySelector(".hapusred");
+const btnBatal = document.querySelector(".close2");
+
+btnHapus.addEventListener("click", function () {
+    if (deleteRow) {
+        deleteRow.remove();
+        deleteRow = null;
+    }
+
+    document.getElementById("popupHapus").classList.remove("open");
+});
+
+btnBatal.addEventListener("click", function () {
+    document.getElementById("popupHapus").classList.remove("open");
+});
+
+    const form = document.getElementById("formKlien");
+    const table = document.querySelector("#tableView tbody");
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Ambil semua input
+        const nama = form.querySelector('input[type="text"]').value;
+        const email = form.querySelector('input[type="email"]').value;
+        const perusahaan = form.querySelectorAll('input[type="text"]')[1].value;
+        const pendapatan = form.querySelector('input[type="number"]').value;
+        const mulai = form.querySelectorAll('input[type="date"]')[0].value;
+        const akhir = form.querySelectorAll('input[type="date"]')[1].value;
+
+        // Ambil inisial avatar
+        const inisial = nama.charAt(0).toUpperCase();
+
+        // Format tanggal (biar cantik)
+        const formatTanggal = (tgl) => {
+            const d = new Date(tgl);
+            return d.toLocaleDateString("id-ID", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            });
+        };
+
+        // Format uang
+        const formatRupiah = (angka) => {
+            return "Rp " + Number(angka).toLocaleString("id-ID");
+        };
+
+        // Buat row baru
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td class="klien">
+                <div class="avatar">${inisial}</div>
+                <span>${nama}</span>
+            </td>
+            <td>${perusahaan}</td>
+            <td>${email}</td>
+            <td>${formatTanggal(akhir)}</td>
+            <td>
+                <span class="status aktif">✔ Aktif</span>
+            </td>
+            <td>${formatRupiah(pendapatan)}</td>
+            <td>
+                <div class="aksi">
+                    <span class="icon">👁️</span>
+                    <span class="icon">✏️</span>
+                    <span class="icon delete">🗑️</span>
+                </div>
+            </td>
+        `;
+
+        // Masukin ke tabel
+        table.appendChild(row);
+
+        // Reset form
+        form.reset();
+
+        // Tutup popup
+        document.getElementById("popupTambah").classList.remove("open");
+    });
+
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("formKlien");
+    const table = document.querySelector("#tableView tbody");
+
+    let editRow = null; // buat tracking edit
+
+    // FORMAT
+    const formatTanggal = (tgl) => {
+        const d = new Date(tgl);
+        return d.toLocaleDateString("id-ID", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        });
+    };
+
+    const formatRupiah = (angka) => {
+        return "Rp " + Number(angka).toLocaleString("id-ID");
+    };
+
+    // SUBMIT FORM
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const nama = document.getElementById("nama").value;
+        const email = document.getElementById("email").value;
+        const perusahaan = document.getElementById("perusahaan").value;
+        const pendapatan = document.getElementById("pendapatan").value;
+        const akhir = document.getElementById("akhir").value;
+
+        const inisial = nama.charAt(0).toUpperCase();
+
+        // kalau lagi edit
+        if (editRow) {
+            editRow.innerHTML = buatRowHTML(nama, perusahaan, email, akhir, pendapatan, inisial);
+            editRow = null;
+        } else {
+            const row = document.createElement("tr");
+            row.innerHTML = buatRowHTML(nama, perusahaan, email, akhir, pendapatan, inisial);
+            table.appendChild(row);
+        }
+
+        form.reset();
+        document.getElementById("popupTambah").classList.remove("open");
+    });
+
+    // TEMPLATE ROW
+    function buatRowHTML(nama, perusahaan, email, akhir, pendapatan, inisial) {
+        return `
+            <td class="klien">
+                <div class="avatar">${inisial}</div>
+                <span>${nama}</span>
+            </td>
+            <td>${perusahaan}</td>
+            <td>${email}</td>
+            <td>${formatTanggal(akhir)}</td>
+            <td><span class="status aktif">✔ Aktif</span></td>
+            <td>${formatRupiah(pendapatan)}</td>
+            <td>
+                <div class="aksi">
+                    <span class="icon lihat">👁️</span>
+                    <span class="icon edit">✏️</span>
+                    <span class="icon delete">🗑️</span>
+                </div>
+            </td>
+        `;
+    }
+
+    // HANDLE DELETE & EDIT (EVENT DELEGATION)
+    table.addEventListener("click", function (e) {
+
+        // DELETE
+       if (e.target.classList.contains("delete")) {
+    deleteRow = e.target.closest("tr");
+
+    // buka popup hapus
+    document.getElementById("popupHapus").classList.add("open");
+}
+
+        // EDIT
+        if (e.target.classList.contains("edit")) {
+            const row = e.target.closest("tr");
+            const td = row.querySelectorAll("td");
+
+            document.getElementById("nama").value = td[0].innerText;
+            document.getElementById("perusahaan").value = td[1].innerText;
+            document.getElementById("email").value = td[2].innerText;
+
+            editRow = row;
+
+            // buka popup
+            document.getElementById("popupTambah").classList.add("open");
+        }
+
+    });
+
+});
