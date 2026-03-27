@@ -6,6 +6,8 @@ use App\Models\User;
 use Session;
 
 use illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator; 
 
 class AuthController extends Controller
 {
@@ -23,6 +25,12 @@ class AuthController extends Controller
     ]);
 
     if(validator()->fails()) {
+      if ($request->expectsJson()) {
+        return response()->json([
+          'success' => false,
+          'message' => $validator->errors()->first(),
+        ], 422);
+      }
       return redirect()->back()->withErrors($validator)->withInput();
     }
 
@@ -33,7 +41,26 @@ class AuthController extends Controller
 
       if ($user->role !== $request->role) {
         Auth::logout();
-        return redirect()->back()->with('error','Role tidak sesuai')->withInput();
+
+        $error = 'Role anda tidak sesuai, silahkan pilih role yang benar!' . strtoupper($user->role);
+
+        if ($request->expectsJson()) {
+          return response()->json([
+            'success' => false,
+            'message' => $error,
+          ], 403);
+        }
+        return redirect()->back()->with('error',$error);
+      }
+
+      if ($request->expectsJson()) {
+        return response()->json([
+          'success' => true,
+          'message' => 'Berhasil login!',
+          'user' => $user,
+          'token' => $user->createToken('auth_token')->plainTextToken,
+          'redirect' => route('dashboard'),
+        ]);
       }
 
       $request->session()->regenerate();
@@ -41,7 +68,15 @@ class AuthController extends Controller
       return redirect()->intended('/dashboard');
     }
 
-    return redirect()->back()->with('error','Email atau password salah!')->withInput();
+    $error = 'Email atau password salah!';
+
+    if ($request->expectsJson()) {
+      return response()->json([
+        'success' => false,
+        'message' => $error,
+      ], 401);
+    }
+    return redirect()->back()->with('error', $error)->withInput();
   }
 
   public function showRegister()
@@ -58,28 +93,64 @@ class AuthController extends Controller
     ]);
 
     if($validator->fails()) {
-      return redirect()->bacl()->withErrors($validator)->withInput();
+      if(validator()->fails()) {
+      if ($request->respectJSon()) {
+        return response()->json([
+        'success' => false,
+        'message' => $validator->errors()->first(),
+        ], 422);
+      }
+    }
+    return redirect()->back()->withErrors($validator)->withInput();
     }
 
     $user = User::create([
       'name' => $request->name,
       'email' => $request->email,
+      'phone_number' => $request->phone_number,
+      'address' => $request->address,
       'password' => Hash::make($request->password),
-      'role' => 'user',
+      'role' => $request->role ?? 'user',
     ]);
 
     Auth::login($user);
+    if ($request->respectJSon()) {
+      return response()->json([
+        'success' => true,
+        'message' => 'Registrasi Sukses!',
+        'user' => $user,
+        'token' => $user->createToken('auth_token')->plainTextToken,
+      ]);
+    }
 
-    return redirect()->intended('/dashboard');
+    return redirect()->route('dashboard')->with('success', 'Selamat Datang!');
+  }
+
+  public function Account(Request $request)
+  {
+    return response()->json([
+      'success' => true,
+      'user' => $request->user()
+    ]);
   }
 
   public function logout(Request $request)
   {
+    if ($request->user() && $request->user()->token()) {
+      $request->user()->currentAccessToken()->delete();
+    }
+
     Auth::logout();
 
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 
+    if ($request->expectsJson()) {
+      return response()->json([
+        'success' => true,
+        'message' => 'Logout Berhasil!',
+      ]);
+    }
     return redirect('/');
   }
 }
