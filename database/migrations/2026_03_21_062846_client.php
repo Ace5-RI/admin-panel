@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('clients',function(Blueprint $table){
             $table->id();
+            $table->string('name');
             $table->string('company');
             $table->string('email')->unique();
+            $table->string('phone_number')->nullable();
             $table->timestamp('subscription_end_date');
             $table->enum('status',['aktif','nonaktif','berakhir'])->default('aktif');
             $table->decimal('revenue',15,2)->default(0);
