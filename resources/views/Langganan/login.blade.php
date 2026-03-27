@@ -36,20 +36,24 @@
             <h2>Welcome To Login Page</h2>
             <p class="sub">Silahkan Login Untuk Melanjutkan</p>
 
-            <label style="margin-top: 10%">Email</label>
-            <input type="text" placeholder="Masukkan Email">
+          <form id="loginForm">
+    <label>Email</label>
+    <input type="text" id="loginEmail" placeholder="Masukkan Email">
 
-            <label style="margin-top: 5%">Password</label>
-            <input type="password" placeholder="Masukkan Password">
+    <label>Password</label>
+    <input type="password" id="loginPassword" placeholder="Masukkan Password">
 
-            <p class="masuk">Masuk Sebagai</p>
 
-            <div class="select-container">
-                <button class="select-btn">Admin</button>
-                <button class="select-btn">User</button>
-            </div>
+     <p class="masuk">Masuk Sebagai</p>
 
-            <button class="submit-btn">Masuk</button>
+    <button type="button" class="select-btn">Admin</button>
+<button type="button" class="select-btn">User</button>
+    <button type="submit" class="submit-btn">Masuk</button>
+</form>
+
+           
+
+            
 
             <p class="register">Belum Punya Akun <a href="#" id="showRegister" style="color: green">Register</a>
 </p>
@@ -57,26 +61,26 @@
     </div>
     <div class="register-wrapper">
 
-    <div class="register-form">
+    <form class="register-form" id="registerForm">
         <h2>Register Account</h2>
         <p class="sub">Silahkan buat akun baru</p>
 
         <label style="margin-top: 10%">Username</label>
-        <input type="text" placeholder="Masukkan Username">
+        <input type="text" id="nama" placeholder="Masukkan Username">
 
         <label>Email</label>
-        <input type="text" placeholder="Masukkan Email">
+        <input type="text" id="regEmail" placeholder="Masukkan Email">
 
         <label>Password</label>
-        <input type="password" placeholder="Masukkan Password">
+        <input type="password" id="regPassword" placeholder="Masukkan Password">
 
-        <button class="regis-btn">Register</button>
+        <button type="submit" class="regis-btn">Register</button>
 
        
             
            <p class="register">Sudah punya akun <a href="#" id="showLogin" style="color: green">login</a>
         
-    </div>
+           </form>
 
     <div class="register-info">
         <h2>Welcome!</h2>

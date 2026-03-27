@@ -72,11 +72,13 @@ input{
 
 .select-btn{
     flex:1;
+    margin: 3px;
     padding:15px;
     border-radius:12px;
     border:2px solid #20b486;
     background:white;
     cursor:pointer;
+    width: 190px;
 }
 
 .select-btn.active{
