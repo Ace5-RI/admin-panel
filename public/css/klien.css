@@ -282,7 +282,7 @@ body {
     width: 900px;        /* lebih lebar */
     max-width: 95%;
 
-    height: 650px;
+    height: 750px;
     max-height: 100vh;     /* lebih tinggi */
     overflow-y: auto;
     
@@ -312,6 +312,7 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 30px;
+    grid-template-columns: repeat(2, 1fr);
 }
 
 .form-group {
@@ -325,6 +326,14 @@ body {
 }
 
 
+
+.full-width {
+    margin-left: 5px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1; /* mengambil semua kolom */
+}
 
 .form-group input {
      

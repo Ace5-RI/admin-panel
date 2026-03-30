@@ -1,34 +1,41 @@
-// 🔴 SEKARANG (pakai localStorage)
-// 🔥 NANTI DIGANTI KE API
+
 async function loginUser(email, password){
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+    try {
+        const response = await fetch("https://..../login", { // ganti URL_TEMANMU sesuai yang dikasih temanmu
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        });
 
-    const user = users.find(u => 
-        u.email === email && 
-        u.password === password
-    );
+        const data = await response.json(); 
+        return data; // server harus ngembaliin { success: true, user: {...} } atau { success: false, message: "..." }
 
-    if(user){
-        return { success: true, user };
-    } else {
-        return { success: false };
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: "Terjadi kesalahan server" };
     }
 }
 
-// 🔴 SEKARANG (pakai localStorage)
-// 🔥 NANTI DIGANTI KE API
+
 async function registerUser(nama, email, password){
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+    try {
+        const response = await fetch("https://....../register", { // ganti URL_TEMANMU sesuai yang dikasih temanmu
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ nama, email, password })
+        });
 
-    const existingUser = users.find(u => u.email === email);
-    if(existingUser){
-        return { success: false, message: "Email sudah terdaftar!" };
+        const data = await response.json(); 
+        return data; // server harus ngembaliin { success: true } atau { success: false, message: "Email sudah terdaftar" }
+
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: "Terjadi kesalahan server" };
     }
-
-    users.push({ nama, email, password });
-    localStorage.setItem("users", JSON.stringify(users));
-
-    return { success: true };
 }
 
 

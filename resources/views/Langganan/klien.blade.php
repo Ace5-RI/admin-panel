@@ -148,6 +148,11 @@
                     <input type="date" id="akhir" required>
                 </div>
 
+            <div class="form-group full-width">
+                <label>Nomer Telepon</label>
+                <input type="text" id="nomer" placeholder="08xxxxxx" required>
+            </div>
+
             </div>
 
             <div class="info-box">
