@@ -57,17 +57,28 @@ buttons.forEach(button => {
 // Tambahkan parameter 'role' dan 'csrfToken'
 async function loginUser(email, password, role){
     try {
-        const response = await fetch("/api/v1/login", {  // ← GANTI URL
+        const response = await fetch("/login", {  // ← GANTI URL
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": csrfToken  // ← TAMBAHKAN CSRF
-            },
+    "Content-Type": "application/json",
+    "Accept": "application/json", // 🔥 TAMBAH INI
+    "X-CSRF-TOKEN": csrfToken
+},
             body: JSON.stringify({ email, password, role })  // ← TAMBAHKAN role
         });
 
-        const data = await response.json(); 
-        return data;
+       const text = await response.text();
+console.log("RESPONSE REGISTER:", text);
+
+let data;
+try {
+    data = JSON.parse(text);
+} catch {
+    return { success: false, message: text };
+}
+
+return data;
+        
 
     } catch (error) {
         console.error(error);
@@ -77,23 +88,23 @@ async function loginUser(email, password, role){
 
 // ==================== MODIFIKASI: Register function ====================
 // Tambahkan parameter 'phone', 'address', dan 'password_confirmation'
-async function registerUser(name, email, password, phone, address){
+async function registerUser(name, email, password, phone){
     try {
-        const response = await fetch("/api/v1/register", {  // ← GANTI URL
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": csrfToken  // ← TAMBAHKAN CSRF
-            },
-            body: JSON.stringify({ 
-                name,           // ← ganti 'nama' jadi 'name'
-                email, 
-                password,
-                password_confirmation: password,  // ← TAMBAHKAN
-                phone,          // ← TAMBAHKAN
-                address         // ← TAMBAHKAN
-            })
-        });
+        const response = await fetch("/register", {
+    method: "POST",
+    headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json", // 🔥 TAMBAH INI
+    "X-CSRF-TOKEN": csrfToken
+},
+    body: JSON.stringify({ 
+        name,
+        email,
+        password,
+        password_confirmation: password,
+        phone_number: phone
+    })
+});
 
         const data = await response.json(); 
         return data;
@@ -152,14 +163,14 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
 document.getElementById("registerForm").addEventListener("submit", async function(e){
     e.preventDefault();
 
-    const nama = document.getElementById("nama").value;
-    const email = document.getElementById("regEmail").value.trim();
-    const password = document.getElementById("regPassword").value.trim();
+    const nama = document.getElementById("nama").value.trim();
+const email = document.getElementById("regEmail").value.trim();
+const password = document.getElementById("regPassword").value.trim();
+const phone = document.getElementById("regPhone").value.trim();
+const passwordConfirm = document.getElementById("regPasswordConfirmation").value.trim();
     
     // ==================== TAMBAHAN: Ambil field tambahan ====================
-    const phone = document.getElementById("regPhone")?.value.trim();
-    const address = document.getElementById("regAddress")?.value.trim();
-    const passwordConfirm = document.getElementById("regPasswordConfirmation")?.value.trim();
+   
 
     // ==================== TAMBAHAN: Validasi ====================
     if (!nama || !email || !password) {
@@ -184,7 +195,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     submitBtn.disabled = true;
 
     // ==================== MODIFIKASI: Panggil register dengan parameter lengkap ====================
-    const res = await registerUser(nama, email, password, phone, address);
+    const res = await registerUser(nama, email, password, phone);
 
     if(res.success){
         alert("Register berhasil! Silakan login.");
@@ -210,3 +221,4 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     submitBtn.innerText = originalText;
     submitBtn.disabled = false;
 });
+
