@@ -1,5 +1,5 @@
 <?php
-
+namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
   public function showLogin()
   {
-    return view('Langgnan.Login');
+    return view('Langganan.Login');
   }
 
   public function login(Request $request)
@@ -24,7 +24,7 @@ class AuthController extends Controller
       'role' => 'required|in:admin,user',
     ]);
 
-    if(validator()->fails()) {
+    if($validator()->fails()) {
       if ($request->expectsJson()) {
         return response()->json([
           'success' => false,
@@ -81,9 +81,11 @@ class AuthController extends Controller
 
   public function showRegister()
   {
-    return view('Langgnan.Register');
+    return view('Langganan.Register');
   }
+  
 
+  
   public function register(Request $request)
   {
     $validator = validator::make($request->all(), [

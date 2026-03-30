@@ -32,24 +32,41 @@
                 </ul>
             </div>
         @endif
+
+        @if (session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
         
             <h2>Welcome To Login Page</h2>
             <p class="sub">Silahkan Login Untuk Melanjutkan</p>
 
-          <form id="loginForm">
+          <form id="loginForm" method="POST" action="{{ route('login') }}">
+                    @csrf  {{-- ⭐ WAJIB: Token CSRF --}}
     <label>Email</label>
-    <input type="text" id="loginEmail" placeholder="Masukkan Email">
+     <input type="email" name="email" id="loginEmail" placeholder="Masukkan Email" value="{{ old('email') }}" required>
+
 
     <label>Password</label>
-    <input type="password" id="loginPassword" placeholder="Masukkan Password">
+   <input type="password" name="password" id="loginPassword" placeholder="Masukkan Password" required>
+
 
 
      <p class="masuk">Masuk Sebagai</p>
 
-    <button type="button" class="select-btn">Admin</button>
+    <div class="role-select">
+                       <button type="button" class="select-btn">Admin</button>
 <button type="button" class="select-btn">User</button>
     <button type="submit" class="submit-btn">Masuk</button>
-</form>
+                    </div>
+                    
+                    
+                </form>
+
+
 
            
 
@@ -61,20 +78,30 @@
     </div>
     <div class="register-wrapper">
 
-    <form class="register-form" id="registerForm">
+                <form class="register-form" id="registerForm" method="POST" action="{{ route('register') }}">
+                @csrf
         <h2>Register Account</h2>
         <p class="sub">Silahkan buat akun baru</p>
 
-        <label style="margin-top: 10%">Username</label>
-        <input type="text" id="nama" placeholder="Masukkan Username">
+        <label>Nama Lengkap</label>
+                <input type="text" name="name" id="nama" placeholder="Masukkan Username" required>
 
-        <label>Email</label>
-        <input type="text" id="regEmail" placeholder="Masukkan Email">
 
+         <label>Email</label>
+                <input type="email" name="email" id="regEmail" placeholder="Masukkan Email" required>
+
+
+          <label>Nomor Telepon</label>
+                <input type="tel" name="phone" id="regPhone" placeholder="081234567890">
+                
         <label>Password</label>
-        <input type="password" id="regPassword" placeholder="Masukkan Password">
+                <input type="password" name="password" id="regPassword" placeholder="Masukkan Password" required>
 
-        <button type="submit" class="regis-btn">Register</button>
+         <label>Konfirmasi Password</label>
+                <input type="password" name="password_confirmation" id="regPasswordConfirmation" placeholder="Konfirmasi Password" required>
+
+                <button type="submit" class="regis-btn">Register</button>
+
 
        
             
