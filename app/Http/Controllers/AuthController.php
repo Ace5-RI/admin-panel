@@ -3,11 +3,11 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Session;
+use Illuminate\Support\Facades\Session;
 
 use illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator; 
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -24,7 +24,7 @@ class AuthController extends Controller
       'role' => 'required|in:admin,user',
     ]);
 
-    if($validator()->fails()) {
+    if($validator->fails()) {
       if ($request->expectsJson()) {
         return response()->json([
           'success' => false,
@@ -95,8 +95,7 @@ class AuthController extends Controller
     ]);
 
     if($validator->fails()) {
-      if(validator()->fails()) {
-      if ($request->respectJSon()) {
+      if ($request->expectsJson()) {
         return response()->json([
         'success' => false,
         'message' => $validator->errors()->first(),
@@ -116,7 +115,7 @@ class AuthController extends Controller
     ]);
 
     Auth::login($user);
-    if ($request->respectJSon()) {
+    if ($request->expectsJSon()) {
       return response()->json([
         'success' => true,
         'message' => 'Registrasi Sukses!',
