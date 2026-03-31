@@ -59,7 +59,7 @@ class subscription extends Model
 
     public function getFormattedPriceAttribute()
     {
-        return 'Rp' . number_format($this->price, 0, ',','.');
+        return 'Rp' . number_format((float)$this->price, 0, ',','.');
     }
 
     public function getDaysLeftAttribute()
