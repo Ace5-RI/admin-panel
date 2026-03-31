@@ -97,20 +97,17 @@ return data;
 // Tambahkan parameter 'phone', 'address', dan 'password_confirmation'
 async function registerUser(name, email, password, phone){
     try {
-        // 🔥 WAJIB TAMBAH DI SINI
-        await fetch('/sanctum/csrf-cookie', {
-            credentials: 'include'
-        });
+        await fetch('/sanctum/csrf-cookie', { credentials: 'include' });
 
-        const response = await fetch("/register", {
-            method: "POST",
-            credentials: "include", // 🔥 WAJIB
+        const res = await fetch('/register', {
+            method: 'POST',
+            credentials: 'include', // WAJIB
             headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "X-CSRF-TOKEN": csrfToken
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 name,
                 email,
                 password,
@@ -119,21 +116,17 @@ async function registerUser(name, email, password, phone){
             })
         });
 
-        const text = await response.text();
-console.log("REGISTER RESPONSE:", text);
+        const text = await res.text();
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch { return { success: false, message: text }; }
 
-let data;
-try {
-    data = JSON.parse(text);
-} catch {
-    return { success: false, message: text };
-}
+        return data;
 
-return data;
-
-    } catch (error) {
-        console.error(error);
-        return { success: false, message: "Terjadi kesalahan server" };
+    } catch (err) {
+        console.error(err);
+        return { success: false, message: "Server error" };
     }
 }
 

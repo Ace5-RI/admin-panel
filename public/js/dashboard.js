@@ -86,7 +86,10 @@ const emailSidebar = document.getElementById("userEmailSidebar");
 function updateSidebar(user){
     nameSidebar.textContent = user.name;
     emailSidebar.textContent = user.email;
-    if(avatarSidebar) avatarSidebar.textContent = user.name.split(" ").map(w=>w[0]).join("").toUpperCase();
+    if(avatarSidebar){
+    const nameParts = user.name.split(" ").slice(0,2); // ambil 2 kata pertama
+    avatarSidebar.textContent = nameParts.map(w => w[0]).join("").toUpperCase();
+}
 }
 
 // 1️⃣ Ambil data dari localStorage (dari login.js)
