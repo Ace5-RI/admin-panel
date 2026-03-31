@@ -165,3 +165,31 @@ document.getElementById("warningText").textContent =
 document.getElementById("avatarUser").textContent =
 user.name.charAt(0) + user.name.split(" ")[1].charAt(0)
 
+document.getElementById("logoutBtn").addEventListener("click", async function(){
+
+    // ambil csrf cookie
+    await fetch('/sanctum/csrf-cookie', {
+        credentials: 'include'
+    });
+
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    const response = await fetch('/logout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'X-CSRF-TOKEN': token,
+            'Accept': 'application/json'
+        }
+    });
+
+    const data = await response.json();
+
+    if(data.success){
+        // hapus semua data user
+        localStorage.clear();
+
+        // redirect ke login
+        window.location.href = "/";
+    }
+});

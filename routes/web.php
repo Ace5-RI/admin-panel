@@ -14,15 +14,26 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function() {
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::post('/dashboard-action', [AuthController::class, 'index']);;
-    Route::post('/client', [ClientController::class, 'index']);
-    Route::post('/klien', [ClientController::class, 'index'])->name('klien.index');
+ Route::get('/dashboard', function () {
+    return view('langganan.dashboard');
+})->middleware('auth')->name('dashboard');
+
+Route::get('/klien', function () {
+    return view('langganan.klien');
+})->middleware('auth')->name('klien');
+
+Route::get('/analitik', function () {
+    return view('langganan.analitik');
+})->middleware('auth')->name('analitik');
+
+Route::get('/help', function () {
+    return view('langganan.help');
+})->middleware('auth')->name('help');
 });
 
 Route::get('/dashboard', function () {
     return view('langganan.dashboard');
-})->name('dashboard');
+})->middleware('auth')->name('dashboard');
 
 
 

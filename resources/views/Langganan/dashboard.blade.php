@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -63,10 +64,10 @@
 </div>
 
 
-<button class="menu-lgt menu-bottom2" onclick="window.location.href='/'">
+<button class="menu-lgt menu-bottom2" id="logoutBtn">
     <img src="{{ asset('img/Logout.png') }}">
     Log Out
-</button> 
+</button>
 
 </div>
 

@@ -57,14 +57,21 @@ buttons.forEach(button => {
 // Tambahkan parameter 'role' dan 'csrfToken'
 async function loginUser(email, password, role){
     try {
-        const response = await fetch("/login", {  // ← GANTI URL
+        // 🔥 TAMBAH DI SINI (PALING ATAS)
+        await fetch('/sanctum/csrf-cookie', {
+            credentials: 'include'
+        });
+
+        // 🔥 BARU LOGIN
+        const response = await fetch("/login", {
             method: "POST",
+            credentials: "include", // 🔥 WAJIB
             headers: {
-    "Content-Type": "application/json",
-    "Accept": "application/json", // 🔥 TAMBAH INI
-    "X-CSRF-TOKEN": csrfToken
-},
-            body: JSON.stringify({ email, password, role })  // ← TAMBAHKAN role
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": csrfToken
+            },
+            body: JSON.stringify({ email, password, role })
         });
 
        const text = await response.text();
@@ -90,21 +97,27 @@ return data;
 // Tambahkan parameter 'phone', 'address', dan 'password_confirmation'
 async function registerUser(name, email, password, phone){
     try {
+        // 🔥 WAJIB TAMBAH DI SINI
+        await fetch('/sanctum/csrf-cookie', {
+            credentials: 'include'
+        });
+
         const response = await fetch("/register", {
-    method: "POST",
-    headers: {
-    "Content-Type": "application/json",
-    "Accept": "application/json", // 🔥 TAMBAH INI
-    "X-CSRF-TOKEN": csrfToken
-},
-    body: JSON.stringify({ 
-        name,
-        email,
-        password,
-        password_confirmation: password,
-        phone_number: phone
-    })
-});
+            method: "POST",
+            credentials: "include", // 🔥 WAJIB
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": csrfToken
+            },
+            body: JSON.stringify({ 
+                name,
+                email,
+                password,
+                password_confirmation: password,
+                phone_number: phone
+            })
+        });
 
         const data = await response.json(); 
         return data;
