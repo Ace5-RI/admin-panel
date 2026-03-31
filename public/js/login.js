@@ -119,8 +119,17 @@ async function registerUser(name, email, password, phone){
             })
         });
 
-        const data = await response.json(); 
-        return data;
+        const text = await response.text();
+console.log("REGISTER RESPONSE:", text);
+
+let data;
+try {
+    data = JSON.parse(text);
+} catch {
+    return { success: false, message: text };
+}
+
+return data;
 
     } catch (error) {
         console.error(error);
@@ -156,8 +165,8 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
         localStorage.setItem("user_email", res.user.email);
         localStorage.setItem("user_role", res.user.role);
         localStorage.setItem("auth_token", res.token);
+        localStorage.setItem("welcome_message", "Selamat datang " + res.user.name);
         
-        alert("Login berhasil! Selamat datang " + res.user.name);
         
         // ==================== TAMBAHAN: Redirect ====================
         window.location.href = "/dashboard";
@@ -211,11 +220,19 @@ const passwordConfirm = document.getElementById("regPasswordConfirmation").value
     const res = await registerUser(nama, email, password, phone);
 
     if(res.success){
-        alert("Register berhasil! Silakan login.");
-        
-        // ==================== TAMBAHAN: Reset form dan kembali ke login ====================
-        this.reset();
-        card.classList.remove("active"); // Kembali ke form login
+
+Swal.fire({
+    title: "Registrasi Berhasil 🎉",
+    text: "Silakan login",
+    icon: "success",
+    timer: 2000,
+    showConfirmButton: false
+}).then(() => {
+    card.classList.remove("active"); // pindah ke login
+});
+
+    // reset form
+    document.getElementById("registerForm").reset(); // Kembali ke form login
         
     } else {
         // ==================== TAMBAHAN: Tampilkan error detail ====================

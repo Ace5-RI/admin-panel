@@ -19,69 +19,53 @@ class AuthController extends Controller
 
     // ================= LOGIN =================
     public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required',
-            'role' => 'required|in:admin,user',
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email',
+        'password' => 'required',
+        'role' => 'required|in:admin,user',
+    ]);
 
     if($validator->fails()) {
-      if ($request->expectsJson()) {
         return response()->json([
-          'success' => false,
-          'message' => $validator->errors()->first(),
+            'success' => false,
+            'message' => $validator->errors()->first(),
         ], 422);
-      }
-      return redirect()->back()->withErrors($validator)->withInput();
     }
 
-        $credentials = $request->only('email', 'password');
+    $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
+    if (Auth::attempt($credentials)) {
+        // 🔹 PENTING: generate session SEBELUM return JSON
+        $request->session()->regenerate();
 
-            // cek role
-            if ($user->role !== $request->role) {
-                Auth::logout();
+        $user = Auth::user();
 
-                $error = 'Role tidak sesuai! Harus: ' . strtoupper($user->role);
-
-                if ($request->expectsJson()) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => $error,
-                    ], 403);
-                }
-
-                return redirect()->back()->with('error', $error);
-            }
-
-            // response JSON
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Login berhasil!',
-                    'user' => $user,
-                    'redirect' => route('dashboard'),
-                ]);
-            }
-
-            $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
-        }
-
-        $error = 'Email atau password salah!';
-
-        if ($request->expectsJson()) {
+        // cek role
+        if ($user->role !== $request->role) {
+            Auth::logout();
             return response()->json([
                 'success' => false,
-                'message' => $error,
-            ], 401);
+                'message' => 'Role tidak sesuai! Harus: ' . strtoupper($user->role),
+            ], 403);
         }
 
-        return redirect()->back()->with('error', $error)->withInput();
+        // ✅ RETURN JSON setelah session valid
+        return response()->json([
+            'success' => true,
+            'message' => 'Login berhasil!',
+            'user' => $user
+        ]);
     }
+
+    return response()->json([
+        'success' => false,
+        'message' => 'Email atau password salah!',
+    ], 401);
+
+
+}
+    
 
     // ================= REGISTER VIEW =================
     public function showRegister()
@@ -91,44 +75,38 @@ class AuthController extends Controller
 
     // ================= REGISTER =================
     public function register(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
-            'phone_number' => 'required',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email',
+        'phone_number' => 'required',
+        'password' => 'required|string|min:6|confirmed',
+    ]);
 
     if($validator->fails()) {
-      if ($request->expectsJson()) {
         return response()->json([
-        'success' => false,
-        'message' => $validator->errors()->first(),
+            'success' => false,
+            'message' => $validator->errors()->first(),
         ], 422);
-      }
-    return redirect()->back()->withErrors($validator)->withInput();
     }
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'password' => Hash::make($request->password),
-            'role' => 'user'
-        ]);
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone_number' => $request->phone_number,
+        'password' => Hash::make($request->password),
+        'role' => 'user'
+    ]);
 
-    Auth::login($user);
-    if ($request->expectsJson()) {
-      return response()->json([
+    return response()->json([
         'success' => true,
-        'message' => 'Registrasi Sukses!',
-        'user' => $user,
-        'token' => $user->createToken('auth_token')->plainTextToken,
-      ]);
-    }
+        'message' => 'Registrasi berhasil!',
+        'user' => $user
+    ]);
+}
 
-        return redirect()->route('dashboard')->with('success', 'Selamat datang!');
-    }
+    
+  
 
     // ================= ACCOUNT =================
     public function Account(Request $request)
