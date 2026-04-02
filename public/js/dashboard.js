@@ -156,3 +156,9 @@ if(logoutBtn){
         }catch(err){alert("Gagal logout!"); console.error(err);}
     });
 }
+
+document.querySelector('.add').addEventListener('click', function(e) {
+    if (e.target === this) {
+        this.classList.remove('open');
+    }
+});

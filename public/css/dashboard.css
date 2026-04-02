@@ -2,6 +2,9 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    
+    overflow: auto !important;
+
 }
 
 *{
@@ -188,7 +191,9 @@ body {
     background: #111;
     padding: 15px;
     border-radius: 12px;
-    width: 260px;
+    width: 280px;
+    font-size: 20px;
+    
 }
 
 .user-icon{
@@ -202,11 +207,14 @@ body {
     justify-content: center;
     font-weight: bold;
     margin-right: 10px;
+    font-size: 14px;
+    
 }
 
 .user-name{
     color: white;
     font-weight: bold;
+    
 }
 
 .user-role{

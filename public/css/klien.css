@@ -1,9 +1,7 @@
 body {
-    font-family: 'Inter', sans-serif;
-
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #F9FAFB;
 }
 
 .container {
@@ -38,6 +36,7 @@ body {
     gap: 10px;
     text-decoration: none;
 }
+
 
 
 .menu-btn{
@@ -152,7 +151,8 @@ body {
     background: #111;
     padding: 15px;
     border-radius: 12px;
-    width: 260px;
+    width: 280px;
+    font-size: 20px;
 }
 
 .user-icon{
@@ -166,6 +166,7 @@ body {
     justify-content: center;
     font-weight: bold;
     margin-right: 10px;
+    font-size: 14px;
 }
 
 .user-name{
@@ -183,6 +184,8 @@ body {
     color: #aaa;
     font-size: 13px;
 }
+
+
 
 .card{
     width:200px;
@@ -408,6 +411,14 @@ body {
     height: 50px;
 }
 
+.add {
+    pointer-events: none;
+}
+
+.add.open {
+    pointer-events: auto;
+}
+
 .buttonadd-active{
     opacity: 0.8;
 }
@@ -460,7 +471,7 @@ body {
     gap: 10px;
 }
 
-.avatar {
+.avatar.card {
     width: 40px;
     height: 40px;
     background: #22c55e;

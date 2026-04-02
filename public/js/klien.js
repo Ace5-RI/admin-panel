@@ -215,6 +215,35 @@ btnBatal.addEventListener("click", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
 
+    const avatarSidebar = document.getElementById("avatarSidebar");
+    const nameSidebar = document.getElementById("userNameSidebar");
+    const emailSidebar = document.getElementById("userEmailSidebar");
+    const roleSidebar = document.getElementById("userRoleSidebar");
+
+    function updateSidebar(user){
+        if(nameSidebar) nameSidebar.textContent = user.name;
+        if(emailSidebar) emailSidebar.textContent = user.email;
+        if(roleSidebar) roleSidebar.textContent = user.role.toUpperCase();
+
+        if(avatarSidebar){
+            const nameParts = user.name.split(" ").slice(0,2);
+            avatarSidebar.textContent = nameParts.map(w => w[0]).join("").toUpperCase();
+        }
+    }
+
+   const userLS = localStorage.getItem("user_name");
+const emailLS = localStorage.getItem("user_email");
+
+if(userLS && emailLS){
+    updateSidebar({
+        name: userLS,
+        email: emailLS,
+        role: "admin" // atau ambil dari backend nanti
+    });
+}
+
+});
+
     const form = document.getElementById("formKlien");
     const table = document.querySelector("#tableView tbody");
 
@@ -310,5 +339,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
-});
 
+
+// ================== LOGOUT ==================
+const logoutBtn = document.getElementById("logoutBtn");
+if(logoutBtn){
+    logoutBtn.addEventListener("click", async ()=>{
+        try{
+            const token = document.querySelector('meta[name="csrf-token"]')?.content;
+            const res = await fetch('/logout',{
+                method:'POST',
+                credentials:'include',
+                headers:{'X-CSRF-TOKEN':token,'Accept':'application/json'}
+            });
+            const data = await res.json();
+            if(data.success){
+                localStorage.clear();
+                window.location.href="/login";
+            }
+        }catch(err){alert("Gagal logout!"); console.error(err);}
+    });
+}

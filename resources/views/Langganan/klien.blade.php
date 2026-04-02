@@ -5,100 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ asset('css/klien.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <title>Dashboard</title>
-    <style>
+<div class="panel">
+    <img src="{{ asset('img/logos.png') }}" alt="" class="logo">
+    <h1>Admin Panel</h1>
+    <p>Manajemen Klien</p>
 
-</style>
-@php
-    $user = Auth::user();
-@endphp
+    <div class="menu">
+        @if (session('success'))
+        <script>alert("{{ session('success') }}");</script>
+        @endif
 
-<div class="user-icon">
-    {{ strtoupper(substr($user->name ?? 'G', 0, 1)) }}
-</div>
+        <a class="menu-btn {{ request()->is('dashboard') ? 'active' : '' }}" href="/dashboard">
+            <img src="{{ asset('img/menu.png') }}">Dashboard
+        </a>
 
-<div class="user-name">
-    {{ $user->name ?? 'Guest User' }}
-</div>
+        <a class="menu-btn {{ request()->is('klien') ? 'active' : '' }}" href="/klien">
+            <img src="{{ asset('img/klien.png') }}">Klien
+        </a>
 
-<div class="user-role">
-    {{ strtoupper($user->role ?? 'guest') }}
-</div>
-</head>
-<body>
-    @extends('layouts.app')
+        <a class="menu-btn {{ request()->is('analistik') ? 'active' : '' }}" href="/analistik">
+            <img src="{{ asset('img/analis.png') }}">Analistik
+        </a>
 
-    @section('content')
-    <div class="panel">
-        <img src="{{ asset('img/logos.png') }}" alt="" class="logo">
-        <h1>Admin Panel</h1>
-        <p>Manajemen Klien</p>
+        <hr class="hr" style="margin-top: 5px">
 
-<div class="menu">
+        <a class="menu-btn {{ request()->is('bantuan') ? 'active' : '' }}" href="/help">
+            <img src="{{ asset('img/help.png') }}">Bantuan
+        </a>
+        <hr class="hr" style="margin-top: 5px">
 
-<a class="menu-btn {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-    <img src="{{ asset('img/menu.png') }}">
-    Dashboard
-</a>
+        <div class="user-card">
+            <div class="user-icon" id="avatarSidebar">A</div>
+            <div class="user-info">
+                <div class="user-name" id="userNameSidebar">Admin User</div>
+                <div class="user-role" id="userRoleSidebar">ADMIN</div>
+                <div class="user-email" id="userEmailSidebar">admin@adminportal.com</div>
+            </div>
+        </div>
 
-<a class="menu-btn {{ request()->is('klien') ? 'active' : '' }}" href="{{ route('klien') }}">
-    <img src="{{ asset('img/klien.png') }}">
-    Klien
-</a>
-
-<a class="menu-btn {{ request()->is('analitik') ? 'active' : '' }}" href="{{ route('analitik') }}">
-    <img src="{{ asset('img/analis.png') }}">
-    Analistik
-</a>
-
-<hr class="hr" style="margin-top: 5px">
-
-<a class="menu-btn {{ request()->is('bantuan') ? 'active' : '' }}" href="{{ route('help') }}">
-    <img src="{{ asset('img/help.png') }}">
-    Bantuan
-</a>
-<hr class="hr" style="margin-top: 5px">
-
-<div class="user-card">
-
-    <div class="user-icon">
-        {{ strtoupper(substr($user->name ?? 'G', 0, 1)) }}
+        <button class="menu-lgt menu-bottom2" id="logoutBtn">
+            <img src="{{ asset('img/Logout.png') }}">Log Out
+        </button>
     </div>
-
-    <div class="user-info">
-        <div class="user-name">
-            {{ $user->name ?? 'Guest User' }}
-        </div>
-
-        <div class="user-role">
-            {{ strtoupper($user->role ?? 'guest') }}
-        </div>
-
-        <div class="user-email">
-            {{ $user->email ?? 'guest@email.com' }}
-        </div>
-    </div>
-
 </div>
 
 
-    @csrf
-  <button class="menu-lgt menu-bottom2" onclick="window.location.href='/'">
-    <img src="{{ asset('img/Logout.png') }}">
-    Log Out
-</button>
-</form>
-
-</div>
-
- </div>
-
-  <div class="main">
+  <div class="main" style="margin-top: 50px">
 
     <div class="header">
         <div>
-            <h1 class="title">Manajemen Klien</h1>
+            <h1 class="title" >Manajemen Klien</h1>
             <p class="subtitle">Kelola dan Pantau Klien</p>
         </div>
 
@@ -115,7 +74,8 @@
             <h2>Tambah Klien Baru</h2>
         </div>
 
-        <form id="formKlien">
+        <form method="POST" action="{{ route('klien.store') }}">
+    @csrf
             <div class="form-grid">
 
                 <div class="form-group">
@@ -125,7 +85,7 @@
 
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" id="emaik" placeholder="email@perusahaan.com" required>
+                    <input type="email" id="email" placeholder="email@perusahaan.com" required>
                 </div>
 
                 <div class="form-group">
@@ -466,5 +426,5 @@
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="js/klien.js"></script>
+<script src="{{ asset('js/klien.js') }}"></script>
 </html>
