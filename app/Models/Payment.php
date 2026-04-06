@@ -115,7 +115,7 @@ class Payment extends Model
     {
         $this->update([
             'status' => 'paid',
-            'approved_by' => $approvedBy ?? auth()->id(),
+            'approved_by' => $approvedBy,
             'payment_date' => $this->payment_date ?? now(),
         ]);
 
