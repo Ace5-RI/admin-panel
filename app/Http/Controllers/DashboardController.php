@@ -8,17 +8,20 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use function Symfony\Component\Clock\now;
-
 class DashboardController extends Controller
 {
     public function index()
     {
         $totalClients = Client::count();
 
-        $activeClients = Client::where('status', 'active')->where('Subscription_end_date','>',now())->count();
+        $activeClients = Client::where('status', 'active')->where('subscription_end_date','>',now())->count();
 
-        $expiringsoon = Client::where('status','active')->whereBetween('subcription_end_date',[now(), now()->addDays(30)])->count();
-        $totalrevenue = Client::where('status', 'paid')->sum(amount);
+        $expiringsoon = Client::where('status','active')->whereBetween('subscription_end_date',[now(), now()->addDays(30)])->count();
+        $totalrevenue = Client::where('status', 'paid')->sum('amount');
+
+        $monthlyRevenue = Payment::where('status','paid')->whereYear('payment_date',now()->year)->select(
+            DB::raw('MONTH(payment_date) as month' ),
+            DB::raw('SUM(amount) as total')
+        )->groupBy('month')->orderBy('month')->get();
     }
 }
