@@ -10,19 +10,22 @@ class Client extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'company',
-        'email',
-        'phone_number',
-        'subscription_end_date',
-        'status',
-        'revenue',
-        'address',
-    ];
+ protected $fillable = [
+    'name',
+    'company',
+    'email',
+    'phone_number',
+    'subscription_start_date',
+    'subscription_end_date',
+    'revenue',
+    'address',
+    'status'
+];
 
     protected $casts = [
-        'subscription_end_date' => 'datetime',
-        'revenue' => 'decimal:2',
+         'subscription_start_date' => 'date', 
+    'subscription_end_date' => 'date',
+    'revenue' => 'decimal:2',
     ];
 
     public function subscriptions()

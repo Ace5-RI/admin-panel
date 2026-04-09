@@ -35,3 +35,8 @@ Route::middleware('auth')->group(function() {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+Route::get('/klien', [ClientController::class, 'index'])->name('klien.index');
+Route::post('/klien', [ClientController::class, 'store'])->name('klien.store');
+// Ubah route update menjadi POST (sudah sesuai)
+Route::post('/klien/update', [ClientController::class, 'update'])->name('klien.update');

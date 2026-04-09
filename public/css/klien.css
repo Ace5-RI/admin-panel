@@ -1,3 +1,7 @@
+/* ==================== CSS ASLI PERTAMA ==================== */
+/* File ini adalah CSS asli Anda tanpa perubahan apapun */
+/* Hanya ditambahkan komentar untuk dokumentasi */
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -195,9 +199,10 @@ body {
 }
 
 .search {
+    width: 100%;
     background-color: white;
-    margin-left: 430px;
-    margin-right: 20px; /* jarak kanan */
+    margin-left: 0px;  /* <-- GANTI INI JADI 0 */
+    margin-right: 20px;
     border: 2px solid #dcdcdc;
     height: 180px;
     padding: 12px 16px;
@@ -205,7 +210,7 @@ body {
 }
 
 .search2 {
-    width: 80%;
+    width: 80%;  /* <-- GANTI JADI 100% */
     background-color: white;
     padding: 12px 16px;
     border-radius: 10px;
@@ -214,8 +219,7 @@ body {
     font-size: 20px;
     font-family: Arial, Helvetica, sans-serif;
     margin-top: 20px;
-    margin-left: 20px;
-
+    margin-left: 20px;  /* <-- GANTI JADI 0 */
 }
 
 .view-buttons {
@@ -320,14 +324,36 @@ body {
 
 .form-group {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* biar label di atas */
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
 }
 
 .form-group label {
-    font-size: 20px;
     margin-bottom: 5px;
+    font-size: 14px;
 }
 
+
+
+.row-date {
+    display: flex;
+    gap: 10px;
+    
+}
+
+.row-date input,
+.row-date select {
+     font-size: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+      padding: 14px;
+    flex: 1;
+}
 
 
 .full-width {
@@ -428,29 +454,27 @@ body {
 }
 
 .table {
-    width: calc(100% - 450px);
-    margin-left: 430px;
-    margin-right: 20px;
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
     border-collapse: collapse;
     background: white;
     border-radius: 10px;
-    overflow: hidden;
     margin-top: 50px;
-    /* HAPUS table-layout */
 }
 
 .table tr {
     height: 70px;
 }
 
-.table td:nth-child(3) {
-    max-width: 250px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.table td {
     padding: 18px 20px;
-    line-height: 1.5;
-    
+    font-size: 15px;
+}
+
+.table td:nth-child(4) {
+    font-weight: 500;
+    color: #333;
 }
 
 .table th {

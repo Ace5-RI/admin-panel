@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -14,18 +13,8 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::orderBy('created_at', 'desc')->paginate(10);
+        $clients = Client::orderBy('created_at', 'desc')->get();
         return view('Langganan.klien', compact('clients'));
-    }
-
-    
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -33,89 +22,122 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-
-    $validator = Validator::make($request->all(),[
-        'name' => 'required|string|max:255',
-        'company' => 'required|string|max:255',
-        'email' => 'required|email|unique|clients,email',
-        'subscription_end_date' => 'required|date',
-        'revenue' => 'required|numeric|min:0',
-        'address' => 'nullable|string'
-    ]);
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required|string|max:255',
+            'perusahaan' => 'required|string|max:255',
+            'email' => 'required|email|unique:clients,email',
+            'pendapatan' => 'required|numeric|min:0',
+            'mulai' => 'required|date', 
+            'akhir' => 'required|date', 
+            'nomer' => 'required|string|max:15',
+        ]);
 
         if ($validator->fails()) {
-        return redirect()->back()
-        ->withErrors($validator)
-        ->withInput();
-    }
+            // Cek apakah request dari AJAX
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
-    client::create([
-        'name' => $request->name,
-        'company' => $request->company,
-        'email' => $request->email,
-        'subscription_end_date' => $request->subscription_end_date,
-        'revenue' => $request->revenue,
-        'address' => $request->address,
-        'status' => 'active',
-    ]);
+        $client = Client::create([
+            'name' => $request->nama,
+            'company' => $request->perusahaan,
+            'email' => $request->email,
+            'phone_number' => $request->nomer,
+            'subscription_start_date' => $request->mulai,
+            'subscription_end_date' => $request->akhir,
+            'revenue' => $request->pendapatan,
+            'status' => 'active', // Ubah dari 'aktif' ke 'active'
+        ]);
 
-    return redirect()->route('Langganan.klien')->with('success', 'Client berhasil ditambahkam!');
-    }
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Klien berhasil ditambahkan!',
+                'data' => $client
+            ], 201);
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $client = Client::findOrFail($id);
-        return view('langganan.klien',compact('client'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        $client = Client::findOrFail($id);
-        return view('Langganan.editklien', compact('client'));
+        return redirect()->back()->with('success', 'Klien berhasil ditambahkan!');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
+        // Ambil id dari request body (bukan dari parameter URL)
+        $id = $request->id;
         $client = Client::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-           'name' => 'required|string|max:255',
-           'company' => 'required|string|max:255',
-           'email' => 'required|email|unique:clients,email' . $id,
-           'subscription_end_date' => 'required|date',
-           'revenue' => 'required|numeric|min:0',
-           'address' => 'nullable|string',
-           'status'  => 'required|in:active,inactive.nonactive',
+            'name' => 'required|string|max:255',
+            'company' => 'required|string|max:255',
+            'email' => 'required|email|unique:clients,email,' . $id,
+            'subscription_end_date' => 'required|date',
+            'revenue' => 'required|numeric|min:0',
+            'phone_number' => 'nullable|string|max:15',
+            'status' => 'required|in:active,inactive'
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()
-            ->withErrors($validator)
-            ->withInput();
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
         }
 
-        $client->update($request->all());
+        $client->update([
+            'name' => $request->name,
+            'company' => $request->company,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'subscription_end_date' => $request->subscription_end_date,
+            'revenue' => $request->revenue,
+            'status' => $request->status
+        ]);
 
-        return redirect()->route('Langganan.klien')->with('success','Klien sukses diperbarui!');
+        return response()->json([
+            'success' => true,
+            'message' => 'Klien berhasil diupdate!',
+            'data' => $client
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $client = Client::findOrFail($id);
-        $client->delete();
+        try {
+            $client = Client::findOrFail($id);
+            $client->delete();
 
-        return redirect()->route('Langgannan.klien')->with('success','Data klien berhasil dihapus!');
+            return response()->json([
+                'success' => true,
+                'message' => 'Data klien berhasil dihapus!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus data!'
+            ], 500);
+        }
+    }
+
+    /**
+     * Get client data for AJAX (optional)
+     */
+    public function getData()
+    {
+        $clients = Client::orderBy('created_at', 'desc')->get();
+        return response()->json([
+            'success' => true,
+            'data' => $clients
+        ]);
     }
 }
