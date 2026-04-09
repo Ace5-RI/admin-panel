@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Client;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ClientController extends Controller
 {
@@ -68,7 +69,7 @@ class ClientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         // Ambil id dari request body (bukan dari parameter URL)
         $id = $request->id;
@@ -81,7 +82,7 @@ class ClientController extends Controller
             'subscription_end_date' => 'required|date',
             'revenue' => 'required|numeric|min:0',
             'phone_number' => 'nullable|string|max:15',
-            'status' => 'required|in:active,inactive'
+            'status' => 'required|in:active,inactive,expired',
         ]);
 
         if ($validator->fails()) {
@@ -104,9 +105,9 @@ class ClientController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Klien berhasil diupdate!',
-            'data' => $client
+            'data' => $client,
         ]);
-    }
+    } 
 
     /**
      * Remove the specified resource from storage.
@@ -121,11 +122,11 @@ class ClientController extends Controller
                 'success' => true,
                 'message' => 'Data klien berhasil dihapus!'
             ]);
-        } catch (\Exception $e) {
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menghapus data!'
-            ], 500);
+                ''
+            ]);
         }
     }
 

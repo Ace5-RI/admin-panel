@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/klien', [ClientController::class, 'index'])->name('klien.index');
     Route::post('/klien', [ClientController::class, 'store'])->name('klien.store');
     Route::post('/klien/update', [ClientController::class, 'update'])->name('klien.update');
+    Route::delete('klien/delete', [ClientController::class, 'update'])->name('klien.delete');
 
     // halaman lain boleh tetap view
     Route::get('/analitik', function () {
