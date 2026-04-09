@@ -23,8 +23,8 @@ class Client extends Model
 ];
 
     protected $casts = [
-         'subscription_start_date' => 'date', 
-    'subscription_end_date' => 'date',
+         'subscription_start_date' => 'datetime', 
+    'subscription_end_date' => 'datetime',
     'revenue' => 'decimal:2',
     ];
 

@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('company');
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();
-            $table->timestamp('subscription_end_date');
-            $table->enum('status',['aktif','nonaktif','berakhir'])->default('aktif');
+            $table->date('subscription_start_date');
+            $table->date('subscription_end_date');
+            $table->enum('status',['aktif','nonaktif','expired'])->default('aktif');
             $table->decimal('revenue',15,2)->default(0);
             $table->text('address')->nullable();
             $table->timestamps();
