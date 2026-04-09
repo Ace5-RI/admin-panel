@@ -111,27 +111,29 @@ if(userLS && emailLS){
 }
 
 // ================== LOGOUT ==================
-const logoutBtn = document.getElementById("logoutBtn");
-if(logoutBtn){
-    logoutBtn.addEventListener("click", async ()=>{
-        try{
-            const token = document.querySelector('meta[name="csrf-token"]')?.content;
-            const res = await fetch('/logout',{
-                method:'POST',
-                credentials:'include',
-                headers:{'X-CSRF-TOKEN':token,'Accept':'application/json'}
-            });
-            const data = await res.json();
-            if(data.success){
-                localStorage.clear();
-                window.location.href="/";
-            }
-        }catch(err){alert("Gagal logout!"); console.error(err);}
-    });
-}
+logoutBtn.addEventListener("click", async () => {
+    try {
+        const token = document.querySelector('meta[name="csrf-token"]').content;
 
-document.querySelector('.add').addEventListener('click', function(e) {
-    if (e.target === this) {
-        this.classList.remove('open');
+        const res = await fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': token,
+                'Accept': 'application/json'
+            }
+        });
+
+        if (!res.ok) throw new Error("Logout gagal");
+
+        const data = await res.json();
+
+        if (data.success) {
+            localStorage.clear();
+            window.location.href = "/";
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert("Logout gagal!");
     }
 });

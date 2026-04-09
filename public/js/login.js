@@ -49,7 +49,7 @@ let selectedRole = 'admin'; // default
 // Update role saat tombol diklik
 buttons.forEach(button => {
     button.addEventListener('click', function(){
-        selectedRole = this.innerText.toLowerCase(); // 'admin' atau 'user'
+        selectedRole = this.dataset.role; 
     });
 });
 
@@ -162,7 +162,11 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
         
         
         // ==================== TAMBAHAN: Redirect ====================
-        window.location.href = "/dashboard";
+        if(res.user.role === "admin"){
+    window.location.href = "/dashboard";
+} else {
+    window.location.href = "/user"; // atau halaman user
+}
     } else {
         // ==================== TAMBAHAN: Tampilkan error detail ====================
         const errorMsg = res.message || res.errors || "Login gagal! Periksa email dan password Anda.";
