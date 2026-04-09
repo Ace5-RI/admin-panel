@@ -47,7 +47,7 @@ class ClientController extends Controller
             'name' => $request->nama,
             'company' => $request->perusahaan,
             'email' => $request->email,
-            'phone_number' => $request->nomer,
+            'phone_number' => $request->phone_number,
             'subscription_start_date' => $request->mulai,
             'subscription_end_date' => $request->akhir,
             'revenue' => $request->pendapatan,
