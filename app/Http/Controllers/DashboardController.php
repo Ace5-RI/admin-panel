@@ -10,58 +10,58 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
+    // ✅ VIEW DOANG
     public function index()
+    {
+        return view('langganan.dashboard');
+    }
+
+    // ✅ API DATA
+    public function api()
     {
         $totalClients = Client::count();
 
-        $activeClients = Client::where('status', 'active')->where('subscription_end_date','>',now())->count();
+        // 🔥 FIX: pakai tanggal, bukan status
+        $activeClients = Client::whereDate('subscription_end_date', '>', now())->count();
 
-        $expiringsoon = Client::where('status','active')->whereBetween('subscription_end_date',[now(), now()->addDays(30)])->count();
-        $totalrevenue = Client::where('status', 'paid')->sum('amount');
-        
-        $clientsLastMonth = Client::whereLastMonth('created_at', now()->subMonth()->month)->count();
-        $clientsPercent = $clientsLastMonth > 0 ? round(($totalClients - $clientsLastMonth) / $clientsLastMonth * 100, 1) : 0;
+$expiringsoon = Client::whereBetween(
+    DB::raw('DATE(subscription_end_date)'),
+    [now()->toDateString(), now()->addDays(30)->toDateString()]
+)->count();
 
-        $activeLastMonth = Client::where('status','active')->whereMonth('created_at', now()->subMonth()->month)->count();
-        $activePercent = $activeLastMonth > 0 ? round(($activeClients - $activeLastMonth) / $activeLastMonth *100, 1) : 0;
-        
-        $revenueLastMonth = Payment::where('status','active')->whereMonth('payment_date', now()->subMonth()->month)->sum('amount');
-        $revenuePercent = $revenueLastMonth > 0 ? round(($totalrevenue - $revenueLastMonth) / $revenueLastMonth * 100, 1) : 0;
+       $inactiveClients = Client::where('subscription_end_date', '<=', now())->count();
 
-        $monthlyRevenue = Payment::where('status','paid')->whereYear('payment_date',now()->year)->select(
-            DB::raw('MONTH(payment_date) as month' ),
-            DB::raw('SUM(amount) as total')
-        )->groupBy('month')->orderBy('month')->get();
+        $totalrevenue = Client::sum('revenue');
 
         $months = [];
         $clientdata = [];
-        $revenue = [];
+        $revenuedate = [];
 
         for ($i = 5; $i >= 0; $i--) {
             $month = now()->subMonths($i);
-            $months[] = $month->format('M Y');
 
-            $clientCount = Client::whereYear('created_dat', $month->year)->whereMonth('created_at', $month->month)->count();
-            $clientdata[] = $clientCount;
+           $months[] = $month->format('M Y');
 
-            $revenue = Payment::where('status', 'paid')->whereYear('payment_date', $month->year)->whereMonth('payment_date', $month->month)->sum('amount');
-            $revenuedate[] = $revenue / 1000000;
+            $clientdata[] = Client::whereYear('created_at', $month->year)
+                ->whereMonth('created_at', $month->month)
+                ->count();
+
+            $monthlyRevenue = Client::whereYear('created_at', $month->year)
+                ->whereMonth('created_at', $month->month)
+                ->sum('revenue');
+
+            $revenuedate[] = $monthlyRevenue / 1000000;
         }
 
-        $expiringclients = Client::where('status','active')->whereBetween('subscription_end_date',[now(),now()->addDays(30)])->orderBy('subscription_end_date','asc')->limit(3)->get();
-
-        return view('dashboard', compact(
-            'totalClients',
-            'activeClients',
-            'expiringsoon',
-            'totalrevenue',
-            'clientsPercent',
-            'activePercent',
-            'revemuePercent',
-            'months',
-            'clientdata',
-            'revenuedate',
-            'expiringclients',
-        ));
+        return response()->json([
+            'totalClients' => $totalClients,
+            'activeClients' => $activeClients,
+            'inactiveClients' => $inactiveClients, // 🔥 tambahan
+            'expiringsoon' => $expiringsoon,
+            'totalrevenue' => $totalrevenue,
+            'months' => $months,
+            'clientdata' => $clientdata,
+            'revenuedata' => $revenuedate,
+        ]);
     }
 }

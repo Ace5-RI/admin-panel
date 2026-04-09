@@ -522,7 +522,7 @@ function initUpdateHandler() {
             phone_number: document.getElementById("editNomer")?.value || '',
             subscription_end_date: document.getElementById("editAkhir")?.value || '',
             revenue: document.getElementById("editPendapatan")?.value || 0,
-            status: 'active'
+            status: 'aktif'
         };
         
         if (!formData.name || !formData.email) {
