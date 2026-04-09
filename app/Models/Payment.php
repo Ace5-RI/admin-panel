@@ -107,7 +107,7 @@ class Payment extends Model
                 $query->where('client_id', $this->subcription->client_id);
             })->where('status','paid')->sum('amount');
 
-            $this->subctiption->client->update(['revenue' => $totalRevenue]);
+            $this->subscription->client->update(['revenue' => $totalRevenue]);
         } 
     }
 
@@ -115,7 +115,7 @@ class Payment extends Model
     {
         $this->update([
             'status' => 'paid',
-            'approved_by' => $approvedBy ?? auth()->id(),
+            'approved_by' => $approvedBy,
             'payment_date' => $this->payment_date ?? now(),
         ]);
 
@@ -136,5 +136,44 @@ class Payment extends Model
         $this->updateClientRevenue();
 
         return $this;
+    }
+
+    protected function extendSubscription()
+    {
+        $subscription = $this->subcription;
+        if (!$subscription) return;
+
+        $currentEndDate = $subscription->end_date ?? now();
+        $newEndDate = $currentEndDate->copy()->addMonths($subscription->duration_months);
+
+        $subscription->update([
+            'end_date' => $newEndDate,
+            'status' => 'active',
+            'start_date' => $subscription->start_date ?? $this->payment_date,
+        ]);
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($payment) {
+            if($payment->status === 'paid') {
+                $payment->updateClientRevenue();
+                $payment->extendSubscription;
+            }
+        });
+
+        static::updated(function ($payment) {
+            if ($payment->wasChanged('status')) {
+                $payment->UpdateClientRevenue();
+
+                if ($payment->status === 'paid') {
+                    $payment->extendSubsctiption();
+                }
+            }
+        });
+
+        static::deleted(function ($payment) {
+            $payment->updateClientRevenue();
+        });
     }
 }
