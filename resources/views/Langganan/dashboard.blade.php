@@ -8,7 +8,11 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <title>Dashboard</title>
     <base href="/">
+
+   
 </head>
+
+
 <body>
 <div class="panel">
     <img src="{{ asset('img/logos.png') }}" alt="" class="logo">
@@ -59,25 +63,25 @@
     <p class="subtitle">Selamat Datang Kembali</p>
 
     <div class="container">
-        <div class="total">
-            <h4>Total Klien</h4>
-            <h1 id="totalClient"></h1>
-            <div class="percentage green" id="clientPercent"></div>
-        </div>
-        <div class="total">
-            <h4>Klien Aktif</h4>
-            <h1 id="totalTransaction"></h1>
-            <div class="percentage green" id="transactionPercent"></div>
-        </div>
-        <div class="total">
-            <h4>Akan Berakhir</h4>
-            <h1 id="activeClient"></h1>
-            <div class="percentage green" id="activePercent"></div>
-        </div>
-        <div class="total">
-            <h4>Total Pendapatan</h4>
-            <h1 id="inactiveClient"></h1>
-            <div class="percentage red" id="inactivePercent"></div>
+  <div class="total">
+    <h4>Total Klien</h4>
+    <h1 id="totalClient"></h1>
+</div>
+
+<div class="total">
+    <h4>Klien Aktif</h4>
+    <h1 id="activeClient"></h1>
+</div>
+
+<div class="total">
+    <h4>Tidak Aktif</h4>
+    <h1 id="inactiveClient"></h1>
+</div>
+
+<div class="total">
+    <h4>Total Pendapatan</h4>
+    <h1 id="totalRevenue"></h1>
+</div>
         </div>
 
         <div class="container2">

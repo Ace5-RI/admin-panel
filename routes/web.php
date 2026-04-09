@@ -18,26 +18,24 @@ Route::middleware('guest')->group(function () {
 // ================= AUTH =================
 Route::middleware('auth')->group(function() {
 
-    Route::get('/dashboard', function () {
-        return view('langganan.dashboard');
-    })->name('dashboard');
+    // 🔥 FIX: pakai controller
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/klien', function () {
-        return view('langganan.klien');
-    })->name('klien');
+    // 🔥 FIX: klien pakai controller
+    Route::get('/klien', [ClientController::class, 'index'])->name('klien.index');
+    Route::post('/klien', [ClientController::class, 'store'])->name('klien.store');
+    Route::post('/klien/update', [ClientController::class, 'update'])->name('klien.update');
 
+    // halaman lain boleh tetap view
     Route::get('/analitik', function () {
         return view('langganan.analitik');
-    })->name('analitik');
+    });
 
     Route::get('/help', function () {
         return view('langganan.help');
-    })->name('help');
+    });
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::get('/klien', [ClientController::class, 'index'])->name('klien.index');
-Route::post('/klien', [ClientController::class, 'store'])->name('klien.store');
-// Ubah route update menjadi POST (sudah sesuai)
-Route::post('/klien/update', [ClientController::class, 'update'])->name('klien.update');
+Route::get('/api/dashboard', [DashboardController::class, 'api']);

@@ -51,7 +51,7 @@ class ClientController extends Controller
             'subscription_start_date' => $request->mulai,
             'subscription_end_date' => $request->akhir,
             'revenue' => $request->pendapatan,
-            'status' => 'active', // Ubah dari 'aktif' ke 'active'
+            'status' => 'aktif', // Ubah dari 'aktif' ke 'active'
         ]);
 
         if ($request->ajax() || $request->wantsJson()) {
