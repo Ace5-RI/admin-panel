@@ -8,6 +8,7 @@ use App\Models\User;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Sanctum\HasApiTokens;
 
 class AuthController extends Controller
 {
@@ -49,12 +50,20 @@ class AuthController extends Controller
                 'message' => 'Role tidak sesuai! Harus: ' . strtoupper($user->role),
             ], 403);
         }
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         // ✅ RETURN JSON setelah session valid
         return response()->json([
             'success' => true,
             'message' => 'Login berhasil!',
-            'user' => $user
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+            ],
+            'token' => $token,
+            'token_type' => 'Bearer', 
         ]);
     }
 
@@ -97,6 +106,9 @@ class AuthController extends Controller
         'password' => Hash::make($request->password),
         'role' => 'user'
     ]);
+
+    Auth::login($user);
+    $token = $user->createToken('auth_token')->plainTextToken;
 
     return response()->json([
         'success' => true,
