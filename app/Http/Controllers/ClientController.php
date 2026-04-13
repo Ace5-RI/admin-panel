@@ -118,16 +118,21 @@ class ClientController extends Controller
             $client = Client::findOrFail($id);
             $client->delete();
 
-            return response()->json([
+            if (request()->expectsJson()) {
+                 return response()->json([
                 'success' => true,
                 'message' => 'Data klien berhasil dihapus!'
             ]);
+        }
+        return redirect()->route('klien.index')->with('success','klien berhasil dihapus!');
+
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
-                ''
-            ]);
+                'message' => 'Klien gagal dihapus!'
+            ], 500);
         }
+        return redirect()->route('klien.index')->with('error','klien gagal dihapus!');
     }
 
     /**
