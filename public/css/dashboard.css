@@ -115,10 +115,10 @@ body {
 
 .logo {
     position: absolute;
-    width: 200px;
-    height: 140px;
+    width: 180px;
+    height: 120px;
     top: 50px;
-    left: 85px;
+    left: 100px;
 }
 
 .gray{
@@ -335,10 +335,10 @@ canvas{
 .container4{
     display:grid;
     grid-template-columns:repeat(auto-fit, 400px);
-    gap:89px;
+    gap:100px;
     margin-top:40px;
     justify-content:center;
-    margin-left: -70px;
+    margin-left: 300px;
 }
 
 .card{
@@ -440,33 +440,297 @@ canvas{
     font-weight:bold;
 }
 
-.warning{
-    margin-top:20px;
-    padding:12px;
-    background:#dff2f7;
-    border-radius:15px;
-    width: 430px;
-    margin-left: 18px;
+
+
+
+/* ========== WARNING CARDS ========== */
+.warning-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+     gap: 35px;
+    width: 100%;
+    margin-top: 24px;
+    padding: 0 16px;
+}
+
+
+
+.warning-card {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+    overflow: hidden;
+    border-left: none !important;
+  
+}
+
+.warning-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+}
+
+/* Badge di pojok kanan atas */
+.warning-card .badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    padding: 6px 14px;
+    border-radius: 40px;
+    font-size: 13px; /* dari 12px jadi 13px */
+    font-weight: 700;
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+/* Nama user */
+.warning-card .card-name {
+    font-size: 20px; /* dari 18px jadi 20px */
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Perusahaan */
+.warning-card .card-company {
+    font-size: 18px; /* dari 14px jadi 15px */
+    color: #475569;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+
+/* Detail grid (email, username, berakhir, harga) */
+.warning-card .detail-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 16px; /* dari 13px jadi 14px */
+    color: #334155;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+.warning-card .detail-row .icon {
+    width: 26px; 
+    font-size: 15px; 
+    color: #64748b;
+}
+
+.warning-card .detail-row .text {
+    flex: 1;
+    word-break: break-word;
+}
+
+/* Status/langganan akan berakhir */
+.warning-card .status-message {
+    margin-top: auto;
+    word-break: break-word;
+    padding-top: 12px;
+    font-weight: 600;
+    font-size: 16px; 
+    border-top: 1px dashed #e2e8f0;
+    color: #0f172a;
+}
+
+/* Warna border kiri sesuai status */
+.warning-card.red {
+    border-left-color: #ef4444;
+    background: linear-gradient(135deg, #ffffff 0%, #fff5f5 100%);
+    outline: 2px solid #ef4444 !important;
+    outline-offset: 2px !important;
+}
+.warning-card.red .badge {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.warning-card.orange {
+    border-left-color: #f97316;
+    background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+    outline: 2px solid #f97316 !important;
+    outline-offset: 2px !important;
+}
+.warning-card.orange .badge {
+    background: #ffedd5;
+    color: #c2410c;
+}
+
+.status-message {
+    margin-top: auto;
+    padding-top: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    border-top: 1px dashed #e2e8f0;
+    color: #0f172a;
+}
+
+.delete-warning-btn {
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 10px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    text-align: center;
+}
+
+/* Popup Hapus - copy dari klien.css */
+.add {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease-in-out;
+    z-index: 999;
+}
+
+.add.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.hapusklien {
+    position: relative;
+    transform: translateX(200px);
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    width: 600px;
+    max-width: 95%;
+    height: 450px;
+    max-height: 100vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header-konfirmasi {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.peringatan {
+    width: 50px;
     height: 50px;
 }
 
-.invoice {
-    width: 200px;
-    height: 40px;
-    background-color: white;
-    border: 1px solid black ;
-    margin-left: 53%;
-    margin-top: 40px;
+.danger-box {
+    background: #FFE2E2;
+    padding: 18px;
+    border-radius: 8px;
+    height: 80px;
+    font-size: 15px;
+    border: 1px solid #FFE2E2;
+}
+
+.hapusred {
+    width: 260px;
+    background-color: red;
+    color: white;
+    outline: none;
+    height: 50px;
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 18px;
+    border: none;
     cursor: pointer;
-    
 }
 
-.invoice-link{
-    text-decoration: none;
-    
+.close2 {
+    background-color: white;
     color: black;
+    width: 260px;
+    height: 50px;
+    margin-left: 15px;
+    border-radius: 10px;
+    outline: none;
+    border: 1px solid black;
+    cursor: pointer;
 }
 
+/* Tombol hapus di card warning */
+.delete-warning-btn {
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 10px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.delete-warning-btn:hover {
+    background: #dc2626;
+}
+
+.delete-warning-btn:hover {
+    background: #dc2626;
+    transform: scale(1.05);
+}
+
+.warning-card.yellow {
+    border-left-color: #eab308;
+    background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%);
+    outline: 2px solid #eab308 !important;
+    outline-offset: 2px !important;
+}
+.warning-card.yellow .badge {
+    background: #fef9c3;
+    color: #a16207;
+}
+
+.warning-card.green {
+    border-left-color: #22c55e;
+    outline: 2px solid #22c55e !important;
+    outline-offset: 2px !important;
+}
+.warning-card.green .badge {
+    background: #dcfce7;
+    color: #166534;
+}
+
+#warningContainer {
+    margin-left: 420px;
+    margin-right: 24px;
+    padding: 10px;
+    width: auto;
+    min-height: 300px; /* tinggi minimal container */
+    
+    
+    
+}
 

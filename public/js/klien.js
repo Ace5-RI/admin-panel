@@ -17,6 +17,8 @@ function formatTanggal(tgl) {
     });
 }
 
+
+
 function formatRupiah(angka) {
     if (!angka || angka == 0) return "Rp 0";
     return "Rp " + Number(angka).toLocaleString("id-ID");
@@ -545,3 +547,48 @@ document.addEventListener("DOMContentLoaded", function () {
     initEditDateCalculations();
     initUpdateHandler();
 });
+
+// ================== SIDEBAR AVATAR SESUAI LOGIN ==================
+const avatarSidebar = document.getElementById("avatarSidebar");
+const nameSidebar = document.getElementById("userNameSidebar");
+const emailSidebar = document.getElementById("userEmailSidebar");
+
+function updateSidebar(user) {
+    nameSidebar.textContent = user.name;
+    emailSidebar.textContent = user.email;
+    if (avatarSidebar) {
+        const nameParts = user.name.split(" ").slice(0, 2); // ambil 2 kata pertama
+        avatarSidebar.textContent = nameParts.map(w => w[0]).join("").toUpperCase();
+    }
+}
+
+// Ambil data dari localStorage (login.js)
+const userName = localStorage.getItem("user_name");
+const userEmail = localStorage.getItem("user_email");
+
+if (userName && userEmail) {
+    updateSidebar({ name: userName, email: userEmail });
+} else {
+    // fallback: fetch API jika localStorage kosong
+    async function fetchLoginUser() {
+        try {
+            const token = document.querySelector('meta[name="csrf-token"]').content;
+            const res = await fetch('/account', {
+                method: 'GET',
+                credentials: 'include',
+                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': token }
+            });
+            const data = await res.json();
+            if (data.success && data.user) {
+                updateSidebar(data.user);
+            }
+        } catch (err) {
+            console.error("Gagal ambil user login:", err);
+        }
+    }
+    fetchLoginUser();
+}
+
+
+
+// CHART 1 - BAR

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Carbon\Carbon;
 use App\Models\Client;
 use App\Models\subscription;
 use App\Models\Payment;
@@ -22,46 +22,81 @@ class DashboardController extends Controller
         $totalClients = Client::count();
 
         // 🔥 FIX: pakai tanggal, bukan status
-        $activeClients = Client::whereDate('subscription_end_date', '>', now())->count();
+       $activeClients = Client::whereDate('subscription_end_date', '>', today())->count();
+
+$todayExpired = Client::whereDate('subscription_end_date', today())->count();
+
+
+
+
+
+
+$warningClients = Client::whereDate('subscription_end_date', '>=', today())
+    ->whereDate('subscription_end_date', '<=', today()->addDays(30))
+    ->get()
+    ->map(function ($client) {
+
+        $endDate = Carbon::parse($client->subscription_end_date)->startOfDay();
+        $today = Carbon::today();
+
+        return [
+            'id' => $client->id,  // 🔥 TAMBAH INI
+            'name' => $client->name,
+            'company' => $client->company,
+            'email' => $client->email,
+            'price' => 'Rp ' . number_format($client->revenue, 0, ',', '.'),
+            
+            // ✅ tanggal clean TANPA JAM
+            'subscription_end_date' => $endDate->translatedFormat('d M Y'),
+
+            // ✅ hari bulat
+            'days_left' => max(0, $today->diffInDays($endDate, false))
+        ];
+    });
+
 
 $expiringsoon = Client::whereBetween(
     DB::raw('DATE(subscription_end_date)'),
     [now()->toDateString(), now()->addDays(30)->toDateString()]
 )->count();
 
-       $inactiveClients = Client::where('subscription_end_date', '<=', now())->count();
+      $inactiveClients = Client::whereDate('subscription_end_date', '<', today())->count();
 
         $totalrevenue = Client::sum('revenue');
 
-        $months = [];
-        $clientdata = [];
-        $revenuedate = [];
+$year = date('Y'); // tahun sekarang
+$months = [];
+$clientData = [];
+$revenueData = [];
 
-        for ($i = 5; $i >= 0; $i--) {
-            $month = now()->subMonths($i);
+for ($m = 1; $m <= 12; $m++) {
+    $months[] = date('M Y', strtotime("$year-$m-01"));
 
-           $months[] = $month->format('M Y');
+    $clientData[] = Client::whereYear('created_at', $year)
+        ->whereMonth('subscription_start_date', $m)
+        ->count();
 
-            $clientdata[] = Client::whereYear('created_at', $month->year)
-                ->whereMonth('created_at', $month->month)
-                ->count();
+    $monthlyRevenue = Client::whereYear('created_at', $year)
+        ->whereMonth('subscription_start_date', $m)
+        ->sum('revenue');
 
-            $monthlyRevenue = Client::whereYear('created_at', $month->year)
-                ->whereMonth('created_at', $month->month)
-                ->sum('revenue');
+    $revenueData[] = $monthlyRevenue / 1000000;
+}
 
-            $revenuedate[] = $monthlyRevenue / 1000000;
-        }
 
         return response()->json([
-            'totalClients' => $totalClients,
-            'activeClients' => $activeClients,
-            'inactiveClients' => $inactiveClients, // 🔥 tambahan
-            'expiringsoon' => $expiringsoon,
-            'totalrevenue' => $totalrevenue,
-            'months' => $months,
-            'clientdata' => $clientdata,
-            'revenuedata' => $revenuedate,
-        ]);
+    'totalClients' => $totalClients,
+    'activeClients' => $activeClients,
+    'inactiveClients' => $inactiveClients,
+    'expiringSoon' => $expiringsoon,
+    'totalrevenue' => $totalrevenue,
+    'months' => $months,
+    'clientdata' => $clientData,
+    'revenuedata' => $revenueData,
+    'warningClients' => $warningClients 
+]);
     }
 }
+
+
+    

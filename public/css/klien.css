@@ -118,6 +118,10 @@ body {
     top: 260px;
 }
 
+#userChart, #activityChart {
+    text-align: right !important;
+}
+
 .logo {
     position: absolute;
     width: 180px;

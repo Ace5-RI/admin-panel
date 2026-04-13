@@ -90,9 +90,30 @@
         </div>
     </div>
 
+    <div id="warningContainer" class="warning-grid"></div>
+
     <div class="container4" id="cardsContainer">
         <!-- User cards akan di-render JS -->
+        <!-- ================= POPUP HAPUS WARNING (COPY DARI HALAMAN KLIEN) ================= -->
+
     </div>
+
+    <div class="add" id="popupHapusWarning">
+    <div class="hapusklien">
+        <div class="header-konfirmasi">
+            <img src="{{ asset('img/peringatan.png') }}" class="peringatan" alt="">
+            <h2>Konfirmasi Hapus</h2>
+        </div>
+        <hr>
+        <p style="font-size: 18px">Apakah Anda Yakin Untuk Menghapus Klien Berikut?</p>
+        <p style="font-size: 18px" class="nama-klien-warning">"Client"</p>
+        <div class="danger-box">
+            ⚠️ Peringatan: Tindakan ini tidak dapat dibatalkan. Semua data terkait klien ini akan dihapus secara permanen.
+        </div>
+        <button class="hapusred" id="confirmDeleteWarningBtn">Ya, Hapus</button>
+        <button class="close2" id="cancelDeleteWarningBtn">Batal</button>
+    </div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

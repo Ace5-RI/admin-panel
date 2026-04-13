@@ -41,7 +41,7 @@
         </a>
         <hr class="hr" style="margin-top: 5px">
 
-        <div class="user-card">
+         <div class="user-card">
             <div class="user-icon" id="avatarSidebar">A</div>
             <div class="user-info">
                 <div class="user-name" id="userNameSidebar">Admin User</div>
