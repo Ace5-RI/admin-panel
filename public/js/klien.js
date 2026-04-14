@@ -351,7 +351,12 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!row) return;
         
         const id = row.getAttribute('data-id');
-        console.log("ID:", id, "Action:", btn.className);
+        const phone = row.getAttribute('data-phone') || '-';
+        const mulai = row.getAttribute('data-mulai') || '';
+        const akhir = row.getAttribute('data-akhir') || '';
+        const pendapatan = row.getAttribute('data-pendapatan') || 0;
+        
+        console.log("ID:", id, "Phone:", phone);
         
         // ========== LIHAT ==========
         if (btn.classList.contains("lihat")) {
@@ -360,10 +365,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const nama = row.querySelector(".klien span")?.innerText || '';
             const perusahaan = row.children[1]?.innerText || '';
             const email = row.children[2]?.innerText || '';
-            const phone = row.getAttribute('data-phone') || '-';
-            const mulai = row.getAttribute('data-mulai') || '';
-            const akhir = row.getAttribute('data-akhir') || '';
-            const pendapatan = row.getAttribute('data-pendapatan') || 0;
             
             let durasiText = '-';
             let sisaText = '-';
@@ -371,7 +372,9 @@ document.addEventListener("DOMContentLoaded", function () {
             if (mulai && akhir) {
                 const start = new Date(mulai);
                 const end = new Date(akhir);
-                const tahun = Math.round((end - start) / (1000 * 60 * 60 * 24 * 365));
+                const diffTime = Math.abs(end - start);
+                const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365);
+                const tahun = Math.round(diffYears * 10) / 10;
                 durasiText = `${tahun} Tahun`;
                 
                 const now = new Date();
@@ -381,25 +384,18 @@ document.addEventListener("DOMContentLoaded", function () {
             
             // Update avatar
             const avatarEl = document.querySelector("#popupLihat .avatar-table");
-            if (avatarEl) avatarEl.innerText = nama.charAt(0).toUpperCase();
+            if (avatarEl) avatarEl.innerText = nama.substring(0, 2).toUpperCase();
             
             // Update fields
-            const fields = {
-                lihatNama: nama,
-                lihatPerusahaan: perusahaan,
-                lihatEmail: email,
-                lihatPhone: phone,
-                lihatPendapatan: formatRupiah(pendapatan),
-                lihatMulai: formatTanggal(mulai),
-                lihatAkhir: formatTanggal(akhir),
-                lihatDurasi: durasiText,
-                lihatSisa: sisaText
-            };
-            
-            Object.entries(fields).forEach(([id, value]) => {
-                const el = document.getElementById(id);
-                if (el) el.innerText = value;
-            });
+            document.getElementById("lihatNama").innerText = nama;
+            document.getElementById("lihatPerusahaan").innerText = perusahaan;
+            document.getElementById("lihatEmail").innerText = email;
+            document.getElementById("lihatPhone").innerText = phone;
+            document.getElementById("lihatPendapatan").innerText = formatRupiah(pendapatan);
+            document.getElementById("lihatMulai").innerText = formatTanggal(mulai);
+            document.getElementById("lihatAkhir").innerText = formatTanggal(akhir);
+            document.getElementById("lihatDurasi").innerText = durasiText;
+            document.getElementById("lihatSisa").innerText = sisaText;
             
             // Update status
             const statusEl = document.querySelector("#popupLihat .status");
@@ -422,31 +418,30 @@ document.addEventListener("DOMContentLoaded", function () {
             editRow = row;
             currentEditId = id;
             
-            // Isi form edit dengan data dari row
-            const editNama = document.getElementById("editNama");
-            const editPerusahaan = document.getElementById("editPerusahaan");
-            const editEmail = document.getElementById("editEmail");
-            const editNomer = document.getElementById("editNomer");
-            const editMulai = document.getElementById("editMulai");
-            const editAkhir = document.getElementById("editAkhir");
-            const editPendapatan = document.getElementById("editPendapatan");
-            const editDurasi = document.getElementById("editDurasi");
+            // Ambil data dari row
+            const nama = row.querySelector(".klien span")?.innerText || '';
+            const perusahaan = row.children[1]?.innerText || '';
+            const email = row.children[2]?.innerText || '';
             
-            if (editNama) editNama.value = row.querySelector(".klien span")?.innerText || '';
-            if (editPerusahaan) editPerusahaan.value = row.children[1]?.innerText || '';
-            if (editEmail) editEmail.value = row.children[2]?.innerText || '';
-            if (editNomer) editNomer.value = row.getAttribute('data-phone') || '';
-            if (editMulai) editMulai.value = row.getAttribute('data-mulai') || '';
-            if (editAkhir) editAkhir.value = row.getAttribute('data-akhir') || '';
-            if (editPendapatan) editPendapatan.value = row.getAttribute('data-pendapatan') || '';
+            console.log("Data edit - Nama:", nama, "Phone:", phone);
             
-            const mulaiVal = row.getAttribute('data-mulai');
-            const akhirVal = row.getAttribute('data-akhir');
-            if (mulaiVal && akhirVal && editDurasi) {
-                const start = new Date(mulaiVal);
-                const end = new Date(akhirVal);
-                const durasi = Math.round((end - start) / (1000 * 60 * 60 * 24 * 365));
-                editDurasi.value = durasi;
+            // Isi form edit
+            document.getElementById("editNama").value = nama;
+            document.getElementById("editPerusahaan").value = perusahaan;
+            document.getElementById("editEmail").value = email;
+            document.getElementById("editNomer").value = phone;
+            document.getElementById("editMulai").value = mulai;
+            document.getElementById("editAkhir").value = akhir;
+            document.getElementById("editPendapatan").value = pendapatan;
+            
+            // Hitung dan set durasi
+            if (mulai && akhir && document.getElementById("editDurasi")) {
+                const start = new Date(mulai);
+                const end = new Date(akhir);
+                const diffTime = Math.abs(end - start);
+                const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365);
+                const tahun = Math.round(diffYears);
+                document.getElementById("editDurasi").value = tahun > 0 ? tahun : '';
             }
             
             // Buka popup edit
@@ -468,16 +463,55 @@ document.addEventListener("DOMContentLoaded", function () {
             const hapusText = document.querySelector("#popupHapus .nama-klien");
             if (hapusText) {
                 hapusText.innerHTML = `"${namaKlien}"`;
-            } else {
-                // Fallback
-                const p = document.querySelector("#popupHapus p");
-                if (p) p.innerHTML = `"${namaKlien}"`;
             }
             
             document.getElementById("popupHapus")?.classList.add("open");
         }
     });
+
 });
+
+// ==================== UPDATE HANDLER ====================
+function initUpdateHandler() {
+    const btnUpdate = document.getElementById("btnUpdate");
+    if (!btnUpdate) {
+        console.log("Tombol update tidak ditemukan");
+        return;
+    }
+    
+    btnUpdate.addEventListener("click", async function (e) {
+        e.preventDefault();
+        console.log("Tombol update diklik");
+        
+        if (!editRow || !currentEditId) {
+            showNotification('Data tidak ditemukan!', 'error');
+            return;
+        }
+        
+        const formData = {
+            name: document.getElementById("editNama")?.value || '',
+            company: document.getElementById("editPerusahaan")?.value || '',
+            email: document.getElementById("editEmail")?.value || '',
+            phone_number: document.getElementById("editNomer")?.value || '',
+            subscription_end_date: document.getElementById("editAkhir")?.value || '',
+            revenue: document.getElementById("editPendapatan")?.value || 0,
+            status: 'aktif'  // ✅ Kembali ke 'aktif'
+        };
+        
+        if (!formData.name || !formData.email) {
+            showNotification('Nama dan Email harus diisi!', 'error');
+            return;
+        }
+        
+        const success = await updateKlien(currentEditId, formData);
+        
+        if (success) {
+            document.getElementById("popupEdit")?.classList.remove("open");
+            editRow = null;
+            currentEditId = null;
+        }
+    });
+}
 
 // ==================== EDIT FORM AUTO CALCULATE ====================
 function initEditDateCalculations() {

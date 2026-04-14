@@ -124,106 +124,103 @@
     </div>
 
     <!-- ================= POPUP LIHAT ================= -->
-    <div class="add" id="popupLihat">
-        <div class="addklien lihat-popup-modern">
-            <div class="lihat-header">
-                <div class="avatar-table">AR</div>
-                <div>
-                    <h3 id="lihatNama">Ahmad Rizki</h3>
-                    <p id="lihatPerusahaan">TechCorp Indonesia</p>
-                </div>
+<!-- ================= POPUP LIHAT ================= -->
+<div class="add" id="popupLihat">
+    <div class="addklien lihat-popup-modern">
+        <div class="lihat-header">
+            <div class="avatar-table">AR</div>
+            <div>
+                <h3 id="lihatNama">Ahmad Rizki</h3>
+                <p id="lihatPerusahaan">TechCorp Indonesia</p>
             </div>
-            <div class="status aktif2">Aktif</div>
-            <div class="lihat-grid">
-                <div class="card">
-                    <span>Email</span>
-                    <strong id="lihatEmail">-</strong>
-                </div>
-                <div class="card">
-                    <span>Perusahaan</span>
-                    <strong id="lihatPerusahaan2">-</strong>
-                </div>
-                <div class="card">
-                    <span>Total Pendapatan</span>
-                    <strong id="lihatPendapatan">Rp 0</strong>
-                </div>
-                <div class="card">
-                    <span>No. Telepon</span>
-                    <strong id="lihatPhone">-</strong>
-                </div>
-                <div class="card">
-                    <span>Mulai</span>
-                    <strong id="lihatMulai">-</strong>
-                </div>
-                <div class="card">
-                    <span>Berakhir</span>
-                    <strong id="lihatAkhir">-</strong>
-                </div>
-                <div class="card">
-                    <span>Durasi</span>
-                    <strong id="lihatDurasi">-</strong>
-                </div>
-                <div class="card">
-                    <span>Sisa</span>
-                    <strong id="lihatSisa" class="green">-</strong>
-                </div>
-            </div>
-            <button class="btn-tutup2 close">Tutup</button>
         </div>
+        <div class="status aktif2">Aktif</div>
+        <div class="lihat-grid">
+            <div class="card">
+                <span>Email</span>
+                <strong id="lihatEmail">-</strong>
+            </div>
+            <div class="card">
+                <span>No. Telepon</span>
+                <strong id="lihatPhone">-</strong>
+            </div>
+            <div class="card">
+                <span>Total Pendapatan</span>
+                <strong id="lihatPendapatan">Rp 0</strong>
+            </div>
+            <div class="card">
+                <span>Mulai Langganan</span>
+                <strong id="lihatMulai">-</strong>
+            </div>
+            <div class="card">
+                <span>Berakhir Langganan</span>
+                <strong id="lihatAkhir">-</strong>
+            </div>
+            <div class="card">
+                <span>Durasi Langganan</span>
+                <strong id="lihatDurasi">-</strong>
+            </div>
+            <div class="card">
+                <span>Sisa Waktu</span>
+                <strong id="lihatSisa" class="green">-</strong>
+            </div>
+        </div>
+        <button class="btn-tutup2 close">Tutup</button>
     </div>
+</div>
 
-    <!-- ================= POPUP EDIT ================= -->
-    <div class="add" id="popupEdit">
-        <div class="addklien">
-            <h2>Edit Klien</h2>
-            <form id="formEditKlien">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Nama Lengkap</label>
-                        <input type="text" id="editNama" placeholder="Contoh: Ahmad Rizki" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="editEmail" placeholder="email@perusahaan.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Perusahaan</label>
-                        <input type="text" id="editPerusahaan" placeholder="Nama Perusahaan" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Total Pendapatan (Rp)</label>
-                        <input type="number" id="editPendapatan" value="0">
-                    </div>
-                    <div class="form-group full-width">
-                        <label>Mulai Langganan</label>
-                        <div class="row-date">
-                            <input type="date" id="editMulai">
-                            <input type="date" id="editAkhir">
-                            <select id="editDurasi">
-                                <option value="">Pilih Durasi</option>
-                                <option value="1">1 Tahun</option>
-                                <option value="2">2 Tahun</option>
-                                <option value="3">3 Tahun</option>
-                                <option value="4">4 Tahun</option>
-                                <option value="5">5 Tahun</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group full-width">
-                        <label>Nomer Telepon</label>
-                        <input type="text" id="editNomer" placeholder="08xxxxxx" required>
+<!-- ================= POPUP EDIT ================= -->
+<div class="add" id="popupEdit">
+    <div class="addklien">
+        <h2>Edit Klien</h2>
+        <form id="formEditKlien">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="editNama" placeholder="Contoh: Ahmad Rizki" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="editEmail" placeholder="email@perusahaan.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Perusahaan</label>
+                    <input type="text" id="editPerusahaan" placeholder="Nama Perusahaan" required>
+                </div>
+                <div class="form-group">
+                    <label>No. Telepon</label>
+                    <input type="text" id="editNomer" placeholder="08xxxxxx" required>
+                </div>
+                <div class="form-group">
+                    <label>Total Pendapatan (Rp)</label>
+                    <input type="number" id="editPendapatan" value="0">
+                </div>
+                <div class="form-group full-width">
+                    <label>Masa Langganan</label>
+                    <div class="row-date">
+                        <input type="date" id="editMulai" readonly style="background:#f5f5f5">
+                        <input type="date" id="editAkhir">
+                        <select id="editDurasi">
+                            <option value="">Pilih Durasi</option>
+                            <option value="1">1 Tahun</option>
+                            <option value="2">2 Tahun</option>
+                            <option value="3">3 Tahun</option>
+                            <option value="4">4 Tahun</option>
+                            <option value="5">5 Tahun</option>
+                        </select>
                     </div>
                 </div>
-                <div class="info-box">
-                    💡 Tip: Masa langganan standar adalah 1 tahun (365 hari).
-                </div>
-                <div class="form-action">
-                    <button type="button" id="btnUpdate" class="simpan-btn">Update</button>
-                    <button class="btn-tutup close">Tutup</button>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div class="info-box">
+                💡 Tip: Masa langganan standar adalah 1 tahun (365 hari).
+            </div>
+            <div class="form-action">
+                <button type="button" id="btnUpdate" class="simpan-btn">Update</button>
+                <button class="btn-tutup close">Tutup</button>
+            </div>
+        </form>
     </div>
+</div>
 
     <!-- ================= POPUP HAPUS ================= -->
     <div class="add" id="popupHapus">

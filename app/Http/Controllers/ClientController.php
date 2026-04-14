@@ -34,7 +34,6 @@ class ClientController extends Controller
         ]);
 
         if ($validator->fails()) {
-            // Cek apakah request dari AJAX
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json([
                     'success' => false,
@@ -48,11 +47,11 @@ class ClientController extends Controller
             'name' => $request->nama,
             'company' => $request->perusahaan,
             'email' => $request->email,
-            'phone_number' => $request->phone_number,
+            'phone_number' => $request->nomer,
             'subscription_start_date' => $request->mulai,
             'subscription_end_date' => $request->akhir,
             'revenue' => $request->pendapatan,
-            'status' => 'aktif', // Ubah dari 'aktif' ke 'active'
+            'status' => 'aktif',  // ✅ Kembali ke 'aktif'
         ]);
 
         if ($request->ajax() || $request->wantsJson()) {
@@ -71,18 +70,18 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Ambil id dari request body (bukan dari parameter URL)
-        $id = $request->id;
-        $client = Client::findOrFail($id);
+        // Ambil id dari request body atau parameter URL
+        $clientId = $request->id ?: $id;
+        $client = Client::findOrFail($clientId);
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'company' => 'required|string|max:255',
-            'email' => 'required|email|unique:clients,email,' . $id,
+            'email' => 'required|email|unique:clients,email,' . $clientId,
             'subscription_end_date' => 'required|date',
             'revenue' => 'required|numeric|min:0',
             'phone_number' => 'nullable|string|max:15',
-            'status' => 'required|in:active,inactive,expired',
+            'status' => 'required|in:aktif,tidak,expired',  // ✅ Ganti ke Bahasa Indonesia
         ]);
 
         if ($validator->fails()) {
@@ -119,12 +118,12 @@ class ClientController extends Controller
             $client->delete();
 
             if (request()->expectsJson()) {
-                 return response()->json([
-                'success' => true,
-                'message' => 'Data klien berhasil dihapus!'
-            ]);
-        }
-        return redirect()->route('klien.index')->with('success','klien berhasil dihapus!');
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Data klien berhasil dihapus!'
+                ]);
+            }
+            return redirect()->route('klien.index')->with('success', 'Klien berhasil dihapus!');
 
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -132,7 +131,6 @@ class ClientController extends Controller
                 'message' => 'Klien gagal dihapus!'
             ], 500);
         }
-        return redirect()->route('klien.index')->with('error','klien gagal dihapus!');
     }
 
     /**
