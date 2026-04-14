@@ -85,10 +85,13 @@ class ClientController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
+            if ($request->expectsJson()) {
+                return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
             ], 422);
+            }
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $client->update([
@@ -98,7 +101,7 @@ class ClientController extends Controller
             'phone_number' => $request->phone_number,
             'subscription_end_date' => $request->subscription_end_date,
             'revenue' => $request->revenue,
-            'status' => $request->status
+            'status' => $request->status,
         ]);
 
         return response()->json([
