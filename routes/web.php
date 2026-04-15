@@ -17,17 +17,12 @@ Route::middleware('guest')->group(function () {
 
 // ================= AUTH =================
 Route::middleware('auth')->group(function() {
-
-    // 🔥 FIX: pakai controller
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    // 🔥 FIX: klien pakai controller
     Route::get('/klien', [ClientController::class, 'index'])->name('klien.index');
     Route::post('/klien', [ClientController::class, 'store'])->name('klien.store');
     Route::post('/klien/{id}', [ClientController::class, 'update'])->name('klien.update');
     Route::delete('klien/{id}', [ClientController::class, 'destroy'])->name('klien.destroy');
 
-    // halaman lain boleh tetap view
     Route::get('/analitik', function () {
         return view('langganan.analitik');
     });
@@ -39,4 +34,12 @@ Route::middleware('auth')->group(function() {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::get('/api/dashboard', [DashboardController::class, 'api']);
+// ================= API ROUTES (Dashboard) =================
+Route::prefix('api/dashboard')->group(function () {
+    Route::get('/', [DashboardController::class, 'api']);  // /api/dashboard
+    Route::get('/total-klien', [DashboardController::class, 'getTotalKlienDetail']);
+    Route::get('/klien-aktif', [DashboardController::class, 'getKlienAktifDetail']);
+    Route::get('/klien-tidak-aktif', [DashboardController::class, 'getKlienTidakAktifDetail']);
+    Route::get('/klien-akan-berakhir', [DashboardController::class, 'getKlienAkanBerakhirDetail']);
+    Route::get('/total-pendapatan', [DashboardController::class, 'getTotalPendapatanDetail']);
+});

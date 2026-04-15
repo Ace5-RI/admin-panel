@@ -1,6 +1,4 @@
-// login.js - JS AWAL ANDA (tetap dipertahankan)
-// Hanya menambahkan bagian yang diperlukan
-
+// login.js - MODIFIKASI (hapus role user)
 console.log("JS KELOAD 🔥");
 
 // ==================== JS AWAL ANDA (TETAP) ====================
@@ -40,52 +38,40 @@ if (showLogin) {
 }
 
 // ==================== TAMBAHAN: Ambil CSRF Token ====================
-// Ambil token dari meta tag (tambahkan ini)
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
-// ==================== TAMBAHAN: Simpan role yang dipilih ====================
-let selectedRole = 'admin'; // default
-
-// Update role saat tombol diklik
-buttons.forEach(button => {
-    button.addEventListener('click', function(){
-        selectedRole = this.dataset.role; 
-    });
-});
+// ==================== HAPUS selectedRole - admin SAJA ====================
+// Tidak perlu selectedRole lagi karena hanya admin
 
 // ==================== MODIFIKASI: Login function ====================
-// Tambahkan parameter 'role' dan 'csrfToken'
-async function loginUser(email, password, role){
+async function loginUser(email, password){
     try {
-        // 🔥 TAMBAH DI SINI (PALING ATAS)
         await fetch('/sanctum/csrf-cookie', {
             credentials: 'include'
         });
 
-        // 🔥 BARU LOGIN
         const response = await fetch("/login", {
             method: "POST",
-            credentials: "include", // 🔥 WAJIB
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
                 "X-CSRF-TOKEN": csrfToken
             },
-            body: JSON.stringify({ email, password, role })
+            body: JSON.stringify({ email, password, role: 'admin' }) // ← FIXED role admin
         });
 
-       const text = await response.text();
-console.log("RESPONSE REGISTER:", text);
+        const text = await response.text();
+        console.log("RESPONSE LOGIN:", text);
 
-let data;
-try {
-    data = JSON.parse(text);
-} catch {
-    return { success: false, message: text };
-}
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch {
+            return { success: false, message: text };
+        }
 
-return data;
-        
+        return data;
 
     } catch (error) {
         console.error(error);
@@ -93,15 +79,14 @@ return data;
     }
 }
 
-// ==================== MODIFIKASI: Register function ====================
-// Tambahkan parameter 'phone', 'address', dan 'password_confirmation'
+// ==================== Register function ====================
 async function registerUser(name, email, password, phone){
     try {
         await fetch('/sanctum/csrf-cookie', { credentials: 'include' });
 
         const res = await fetch('/register', {
             method: 'POST',
-            credentials: 'include', // WAJIB
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -130,68 +115,54 @@ async function registerUser(name, email, password, phone){
     }
 }
 
-// ==================== JS AWAL ANDA (FORM LOGIN) ====================
+// ==================== FORM LOGIN ====================
 document.getElementById("loginForm").addEventListener("submit", async function(e){
     e.preventDefault();
 
     const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value.trim();
 
-    // ==================== TAMBAHAN: Validasi sederhana ====================
     if (!email || !password) {
         alert("Email dan password harus diisi!");
         return;
     }
 
-    // ==================== TAMBAHAN: Loading state ====================
     const submitBtn = this.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerText;
     submitBtn.innerText = "Loading...";
     submitBtn.disabled = true;
 
-    // ==================== TAMBAHAN: Kirim role juga ====================
-    const res = await loginUser(email, password, selectedRole);
+    // Kirim login tanpa parameter role
+    const res = await loginUser(email, password);
 
     if(res.success){
-        // ==================== TAMBAHAN: Simpan data user ====================
         localStorage.setItem("user_name", res.user.name);
         localStorage.setItem("user_email", res.user.email);
         localStorage.setItem("user_role", res.user.role);
         localStorage.setItem("auth_token", res.token);
         localStorage.setItem("welcome_message", "Selamat datang " + res.user.name);
         
-        
-        // ==================== TAMBAHAN: Redirect ====================
-        if(res.user.role === "admin"){
-    window.location.href = "/dashboard";
-} else {
-    window.location.href = "/user"; // atau halaman user
-}
+        // Redirect ke dashboard admin
+        window.location.href = "/dashboard";
     } else {
-        // ==================== TAMBAHAN: Tampilkan error detail ====================
         const errorMsg = res.message || res.errors || "Login gagal! Periksa email dan password Anda.";
         alert(errorMsg);
     }
     
-    // ==================== TAMBAHAN: Kembalikan tombol ====================
     submitBtn.innerText = originalText;
     submitBtn.disabled = false;
 });
 
-// ==================== JS AWAL ANDA (FORM REGISTER) ====================
+// ==================== FORM REGISTER ====================
 document.getElementById("registerForm").addEventListener("submit", async function(e){
     e.preventDefault();
 
     const nama = document.getElementById("nama").value.trim();
-const email = document.getElementById("regEmail").value.trim();
-const password = document.getElementById("regPassword").value.trim();
-const phone = document.getElementById("regPhone").value.trim();
-const passwordConfirm = document.getElementById("regPasswordConfirmation").value.trim();
+    const email = document.getElementById("regEmail").value.trim();
+    const password = document.getElementById("regPassword").value.trim();
+    const phone = document.getElementById("regPhone").value.trim();
+    const passwordConfirm = document.getElementById("regPasswordConfirmation").value.trim();
     
-    // ==================== TAMBAHAN: Ambil field tambahan ====================
-   
-
-    // ==================== TAMBAHAN: Validasi ====================
     if (!nama || !email || !password) {
         alert("Nama, Email, dan Password harus diisi!");
         return;
@@ -207,32 +178,26 @@ const passwordConfirm = document.getElementById("regPasswordConfirmation").value
         return;
     }
 
-    // ==================== TAMBAHAN: Loading state ====================
     const submitBtn = this.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerText;
     submitBtn.innerText = "Loading...";
     submitBtn.disabled = true;
 
-    // ==================== MODIFIKASI: Panggil register dengan parameter lengkap ====================
     const res = await registerUser(nama, email, password, phone);
 
     if(res.success){
+        Swal.fire({
+            title: "Registrasi Berhasil 🎉",
+            text: "Silakan login",
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false
+        }).then(() => {
+            card.classList.remove("active");
+        });
 
-Swal.fire({
-    title: "Registrasi Berhasil 🎉",
-    text: "Silakan login",
-    icon: "success",
-    timer: 2000,
-    showConfirmButton: false
-}).then(() => {
-    card.classList.remove("active"); // pindah ke login
-});
-
-    // reset form
-    document.getElementById("registerForm").reset(); // Kembali ke form login
-        
+        document.getElementById("registerForm").reset();
     } else {
-        // ==================== TAMBAHAN: Tampilkan error detail ====================
         if (res.errors) {
             let errorMessages = [];
             Object.values(res.errors).forEach(error => {
@@ -244,8 +209,6 @@ Swal.fire({
         }
     }
     
-    // ==================== TAMBAHAN: Kembalikan tombol ====================
     submitBtn.innerText = originalText;
     submitBtn.disabled = false;
 });
-

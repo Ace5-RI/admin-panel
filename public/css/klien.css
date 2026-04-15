@@ -214,7 +214,7 @@ body {
 }
 
 .search2 {
-    width: 80%;  /* <-- GANTI JADI 100% */
+    width: 75%;  /* <-- GANTI JADI 100% */
     background-color: white;
     padding: 12px 16px;
     border-radius: 10px;
@@ -831,4 +831,261 @@ td {
 
 .hapusred:focus {
     outline: none;
+}
+
+/* ============ POPUP LIHAT ============ */
+
+#popupLihat .lihat-popup-modern {
+    width: 900px;
+    max-width: 90%;
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    padding: 0 !important;
+}
+
+#popupLihat .lihat-header {
+    background: linear-gradient(135deg, #10b981, #059669);
+    text-align: center;
+    padding: 30px 20px 20px !important; /* kurangi padding */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#popupLihat .avatar-table {
+    width: 70px !important; /* kecilin avatar */
+    height: 70px !important;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    
+    align-items: center;
+    justify-content: center;
+    font-size: 24px !important;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-left: -5px; /* kurangi margin */
+    border: 3px solid white;
+    color: white;
+}
+
+#popupLihat .lihat-header h3 {
+    margin: 0 0 4px 0 !important; /* kurangi margin */
+    font-size: 20px !important; /* kecilin font */
+    color: white;
+}
+
+#popupLihat .lihat-header p {
+    margin: 0 0 8px 0 !important;
+    color: rgba(255,255,255,0.9);
+    font-size: 16px !important; /* kecilin font */
+}
+
+#popupLihat .status.aktif2 {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #d1fae5;
+    color: #065f46;
+    padding: 4px 16px;
+    border-radius: 12px;
+    font-size: 16px;
+    margin: 10px auto 0 auto !important;
+    width: 100px;
+    text-align: center;
+}
+
+#popupLihat .lihat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px !important; /* kurangi gap */
+    padding: 20px !important; /* kurangi padding */
+    background: #f9fafb;
+}
+
+#popupLihat .lihat-grid .card {
+    background: white;
+    padding: 12px 16px !important; /* kurangi padding card */
+    border-radius: 12px !important; /* kurangi border radius */
+    width: auto;
+    height: auto;
+    margin: 0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+#popupLihat .lihat-grid .card span {
+    font-size: 11px !important; /* kecilin font */
+    color: #6b7280;
+    display: block;
+    margin-bottom: 4px !important;
+}
+
+#popupLihat .lihat-grid .card strong {
+    font-size: 14px !important; /* kecilin font */
+    color: #111827;
+}
+
+#popupLihat .green {
+    color: #10b981;
+}
+
+#popupLihat .btn-tutup2 {
+    margin: 0 20px 20px 20px !important; /* kurangi margin */
+    width: calc(100% - 40px);
+    background: #1e293b;
+    padding: 12px !important; /* kurangi padding */
+    border-radius: 30px !important; /* kurangi border radius */
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 13px !important;
+}
+
+#popupLihat .btn-tutup2:hover {
+    background: #0f172a;
+}
+
+.status.aktif-hijau {
+    background: #dcfce7;
+    color: #16a34a;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status.warning {
+    background: #fef3c7;
+    color: #d97706;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status.danger {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ============ STATUS STYLE BARU ============ */
+
+/* Status Aktif (>30 hari) - HIJAU */
+.status-active {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+/* Status Info (21-30 hari) - BIRU */
+.status-info {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+/* Status Warning (11-20 hari) - KUNING */
+.status-warning {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+/* Status Danger (1-10 hari) - MERAH TUA */
+.status-danger {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* Status Expired (<=0 hari) - MERAH GELAP */
+.status-expired {
+    background: #fecaca;
+    color: #991b1b;
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 500;
+    width: auto;
+    height: auto;
+}
+
+.status-icon {
+    font-size: 12px;
+}
+
+
+/* ============ DROPDOWN GROUP ============ */
+.dropdown-group {
+    display: flex;
+    gap: 30px;
+    margin-top: -105px;
+    margin-left: -610px;
+    align-items: center;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: #3498DB;
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    width: auto;
+    min-width: 160px;
+}
+
+.dropbtn:hover {
+    background-color: #2980B9;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 10px 16px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+    border-radius: 10px;
+}
+
+.show {
+    display: block;
 }

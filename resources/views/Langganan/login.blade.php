@@ -45,9 +45,10 @@
 
      <p class="masuk">Masuk Sebagai</p>
 
-    <div class="role-select">
-    <button type="button" class="select-btn" data-role="admin">Admin</button>
-    <button type="button" class="select-btn" data-role="user">User</button>
+    
+<div class="role-select">
+    <button type="button" class="select-btn active" data-role="admin">Admin</button>
+    
     <button type="submit" class="submit-btn">Masuk</button>
 </div>
                     

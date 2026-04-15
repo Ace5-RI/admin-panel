@@ -123,22 +123,20 @@
         </div>
     </div>
 
-    <!-- ================= POPUP LIHAT ================= -->
 <!-- ================= POPUP LIHAT ================= -->
 <div class="add" id="popupLihat">
     <div class="addklien lihat-popup-modern">
         <div class="lihat-header">
-            <div class="avatar-table">AR</div>
-            <div>
-                <h3 id="lihatNama">Ahmad Rizki</h3>
-                <p id="lihatPerusahaan">TechCorp Indonesia</p>
-            </div>
+            <div class="avatar-table" id="lihatAvatar">AR</div>
+            <h3 id="lihatNama">Ahmad Rizki</h3>
+            <p id="lihatEmail">ahmad.rizki@techcorp.co.id</p>
+            <div class="status aktif2" id="lihatStatus">Aktif</div>
         </div>
-        <div class="status aktif2">Aktif</div>
+
         <div class="lihat-grid">
             <div class="card">
-                <span>Email</span>
-                <strong id="lihatEmail">-</strong>
+                <span>Perusahaan</span>
+                <strong id="lihatPerusahaan">-</strong>
             </div>
             <div class="card">
                 <span>No. Telepon</span>
@@ -146,7 +144,7 @@
             </div>
             <div class="card">
                 <span>Total Pendapatan</span>
-                <strong id="lihatPendapatan">Rp 0</strong>
+                <strong id="lihatPendapatan">-</strong>
             </div>
             <div class="card">
                 <span>Mulai Langganan</span>
@@ -157,7 +155,7 @@
                 <strong id="lihatAkhir">-</strong>
             </div>
             <div class="card">
-                <span>Durasi Langganan</span>
+                <span>Durasi</span>
                 <strong id="lihatDurasi">-</strong>
             </div>
             <div class="card">
@@ -165,6 +163,7 @@
                 <strong id="lihatSisa" class="green">-</strong>
             </div>
         </div>
+
         <button class="btn-tutup2 close">Tutup</button>
     </div>
 </div>
@@ -242,20 +241,32 @@
 
     <!-- ================= SEARCH & FILTER ================= -->
     <div class="search">
-        <input type="text" id="searchInput" class="search2" placeholder="Cari Klien Berdasarkan Nama, Email Atau Perusahaan">
-        <div class="view-buttons">
-            <button onclick="showTable()" class="view-button">Tampilan Tabel</button>
-            <button onclick="showCard()" class="view-button">Tampilan Kartu</button>
-        </div>
+    <input type="text" id="searchInput" class="search2" placeholder="Cari Klien Berdasarkan Nama, Email Atau Perusahaan">
+    <div class="view-buttons">
+        <button onclick="showTable()" class="view-button">Tampilan Tabel</button>
+        <button onclick="showCard()" class="view-button">Tampilan Kartu</button>
+    </div>
+    
+    <div class="dropdown-group">
         <div class="dropdown">
-            <button onclick="toggleDropdown()" class="dropbtn">Filter Status</button>
+            <button onclick="toggleDropdown()" class="dropbtn">Filter Status ▼</button>
             <div id="myDropdown" class="dropdown-content">
                 <a href="#" onclick="filterStatus('all')">Semua</a>
                 <a href="#" onclick="filterStatus('aktif')">Aktif</a>
-                <a href="#" onclick="filterStatus('tidak')">Tidak Aktif</a>
+                <a href="#" onclick="filterStatus('akan_berakhir')">Akan Berakhir</a>
+                <a href="#" onclick="filterStatus('berakhir')">Berakhir</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button onclick="toggleSortDropdown()" class="dropbtn">Urutkan ▼</button>
+            <div id="sortDropdown" class="dropdown-content">
+                <a href="#" onclick="sortTable('tercepat')">Paling Cepat</a>
+                <a href="#" onclick="sortTable('terlama')">Paling Lama</a>
             </div>
         </div>
     </div>
+</div>
 
     <!-- ================= TABEL ================= -->
     <table class="table" id="tableView">
@@ -271,26 +282,64 @@
             </tr>
         </thead>
         <tbody id="tableBody">
-            @foreach($clients as $client)
-            <tr 
-                data-id="{{ $client->id }}"
-                data-phone="{{ $client->phone_number }}"
-                data-mulai="{{ \Carbon\Carbon::parse($client->subscription_start_date)->format('Y-m-d') }}"
-                data-akhir="{{ \Carbon\Carbon::parse($client->subscription_end_date)->format('Y-m-d') }}"
-                data-pendapatan="{{ $client->revenue }}"
-                data-status="{{ $client->status }}">
-                <td class="klien">
-                    <div class="avatar">{{ strtoupper(substr($client->name, 0, 2)) }}</div>
-                    <span>{{ $client->name }}</span>
-                </td>
-                <td>{{ $client->company }}</td>
-                <td>{{ $client->email }}</td>
-                <td>{{ date('d M Y', strtotime($client->subscription_end_date)) }}</td>
-                <td>
-                    <span class="status aktif">✔ {{ ucfirst($client->status) }}</span>
-                </td>
-                <td>Rp {{ number_format($client->revenue, 0, ',', '.') }}</td>
-                <td>
+    @foreach($clients as $client)
+    <tr 
+        data-id="{{ $client->id }}"
+        data-phone="{{ $client->phone_number }}"
+        data-mulai="{{ \Carbon\Carbon::parse($client->subscription_start_date)->format('Y-m-d') }}"
+        data-akhir="{{ \Carbon\Carbon::parse($client->subscription_end_date)->format('Y-m-d') }}"
+        data-pendapatan="{{ $client->revenue }}"
+        data-status="{{ $client->status }}">
+        <td class="klien">
+            <div class="avatar">{{ strtoupper(substr($client->name, 0, 2)) }}</div>
+            <span>{{ $client->name }}</span>
+        </td>
+        <td>{{ $client->company }}</td>
+        <td>{{ $client->email }}</td>
+        <td>{{ date('d M Y', strtotime($client->subscription_end_date)) }}</td>
+        <td>
+  @php
+    $endDate = \Carbon\Carbon::parse($client->subscription_end_date);
+    $today = \Carbon\Carbon::now();
+    $daysLeft = round($today->diffInDays($endDate, false));
+    
+    if ($daysLeft <= 0) {
+        $statusHtml = '<span class="status status-expired">
+                        <span class="status-icon">❌</span>
+                        <span class="status-text">Berakhir</span>
+                      </span>';
+    } elseif ($daysLeft <= 10 && $daysLeft > 0) {
+        // MERAH untuk 1-10 hari (darurat)
+        $statusHtml = '<span class="status status-danger">
+                        <span class="status-icon">🔴</span>
+                        <span class="status-text">' . $daysLeft . ' hari</span>
+                      </span>';
+    } elseif ($daysLeft <= 20 && $daysLeft > 10) {
+        // KUNING untuk 11-20 hari
+        $statusHtml = '<span class="status status-warning">
+                        <span class="status-icon">⚠️</span>
+                        <span class="status-text">' . $daysLeft . ' hari</span>
+                      </span>';
+    } elseif ($daysLeft <= 30 && $daysLeft > 20) {
+        // BIRU untuk 21-30 hari
+        $statusHtml = '<span class="status status-info">
+                        <span class="status-icon">ℹ️</span>
+                        <span class="status-text">' . $daysLeft . ' hari</span>
+                      </span>';
+    } else {
+        // HIJAU untuk >30 hari
+        $statusHtml = '<span class="status status-active">
+                        <span class="status-icon">✅</span>
+                        <span class="status-text">Aktif</span>
+                      </span>';
+    }
+@endphp
+{!! $statusHtml !!}
+            
+            
+        </td>
+        <td>Rp {{ number_format($client->revenue, 0, ',', '.') }}</td>
+        <td>
                     <div class="aksi">
                         <span class="icon lihat">👁️</span>
                         <span class="icon edit">✏️</span>

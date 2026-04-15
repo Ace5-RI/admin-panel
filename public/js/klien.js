@@ -17,8 +17,6 @@ function formatTanggal(tgl) {
     });
 }
 
-
-
 function formatRupiah(angka) {
     if (!angka || angka == 0) return "Rp 0";
     return "Rp " + Number(angka).toLocaleString("id-ID");
@@ -185,6 +183,107 @@ async function deleteKlien(id) {
     }
 }
 
+// ==================== DROPDOWN 1 - FILTER ====================
+window.toggleDropdown = function() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+window.filterStatus = function(status) {
+    const rows = document.querySelectorAll("#tableBody tr");
+    rows.forEach(row => {
+        const endDate = row.getAttribute('data-akhir');
+        if (!endDate) {
+            row.style.display = "none";
+            return;
+        }
+        
+        const today = new Date();
+        const end = new Date(endDate);
+        const daysLeft = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+        
+        let show = false;
+        
+        if (status === "all") {
+            show = true;
+        } else if (status === "aktif" && daysLeft > 30) {
+            show = true;
+        } else if (status === "akan_berakhir" && daysLeft > 0 && daysLeft <= 30) {
+            show = true;
+        } else if (status === "berakhir" && daysLeft <= 0) {
+            show = true;
+        }
+        
+        row.style.display = show ? "" : "none";
+    });
+    
+    document.getElementById("myDropdown").classList.remove("show");
+}
+
+// ==================== DROPDOWN 2 - SORT ====================
+window.toggleSortDropdown = function() {
+    document.getElementById("sortDropdown").classList.toggle("show");
+}
+
+window.sortTable = function(type) {
+    const tbody = document.getElementById("tableBody");
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+    
+    rows.sort((a, b) => {
+        const endDateA = new Date(a.getAttribute('data-akhir'));
+        const endDateB = new Date(b.getAttribute('data-akhir'));
+        const today = new Date();
+        
+        const daysLeftA = Math.ceil((endDateA - today) / (1000 * 60 * 60 * 24));
+        const daysLeftB = Math.ceil((endDateB - today) / (1000 * 60 * 60 * 24));
+        
+        if (type === 'tercepat') {
+            return daysLeftA - daysLeftB;
+        } else if (type === 'terlama') {
+            return daysLeftB - daysLeftA;
+        }
+        return 0;
+    });
+    
+    rows.forEach(row => tbody.appendChild(row));
+    document.getElementById("sortDropdown").classList.remove("show");
+}
+
+// ==================== DEFAULT SORT (TERCEPAT) SAAT LOAD ====================
+function defaultSort() {
+    const tbody = document.getElementById("tableBody");
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+    
+    rows.sort((a, b) => {
+        const endDateA = new Date(a.getAttribute('data-akhir'));
+        const endDateB = new Date(b.getAttribute('data-akhir'));
+        const today = new Date();
+        
+        const daysLeftA = Math.ceil((endDateA - today) / (1000 * 60 * 60 * 24));
+        const daysLeftB = Math.ceil((endDateB - today) / (1000 * 60 * 60 * 24));
+        
+        return daysLeftA - daysLeftB;
+    });
+    
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+// Panggil default sort saat halaman load
+document.addEventListener("DOMContentLoaded", function() {
+    defaultSort();
+});
+
+// ==================== TUTUP DROPDOWN SAAT KLIK DI LUAR ====================
+window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+            const openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+}
 // ==================== EVENT LISTENERS ====================
 document.addEventListener("DOMContentLoaded", function () {
     
@@ -215,16 +314,29 @@ document.addEventListener("DOMContentLoaded", function () {
     window.filterStatus = function (status) {
         const rows = document.querySelectorAll("#tableBody tr");
         rows.forEach(row => {
-            const statusText = row.querySelector(".status")?.innerText.toLowerCase() || '';
-            if (status === "all") {
-                row.style.display = "";
-            } else if (status === "aktif" && statusText.includes("aktif")) {
-                row.style.display = "";
-            } else if (status === "tidak" && (statusText.includes("tidak") || statusText.includes("expired"))) {
-                row.style.display = "";
-            } else {
+            const endDate = row.getAttribute('data-akhir');
+            if (!endDate) {
                 row.style.display = "none";
+                return;
             }
+            
+            const today = new Date();
+            const end = new Date(endDate);
+            const daysLeft = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+            
+            let show = false;
+            
+            if (status === "all") {
+                show = true;
+            } else if (status === "aktif" && daysLeft > 30) {
+                show = true;
+            } else if (status === "akan_berakhir" && daysLeft > 0 && daysLeft <= 30) {
+                show = true;
+            } else if (status === "berakhir" && daysLeft <= 0) {
+                show = true;
+            }
+            
+            row.style.display = show ? "" : "none";
         });
     };
     
@@ -330,10 +442,8 @@ document.addEventListener("DOMContentLoaded", function () {
             if (popupTambah) popupTambah.classList.add('open');
         });
     }
-});
-
-// ==================== TABLE CLICK HANDLER (LIHAT, EDIT, DELETE) ====================
-document.addEventListener("DOMContentLoaded", function () {
+    
+    // ==================== TABLE CLICK HANDLER (LIHAT, EDIT, DELETE) ====================
     const tableBody = document.querySelector("#tableBody");
     
     if (!tableBody) {
@@ -342,11 +452,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
     tableBody.addEventListener("click", function (e) {
-        // Cari icon yang diklik
         let btn = e.target.closest(".icon");
         if (!btn) return;
         
-        // Cari row terdekat
         const row = btn.closest("tr");
         if (!row) return;
         
@@ -356,76 +464,104 @@ document.addEventListener("DOMContentLoaded", function () {
         const akhir = row.getAttribute('data-akhir') || '';
         const pendapatan = row.getAttribute('data-pendapatan') || 0;
         
-        console.log("ID:", id, "Phone:", phone);
-        
         // ========== LIHAT ==========
         if (btn.classList.contains("lihat")) {
-            console.log("Membuka popup lihat");
-            
             const nama = row.querySelector(".klien span")?.innerText || '';
             const perusahaan = row.children[1]?.innerText || '';
             const email = row.children[2]?.innerText || '';
+            const revenue = row.children[5]?.innerText || 'Rp 0';
             
-            let durasiText = '-';
-            let sisaText = '-';
+            function formatTgl(tgl) {
+                if (!tgl) return '-';
+                const d = new Date(tgl);
+                const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                return `${d.getDate()} ${bulan[d.getMonth()]} ${d.getFullYear()}`;
+            }
+            
+            let durasi = '-';
+            let sisa = '-';
             
             if (mulai && akhir) {
                 const start = new Date(mulai);
                 const end = new Date(akhir);
-                const diffTime = Math.abs(end - start);
-                const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365);
-                const tahun = Math.round(diffYears * 10) / 10;
-                durasiText = `${tahun} Tahun`;
+                const today = new Date();
                 
-                const now = new Date();
-                const sisaHari = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
-                sisaText = sisaHari > 0 ? `${sisaHari} hari lagi` : 'Sudah berakhir';
-            }
-            
-            // Update avatar
-            const avatarEl = document.querySelector("#popupLihat .avatar-table");
-            if (avatarEl) avatarEl.innerText = nama.substring(0, 2).toUpperCase();
-            
-            // Update fields
-            document.getElementById("lihatNama").innerText = nama;
-            document.getElementById("lihatPerusahaan").innerText = perusahaan;
-            document.getElementById("lihatEmail").innerText = email;
-            document.getElementById("lihatPhone").innerText = phone;
-            document.getElementById("lihatPendapatan").innerText = formatRupiah(pendapatan);
-            document.getElementById("lihatMulai").innerText = formatTanggal(mulai);
-            document.getElementById("lihatAkhir").innerText = formatTanggal(akhir);
-            document.getElementById("lihatDurasi").innerText = durasiText;
-            document.getElementById("lihatSisa").innerText = sisaText;
-            
-            // Update status
-            const statusEl = document.querySelector("#popupLihat .status");
-            if (statusEl) {
-                if (sisaText.includes('hari lagi')) {
-                    statusEl.className = "status aktif2";
-                    statusEl.innerText = "✔ Aktif";
+                const diffDays = Math.floor((end - start) / (1000 * 60 * 60 * 24));
+                const tahunDurasi = Math.floor(diffDays / 365);
+                const bulanDurasi = Math.floor((diffDays % 365) / 30);
+                const hariDurasi = (diffDays % 365) % 30;
+                
+                if (tahunDurasi > 0 && bulanDurasi > 0 && hariDurasi > 0) {
+                    durasi = `${tahunDurasi} tahun ${bulanDurasi} bulan ${hariDurasi} hari`;
+                } else if (tahunDurasi > 0 && bulanDurasi > 0) {
+                    durasi = `${tahunDurasi} tahun ${bulanDurasi} bulan`;
+                } else if (tahunDurasi > 0 && hariDurasi > 0) {
+                    durasi = `${tahunDurasi} tahun ${hariDurasi} hari`;
+                } else if (tahunDurasi > 0) {
+                    durasi = `${tahunDurasi} tahun`;
+                } else if (bulanDurasi > 0 && hariDurasi > 0) {
+                    durasi = `${bulanDurasi} bulan ${hariDurasi} hari`;
+                } else if (bulanDurasi > 0) {
+                    durasi = `${bulanDurasi} bulan`;
                 } else {
-                    statusEl.className = "status nonaktif2";
-                    statusEl.innerText = "✘ Tidak Aktif";
+                    durasi = `${hariDurasi} hari`;
+                }
+                
+                const sisaDays = Math.floor((end - today) / (1000 * 60 * 60 * 24));
+                
+                if (sisaDays > 0) {
+                    const tahunSisa = Math.floor(sisaDays / 365);
+                    const bulanSisa = Math.floor((sisaDays % 365) / 30);
+                    const hariSisa = (sisaDays % 365) % 30;
+                    
+                    if (tahunSisa > 0 && bulanSisa > 0 && hariSisa > 0) {
+                        sisa = `Berakhir dalam ${tahunSisa} tahun ${bulanSisa} bulan ${hariSisa} hari`;
+                    } else if (tahunSisa > 0 && bulanSisa > 0) {
+                        sisa = `Berakhir dalam ${tahunSisa} tahun ${bulanSisa} bulan`;
+                    } else if (tahunSisa > 0 && hariSisa > 0) {
+                        sisa = `Berakhir dalam ${tahunSisa} tahun ${hariSisa} hari`;
+                    } else if (tahunSisa > 0) {
+                        sisa = `Berakhir dalam ${tahunSisa} tahun`;
+                    } else if (bulanSisa > 0 && hariSisa > 0) {
+                        sisa = `Berakhir dalam ${bulanSisa} bulan ${hariSisa} hari`;
+                    } else if (bulanSisa > 0) {
+                        sisa = `Berakhir dalam ${bulanSisa} bulan`;
+                    } else if (hariSisa > 0) {
+                        sisa = `Berakhir dalam ${hariSisa} hari`;
+                    } else {
+                        sisa = `Berakhir hari ini!`;
+                    }
+                } else if (sisaDays === 0) {
+                    sisa = `Berakhir hari ini!`;
+                } else {
+                    sisa = `Sudah berakhir ${Math.abs(sisaDays)} hari yang lalu`;
                 }
             }
+            
+            document.getElementById('lihatAvatar').innerText = nama.substring(0, 2).toUpperCase();
+            document.getElementById('lihatNama').innerText = nama;
+            document.getElementById('lihatEmail').innerText = email;
+            document.getElementById('lihatStatus').innerText = sisa.includes('Berakhir dalam') || sisa.includes('Berakhir hari') ? 'Aktif' : 'Tidak Aktif';
+            document.getElementById('lihatPerusahaan').innerText = perusahaan;
+            document.getElementById('lihatPhone').innerText = phone;
+            document.getElementById('lihatPendapatan').innerText = revenue;
+            document.getElementById('lihatMulai').innerText = formatTgl(mulai);
+            document.getElementById('lihatAkhir').innerText = formatTgl(akhir);
+            document.getElementById('lihatDurasi').innerText = durasi;
+            document.getElementById('lihatSisa').innerText = sisa;
             
             document.getElementById("popupLihat")?.classList.add("open");
         }
         
         // ========== EDIT ==========
         if (btn.classList.contains("edit")) {
-            console.log("Membuka popup edit - ID:", id);
             editRow = row;
             currentEditId = id;
             
-            // Ambil data dari row
             const nama = row.querySelector(".klien span")?.innerText || '';
             const perusahaan = row.children[1]?.innerText || '';
             const email = row.children[2]?.innerText || '';
             
-            console.log("Data edit - Nama:", nama, "Phone:", phone);
-            
-            // Isi form edit
             document.getElementById("editNama").value = nama;
             document.getElementById("editPerusahaan").value = perusahaan;
             document.getElementById("editEmail").value = email;
@@ -434,7 +570,6 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("editAkhir").value = akhir;
             document.getElementById("editPendapatan").value = pendapatan;
             
-            // Hitung dan set durasi
             if (mulai && akhir && document.getElementById("editDurasi")) {
                 const start = new Date(mulai);
                 const end = new Date(akhir);
@@ -444,74 +579,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("editDurasi").value = tahun > 0 ? tahun : '';
             }
             
-            // Buka popup edit
             const popupEdit = document.getElementById("popupEdit");
             if (popupEdit) {
                 popupEdit.classList.add("open");
-                console.log("Popup edit opened");
-            } else {
-                console.log("Popup edit element tidak ditemukan!");
             }
         }
         
         // ========== DELETE ==========
         if (btn.classList.contains("delete")) {
-            console.log("Membuka popup hapus");
             deleteRow = row;
-            
             const namaKlien = row.querySelector(".klien span")?.innerText || '';
             const hapusText = document.querySelector("#popupHapus .nama-klien");
             if (hapusText) {
                 hapusText.innerHTML = `"${namaKlien}"`;
             }
-            
             document.getElementById("popupHapus")?.classList.add("open");
         }
     });
-
 });
-
-// ==================== UPDATE HANDLER ====================
-function initUpdateHandler() {
-    const btnUpdate = document.getElementById("btnUpdate");
-    if (!btnUpdate) {
-        console.log("Tombol update tidak ditemukan");
-        return;
-    }
-    
-    btnUpdate.addEventListener("click", async function (e) {
-        e.preventDefault();
-        console.log("Tombol update diklik");
-        
-        if (!editRow || !currentEditId) {
-            showNotification('Data tidak ditemukan!', 'error');
-            return;
-        }
-        
-        const formData = {
-            name: document.getElementById("editNama")?.value || '',
-            company: document.getElementById("editPerusahaan")?.value || '',
-            email: document.getElementById("editEmail")?.value || '',
-            phone_number: document.getElementById("editNomer")?.value || '',
-            subscription_end_date: document.getElementById("editAkhir")?.value || '',
-            revenue: document.getElementById("editPendapatan")?.value || 0,
-            status: 'aktif'  // ✅ Kembali ke 'aktif'
-        };
-        
-        if (!formData.name || !formData.email) {
-            showNotification('Nama dan Email harus diisi!', 'error');
-            return;
-        }
-        
-        const success = await updateKlien(currentEditId, formData);
-        
-        if (success) {
-            document.getElementById("popupEdit")?.classList.remove("open");
-            editRow = null;
-            currentEditId = null;
-        }
-    });
-}
 
 // ==================== EDIT FORM AUTO CALCULATE ====================
 function initEditDateCalculations() {
@@ -544,7 +629,6 @@ function initUpdateHandler() {
     
     btnUpdate.addEventListener("click", async function (e) {
         e.preventDefault();
-        console.log("Tombol update diklik");
         
         if (!editRow || !currentEditId) {
             showNotification('Data tidak ditemukan!', 'error');
@@ -576,7 +660,7 @@ function initUpdateHandler() {
     });
 }
 
-// Inisialisasi semua
+// Inisialisasi
 document.addEventListener("DOMContentLoaded", function () {
     initEditDateCalculations();
     initUpdateHandler();
@@ -591,19 +675,17 @@ function updateSidebar(user) {
     nameSidebar.textContent = user.name;
     emailSidebar.textContent = user.email;
     if (avatarSidebar) {
-        const nameParts = user.name.split(" ").slice(0, 2); // ambil 2 kata pertama
+        const nameParts = user.name.split(" ").slice(0, 2);
         avatarSidebar.textContent = nameParts.map(w => w[0]).join("").toUpperCase();
     }
 }
 
-// Ambil data dari localStorage (login.js)
 const userName = localStorage.getItem("user_name");
 const userEmail = localStorage.getItem("user_email");
 
 if (userName && userEmail) {
     updateSidebar({ name: userName, email: userEmail });
 } else {
-    // fallback: fetch API jika localStorage kosong
     async function fetchLoginUser() {
         try {
             const token = document.querySelector('meta[name="csrf-token"]').content;
@@ -623,6 +705,3 @@ if (userName && userEmail) {
     fetchLoginUser();
 }
 
-
-
-// CHART 1 - BAR

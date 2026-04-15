@@ -54,6 +54,8 @@ body {
     font-size: 18px;
 }
 
+
+
 .menu-lgt{
     width: 350px;
     height: 70px;
@@ -734,3 +736,291 @@ canvas{
     
 }
 
+/* ================= MODAL POPUP UNTUK BOX STATISTIK ================= */
+.modal-popup {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-popup.open {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 650px;
+    max-height: 85vh;
+    overflow: hidden;
+    animation: modalSlideIn 0.3s ease;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.close-popup {
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+    transition: 0.3s;
+    line-height: 1;
+    opacity: 0.8;
+}
+
+.close-popup:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.modal-body {
+    padding: 20px 24px;
+    max-height: 55vh;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #eee;
+    text-align: right;
+    background: #fafafa;
+}
+
+.btn-tutup {
+    padding: 10px 28px;
+    background: #20b486;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.btn-tutup:hover {
+    background: #189a6f;
+    transform: scale(1.02);
+}
+
+.total-count {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #666;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.client-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.client-item {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.3s;
+    border: 1px solid #e9ecef;
+}
+
+.client-item:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+.client-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+}
+
+.client-info p {
+    margin: 3px 0;
+    font-size: 13px;
+    color: #666;
+}
+
+.client-company {
+    font-size: 12px;
+    color: #888;
+}
+
+.client-status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.status-aktif {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-warning {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-berakhir {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.client-price {
+    font-weight: bold;
+    color: #20b486;
+    font-size: 18px;
+}
+
+.grand-total {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 2px solid #eee;
+    text-align: right;
+    font-size: 18px;
+    color: #20b486;
+}
+
+.loading-text {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+/* Warna header tiap modal */
+.modal-klien .modal-header {
+    background: linear-gradient(135deg,  #0A8AAD 20%, #00C8FF 100%);
+    color: white;
+}
+
+.modal-aktif .modal-header {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+}
+
+.modal-tidak-aktif .modal-header {
+    background: linear-gradient(135deg,  #C72137 25%, #EB4050 75%, #FD88A5 100%);
+    color: white;
+}
+
+.modal-warning .modal-header {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.modal-pendapatan .modal-header {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+}
+
+/* Box clickable */
+.total {
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.total:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Scrollbar */
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: #20b486;
+    border-radius: 10px;
+}
+
+/* Header dengan icon gambar */
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.modal-icon {
+    width: 40px;
+    height: 50px;
+    object-fit: contain;
+    
+}
+
+/* Close button (X) tetep pake teks */
+.close-popup {
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    transition: 0.3s;
+    line-height: 1;
+}
+
+.close-popup:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+/* Tombol tutup tetep pake teks */
+.btn-tutup {
+    padding: 10px 28px;
+    background: #20b486;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.btn-tutup:hover {
+    background: #189a6f;
+    transform: scale(1.02);
+}

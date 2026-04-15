@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-
 class AuthController extends Controller
 {
     // ================= LOGIN VIEW =================
@@ -17,13 +16,13 @@ class AuthController extends Controller
         return view('Langganan.Login');
     }
 
-    // ================= LOGIN =================
+    // ================= LOGIN (HANYA ADMIN) =================
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
-            'role' => 'required|in:admin,user',
+            'role' => 'required|in:admin', // ← HANYA ADMIN
         ]);
 
         if ($validator->fails()) {
@@ -39,16 +38,15 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $user = Auth::user();
 
-            // cek role
-            if ($user->role !== $request->role) {
+            // HANYA ADMIN YANG BOLEH LOGIN
+            if ($user->role !== 'admin') {
                 Auth::logout();
                 return response()->json([
                     'success' => false,
-                    'message' => 'Role tidak sesuai! Harus: ' . strtoupper($user->role),
+                    'message' => 'Akses ditolak! Hanya admin yang dapat login.',
                 ], 403);
             }
 
-            // ✅ PASTIKAN Sanctum sudah terinstall dan User model pakai HasApiTokens
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
@@ -71,19 +69,13 @@ class AuthController extends Controller
         ], 401);
     }
 
-    // ================= REGISTER VIEW =================
-    public function showRegister()
-    {
-        return view('Langganan.Register');
-    }
-
-    // ================= REGISTER =================
+    // ================= REGISTER (ROLE DEFAULT USER) =================
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
-            'phone_number' => 'nullable|string|max:20',  // ← Ubah ke nullable
+            'phone_number' => 'nullable|string|max:20',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
@@ -99,23 +91,18 @@ class AuthController extends Controller
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->password),
-            'role' => 'user'
+            'role' => 'user' // TETAP USER, TAPI TIDAK BISA LOGIN
         ]);
-
-        Auth::login($user);
-        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'success' => true,
-            'message' => 'Registrasi berhasil!',
+            'message' => 'Registrasi berhasil! Silakan hubungi admin untuk mengaktifkan akun admin.',
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
                 'role' => $user->role,
             ],
-            'token' => $token,  // ← Tambahkan token di response
-            'token_type' => 'Bearer'
         ], 201);
     }
 
@@ -131,7 +118,6 @@ class AuthController extends Controller
     // ================= LOGOUT =================
     public function logout(Request $request)
     {
-        // Hapus token user
         if ($request->user()) {
             $request->user()->currentAccessToken()->delete();
         }

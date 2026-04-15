@@ -116,6 +116,104 @@
 </div>
 </div>
 
+
+
+<!-- ================= MODAL POPUP UNTUK BOX STATISTIK ================= -->
+
+<!-- Modal Total Klien -->
+<div id="popupTotalKlien" class="modal-popup">
+    <div class="modal-content modal-klien">
+        <div class="modal-header">
+            <div class="header-title">
+                <img src="{{ asset('img/profile.png') }}" class="modal-icon" alt="Total Klien">
+                <h2>Total Klien</h2>
+            </div>
+            <span class="close-popup" data-popup="popupTotalKlien">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p class="total-count">Total <strong id="totalKlienCount">0</strong> klien terdaftar</p>
+            <div class="client-list" id="totalKlienList">
+                <div class="loading-text">Loading data...</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-tutup" data-popup="popupTotalKlien">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Klien Aktif -->
+<div id="popupKlienAktif" class="modal-popup">
+    <div class="modal-content modal-aktif">
+        <div class="modal-header">
+            <div class="header-title">
+                <img src="{{ asset('img/upline.png') }}" class="modal-icon" alt="Klien Aktif">
+                <h2>Klien Aktif</h2>
+            </div>
+            <span class="close-popup" data-popup="popupKlienAktif">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p class="total-count"><strong id="aktifCount">0</strong> klien dengan langganan aktif</p>
+            <div class="client-list" id="klienAktifList">
+                <div class="loading-text">Loading data...</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-tutup" data-popup="popupKlienAktif">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Klien Tidak Aktif -->
+<div id="popupTidakAktif" class="modal-popup">
+    <div class="modal-content modal-tidak-aktif">
+        <div class="modal-header">
+            <div class="header-title">
+                <img src="{{ asset('img/tanggal.png') }}" class="modal-icon" alt="Klien Tidak Aktif">
+                <h2>Klien Tidak Aktif</h2>
+            </div>
+            <span class="close-popup" data-popup="popupTidakAktif">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p class="total-count"><strong id="tidakAktifCount">0</strong> klien dengan langganan berakhir</p>
+            <div class="client-list" id="tidakAktifList">
+                <div class="loading-text">Loading data...</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-tutup" data-popup="popupTidakAktif">Tutup</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal Total Pendapatan -->
+<div id="popupTotalPendapatan" class="modal-popup">
+    <div class="modal-content modal-pendapatan">
+        <div class="modal-header">
+            <div class="header-title">
+                <img src="{{ asset('img/cash.png') }}" class="modal-icon" alt="Total Pendapatan">
+                <h2>Total Pendapatan</h2>
+            </div>
+            <span class="close-popup" data-popup="popupTotalPendapatan">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p class="total-count">Total pendapatan: <strong id="totalPendapatanValue">Rp 0</strong></p>
+            <div class="client-list" id="pendapatanList">
+                <div class="loading-text">Loading data...</div>
+            </div>
+            <div class="grand-total">
+                <strong>Total Keseluruhan: <span id="grandTotalPendapatan">Rp 0</span></strong>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-tutup" data-popup="popupTotalPendapatan">Tutup</button>
+        </div>
+    </div>
+</div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{{ asset('js/dashboard.js') }}"></script>
