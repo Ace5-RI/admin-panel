@@ -43,6 +43,7 @@ class SubscriptionExpiringNotification extends Notification
         $message .= "";
         $message .= "";
         $message .= "";
+        $message .= "";
                 return (new MailMessage)
             ->line('The introduction to the notification.')
             ->action('Notification Action', url('/'))
