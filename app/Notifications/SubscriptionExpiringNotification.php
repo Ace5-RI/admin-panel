@@ -53,26 +53,10 @@ class SubscriptionExpiringNotification extends Notification
     /**
      * Get the mail representation of the notification.
      */
-    public function toWhatsApp(object $notifiable)
-{
-    $paymentUrl = route('payment.page', ['id' => $this->client->id]);
-    $expiryDate = date('d/m/Y', strtotime($this->client->subscription_end_date));
-    
-    $message = "⚠️ *PEMBERITAHUAN LANGGANAN* ⚠️\n\n";
-    $message .= "Halo *{$this->client->name}*,\n\n";
-    $message .= "Langganan Anda akan berakhir dalam *{$this->daysLeft} hari*.\n";
-    $message .= "📅 {$expiryDate}\n\n";
-    $message .= "💳 *Link Pembayaran:*\n";
-    $message .= "{$paymentUrl}\n\n";
-    $message .= "Atau transfer ke:\n";
-    $message .= "BCA: 123-456-789 a.n Admin Panel\n\n";
-    $message .= "Kirim bukti transfer ke WA ini ya 🙏\n\n";
-    $message .= "Terima kasih!";
-    
-    return WhatsAppMessage::create()
-        ->to($this->client->phone_number)
-        ->text($message);
-}
+   private function BuildMessage($paymentUrl)
+   {
+    $expiryDate = date('d/m/Y', strtotime());
+   }
     /**
      * Get the array representation of the notification.
      *
