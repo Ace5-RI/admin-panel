@@ -43,3 +43,10 @@ Route::prefix('api/dashboard')->group(function () {
     Route::get('/klien-akan-berakhir', [DashboardController::class, 'getKlienAkanBerakhirDetail']);
     Route::get('/total-pendapatan', [DashboardController::class, 'getTotalPendapatanDetail']);
 });
+
+// ================= PAYMENT ROUTE =================
+Route::middleware('auth')->group(function (){
+    Route::get('payment/{client_id}',[PaymentController::class,'show'])->name('payment.page');
+    Route::post();
+    Route::get();
+});
