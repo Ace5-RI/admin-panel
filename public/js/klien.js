@@ -1,7 +1,52 @@
+
+
+
+
 // ==================== VARIABEL GLOBAL ====================
 let deleteRow = null;
 let editRow = null;
 let currentEditId = null;
+
+// ==================== AUTO FORMAT RUPIAH ====================
+function initRupiahFormat() {
+    const pendapatan = document.getElementById('pendapatan');
+    const editPendapatan = document.getElementById('editPendapatan');
+    
+    function formatRupiah(angka) {
+        // Hapus semua karakter selain angka
+        let bersih = angka.replace(/[^0-9]/g, '');
+        if (!bersih) return '';
+        
+        // Balikin ke angka (support besar)
+        let nilai = parseFloat(bersih);
+        if (isNaN(nilai)) return '';
+        
+        // Format dengan titik per 3 digit
+        return nilai.toLocaleString('id-ID');
+    }
+    
+    if (pendapatan) {
+        pendapatan.addEventListener('input', function(e) {
+            let formatted = formatRupiah(this.value);
+            if (formatted) this.value = formatted;
+        });
+        
+        pendapatan.closest('form')?.addEventListener('submit', function() {
+            if (pendapatan) pendapatan.value = pendapatan.value.replace(/\./g, '');
+        });
+    }
+    
+    if (editPendapatan) {
+        editPendapatan.addEventListener('input', function(e) {
+            let formatted = formatRupiah(this.value);
+            if (formatted) this.value = formatted;
+        });
+        
+        editPendapatan.closest('form')?.addEventListener('submit', function() {
+            if (editPendapatan) editPendapatan.value = editPendapatan.value.replace(/\./g, '');
+        });
+    }
+}
 
 // ==================== CSRF TOKEN ====================
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
@@ -21,6 +66,63 @@ function formatRupiah(angka) {
     if (!angka || angka == 0) return "Rp 0";
     return "Rp " + Number(angka).toLocaleString("id-ID");
 }
+
+// ==================== FUNGSI RENDER STATUS SISA HARI ====================
+function getWarnaSisaHari(daysLeft) {
+    if (daysLeft <= 0) return "expired";
+    if (daysLeft <= 5) return "danger";
+    if (daysLeft <= 15) return "warning";
+    if (daysLeft <= 20) return "info";
+    return "active";
+}
+
+function getIconSisaHari(daysLeft) {
+    if (daysLeft <= 0) return "❌";
+    if (daysLeft <= 5) return "🔴";
+    if (daysLeft <= 15) return "🟠";
+    if (daysLeft <= 20) return "🟡";
+    return "✅";  // 21 hari ke atas - icon centang hijau
+}
+
+function getTextSisaHari(daysLeft) {
+    if (daysLeft <= 0) return "Berakhir";
+    if (daysLeft <= 5) return `${daysLeft} hari`;
+    if (daysLeft <= 15) return `${daysLeft} hari`;
+    if (daysLeft <= 20) return `${daysLeft} hari`;
+    if (daysLeft <= 30) return `${daysLeft} hari`;  // 21-30 hari: tampilkan angka
+    return "Aktif";  // >30 hari: cukup "Aktif"
+}
+
+function renderAllStatus() {
+    const statusCells = document.querySelectorAll('.status-cell');
+    
+    statusCells.forEach(cell => {
+        const endDateStr = cell.getAttribute('data-end-date');
+        if (!endDateStr) return;
+        
+        const today = new Date();
+        const endDate = new Date(endDateStr);
+        const daysLeft = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
+        
+        const warna = getWarnaSisaHari(daysLeft);
+        const icon = getIconSisaHari(daysLeft);
+        const text = getTextSisaHari(daysLeft);
+        
+        const statusHtml = `
+            <span class="status status-${warna}">
+                <span class="status-icon">${icon}</span>
+                <span class="status-text">${text}</span>
+            </span>
+        `;
+        
+        cell.innerHTML = statusHtml;
+    });
+}
+
+// Panggil render status saat halaman load
+document.addEventListener("DOMContentLoaded", function() {
+    renderAllStatus();
+});
 
 function showNotification(message, type = 'success') {
     const oldNotif = document.querySelector('.notification');
@@ -205,9 +307,9 @@ window.filterStatus = function(status) {
         
         if (status === "all") {
             show = true;
-        } else if (status === "aktif" && daysLeft > 30) {
+        } else if (status === "aktif" && daysLeft > 20) {  // >20 hari
             show = true;
-        } else if (status === "akan_berakhir" && daysLeft > 0 && daysLeft <= 30) {
+        } else if (status === "akan_berakhir" && daysLeft > 0 && daysLeft <= 20) {  // 1-20 hari
             show = true;
         } else if (status === "berakhir" && daysLeft <= 0) {
             show = true;
@@ -216,7 +318,7 @@ window.filterStatus = function(status) {
         row.style.display = show ? "" : "none";
     });
     
-    document.getElementById("myDropdown").classList.remove("show");
+    document.getElementById("myDropdown")?.classList.remove("show");
 }
 
 // ==================== DROPDOWN 2 - SORT ====================
@@ -290,6 +392,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Init date calculations
     initDateCalculations();
     
+    initRupiahFormat(); 
     // DOM Elements
     const form = document.getElementById("formKlien");
     const popupTambah = document.getElementById("popupTambah");
@@ -389,25 +492,29 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
     // ==================== FORM SUBMIT (CREATE) ====================
-    if (form) {
-        form.addEventListener("submit", async function (e) {
-            e.preventDefault();
-            
-            const formData = {
-                nama: document.getElementById("nama")?.value || '',
-                perusahaan: document.getElementById("perusahaan")?.value || '',
-                email: document.getElementById("email")?.value || '',
-                nomer: document.getElementById("nomer")?.value || '',
-                pendapatan: document.getElementById("pendapatan")?.value || 0,
-                mulai: document.getElementById("mulai")?.value || '',
-                akhir: document.getElementById("akhir")?.value || ''
-            };
-            
-            await storeKlien(formData);
-            resetForm();
-            closeAllPopup();
-        });
-    }
+if (form) {
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        
+        // Ambil nilai pendapatan dan bersihkan titik
+        let pendapatanValue = document.getElementById("pendapatan")?.value || '0';
+        let pendapatanBersih = pendapatanValue.replace(/\./g, ''); // hapus titik
+        
+        const formData = {
+            nama: document.getElementById("nama")?.value || '',
+            perusahaan: document.getElementById("perusahaan")?.value || '',
+            email: document.getElementById("email")?.value || '',
+            nomer: document.getElementById("nomer")?.value || '',
+            pendapatan: parseInt(pendapatanBersih) || 0,  // <== pake yang udah bersih
+            mulai: document.getElementById("mulai")?.value || '',
+            akhir: document.getElementById("akhir")?.value || ''
+        };
+        
+        await storeKlien(formData);
+        resetForm();
+        closeAllPopup();
+    });
+}
     
     // ==================== DELETE CONFIRMATION ====================
     const btnHapus = document.querySelector(".hapusred");
@@ -635,15 +742,18 @@ function initUpdateHandler() {
             return;
         }
         
-        const formData = {
-            name: document.getElementById("editNama")?.value || '',
-            company: document.getElementById("editPerusahaan")?.value || '',
-            email: document.getElementById("editEmail")?.value || '',
-            phone_number: document.getElementById("editNomer")?.value || '',
-            subscription_end_date: document.getElementById("editAkhir")?.value || '',
-            revenue: document.getElementById("editPendapatan")?.value || 0,
-            status: 'aktif'
-        };
+        let revenueValue = document.getElementById("editPendapatan")?.value || '0';
+let revenueBersih = revenueValue.replace(/\./g, '');
+
+const formData = {
+    name: document.getElementById("editNama")?.value || '',
+    company: document.getElementById("editPerusahaan")?.value || '',
+    email: document.getElementById("editEmail")?.value || '',
+    phone_number: document.getElementById("editNomer")?.value || '',
+    subscription_end_date: document.getElementById("editAkhir")?.value || '',
+    revenue: parseInt(revenueBersih) || 0,  // <== pake yang udah bersih
+    status: 'aktif'
+};
         
         if (!formData.name || !formData.email) {
             showNotification('Nama dan Email harus diisi!', 'error');

@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="Expires" content="0">
     <title>Dashboard</title>
     <base href="/">
 
@@ -32,15 +36,13 @@
             <img src="{{ asset('img/klien.png') }}">Klien
         </a>
 
-        <a class="menu-btn {{ request()->is('analistik') ? 'active' : '' }}" href="/analistik">
-            <img src="{{ asset('img/analis.png') }}">Analistik
-        </a>
+        
 
         <hr class="hr" style="margin-top: 5px">
 
-        <a class="menu-btn {{ request()->is('bantuan') ? 'active' : '' }}" href="/help">
-            <img src="{{ asset('img/help.png') }}">Bantuan
-        </a>
+        <a class="menu-btn {{ request()->is('aktivitas') ? 'active' : '' }}" href="/aktivitas">
+    <img src="{{ asset('img/help.png') }}"> Aktivitas
+</a>
         <hr class="hr" style="margin-top: 5px">
 
         <div class="user-card">
@@ -65,29 +67,48 @@
     <div class="container">
   <div class="total">
     <h4>Total Klien</h4>
+    <img src="{{ asset('img/profile.png') }}" class="profile" alt="">
     <h1 id="totalClient"></h1>
 </div>
 
 <div class="total">
     <h4>Klien Aktif</h4>
+    <img src="{{ asset('img/upline.png') }}" class="aktif" alt="">
     <h1 id="activeClient"></h1>
 </div>
 
 <div class="total">
     <h4>Tidak Aktif</h4>
+    <img src="{{ asset('img/dangers.png') }}" class="tanggal" alt="">
     <h1 id="inactiveClient"></h1>
 </div>
 
 <div class="total">
     <h4>Total Pendapatan</h4>
+    <img src="{{ asset('img/cash.png') }}" class="keuangan" alt="">
     <h1 id="totalRevenue"></h1>
 </div>
         </div>
 
+<!-- Tombol Ganti Tahun -->
+<div class="year-selector">
+    <button id="prevYearBtn" class="year-nav">◀</button>
+    <span id="currentYear" class="current-year">2026</span>
+    <button id="nextYearBtn" class="year-nav">▶</button>
+</div>
+
         <div class="container2">
-            <div class="table"><canvas id="userChart"></canvas></div>
-            <div class="table"><canvas id="activityChart"></canvas></div>
-        </div>
+    <div class="table">
+        <h4 class="table-txt">📊 Tren Klien Aktif</h4>
+        <canvas id="userChart"></canvas>
+        
+    </div>
+    <div class="table">
+        <h4 class="table-txt">🚀 Tren Klien Baru</h4>
+        <canvas id="activityChart"></canvas>
+       
+    </div>
+</div>
     </div>
 
     <div id="warningContainer" class="warning-grid"></div>
@@ -169,7 +190,7 @@
     <div class="modal-content modal-tidak-aktif">
         <div class="modal-header">
             <div class="header-title">
-                <img src="{{ asset('img/tanggal.png') }}" class="modal-icon" alt="Klien Tidak Aktif">
+                <img src="{{ asset('img/dangers.png') }}" class="modal-icon" alt="Klien Tidak Aktif">
                 <h2>Klien Tidak Aktif</h2>
             </div>
             <span class="close-popup" data-popup="popupTidakAktif">&times;</span>
@@ -199,12 +220,23 @@
             <span class="close-popup" data-popup="popupTotalPendapatan">&times;</span>
         </div>
         <div class="modal-body">
-            <p class="total-count">Total pendapatan: <strong id="totalPendapatanValue">Rp 0</strong></p>
+            <!-- SELECTOR TAHUN -->
+            <div class="tahun-selector">
+                <button type="button" onclick="changeRevenueYear('prev')" class="tahun-nav">◀</button>
+        <select id="tahunPendapatanSelect" onchange="setRevenueYear()">
+    <option value="">Loading...</option>
+</select>
+                <button type="button" onclick="changeRevenueYear('next')" class="tahun-nav">▶</button>
+            </div>
+            
+            <div class="grand-total">
+                <span>Total Pendapatan <span id="tahunPendapatanJudul">Tahun <?php echo date('Y'); ?></span> :</span>
+                <strong id="grandTotalPendapatan">Rp 0</strong>
+            </div>
+            
+            <p class="total-count">Rincian pendapatan per klien:</p>
             <div class="client-list" id="pendapatanList">
                 <div class="loading-text">Loading data...</div>
-            </div>
-            <div class="grand-total">
-                <strong>Total Keseluruhan: <span id="grandTotalPendapatan">Rp 0</span></strong>
             </div>
         </div>
         <div class="modal-footer">

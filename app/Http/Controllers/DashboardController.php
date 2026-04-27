@@ -17,67 +17,95 @@ class DashboardController extends Controller
     }
 
     // ✅ API DATA
-    public function api()
-    {
-        // ... (kode api kamu yang sudah ada, tetap pertahankan)
-        $totalClients = Client::count();
+ // ✅ API DATA
 
-        $activeClients = Client::whereDate('subscription_end_date', '>', today())->count();
+// Tambahkan method ini
+public function getAvailableYears()
+{
+    $oldestYear = Client::min(\DB::raw('YEAR(subscription_start_date)'));
+    $latestYear = Client::max(\DB::raw('YEAR(subscription_start_date)'));
+    
+    if (!$oldestYear) $oldestYear = date('Y');
+    if (!$latestYear) $latestYear = date('Y');
+    
+    return response()->json([
+        'oldest_year' => $oldestYear,
+        'latest_year' => $latestYear
+    ]);
+}
 
-        $warningClients = Client::whereDate('subscription_end_date', '>=', today())
-            ->whereDate('subscription_end_date', '<=', today()->addDays(30))
-            ->get()
-            ->map(function ($client) {
-                $endDate = Carbon::parse($client->subscription_end_date)->startOfDay();
-                $today = Carbon::today();
-                return [
-                    'id' => $client->id,
-                    'name' => $client->name,
-                    'company' => $client->company,
-                    'email' => $client->email,
-                    'price' => 'Rp ' . number_format($client->revenue, 0, ',', '.'),
-                    'subscription_end_date' => $endDate->translatedFormat('d M Y'),
-                    'days_left' => max(0, $today->diffInDays($endDate, false))
-                ];
-            });
+public function api(Request $request)
+{
+    $totalClients = Client::count();
 
-        $expiringsoon = Client::whereBetween(
-            DB::raw('DATE(subscription_end_date)'),
-            [now()->toDateString(), now()->addDays(30)->toDateString()]
-        )->count();
+    $activeClients = Client::whereDate('subscription_end_date', '>', today())->count();
 
-        $inactiveClients = Client::whereDate('subscription_end_date', '<', today())->count();
-        $totalrevenue = Client::sum('revenue');
+    $warningClients = Client::whereDate('subscription_end_date', '>=', today())
+        ->whereDate('subscription_end_date', '<=', today()->addDays(30))
+        ->get()
+        ->map(function ($client) {
+            $endDate = Carbon::parse($client->subscription_end_date)->startOfDay();
+            $today = Carbon::today();
+            return [
+                'id' => $client->id,
+                'name' => $client->name,
+                'company' => $client->company,
+                'email' => $client->email,
+                'price' => 'Rp ' . number_format($client->revenue, 0, ',', '.'),
+                'subscription_end_date' => $endDate->translatedFormat('d M Y'),
+                'days_left' => max(0, $today->diffInDays($endDate, false))
+            ];
+        });
 
-        $year = date('Y');
-        $months = [];
-        $clientData = [];
-        $revenueData = [];
+    $expiringsoon = Client::whereBetween(
+        DB::raw('DATE(subscription_end_date)'),
+        [now()->toDateString(), now()->addDays(30)->toDateString()]
+    )->count();
 
-        for ($m = 1; $m <= 12; $m++) {
-            $months[] = date('M Y', strtotime("$year-$m-01"));
-            $clientData[] = Client::whereYear('created_at', $year)
-                ->whereMonth('subscription_start_date', $m)
-                ->count();
-            $monthlyRevenue = Client::whereYear('created_at', $year)
-                ->whereMonth('subscription_start_date', $m)
-                ->sum('revenue');
-            $revenueData[] = $monthlyRevenue / 1000000;
-        }
+    $inactiveClients = Client::whereDate('subscription_end_date', '<', today())->count();
+    $totalrevenue = Client::sum('revenue');
 
-        return response()->json([
-            'totalClients' => $totalClients,
-            'activeClients' => $activeClients,
-            'inactiveClients' => $inactiveClients,
-            'expiringSoon' => $expiringsoon,
-            'totalrevenue' => $totalrevenue,
-            'months' => $months,
-            'clientdata' => $clientData,
-            'revenuedata' => $revenueData,
-            'warningClients' => $warningClients 
-        ]);
+    // Ambil tahun dari request, default tahun sekarang
+    $year = $request->get('year', date('Y'));
+    $months = [];
+    $totalActivePerMonth = [];
+    $newClientData = [];
+
+    for ($m = 1; $m <= 12; $m++) {
+        // Ambil tanggal TERAKHIR bulan ini (23:59:59)
+        $endOfMonth = Carbon::create($year, $m, 1)->endOfMonth();
+        
+        $months[] = $endOfMonth->format('M Y');
+        
+        // ========== CHART 1: Klien aktif pada TANGGAL AKHIR BULAN ==========
+        // Pastikan subscription_start_date dan subscription_end_date tidak null
+        $activeCount = Client::whereNotNull('subscription_start_date')
+            ->whereNotNull('subscription_end_date')
+            ->where(function($q) use ($endOfMonth) {
+                $q->where('subscription_start_date', '<=', $endOfMonth)
+                  ->where('subscription_end_date', '>=', $endOfMonth);
+            })->count();
+        
+        $totalActivePerMonth[] = $activeCount;
+        
+        // ========== CHART 2: Klien Baru di bulan ini ==========
+        $newClientData[] = Client::whereYear('subscription_start_date', $year)
+            ->whereMonth('subscription_start_date', $m)
+            ->count();
     }
 
+    return response()->json([
+        'totalClients' => $totalClients,
+        'activeClients' => $activeClients,
+        'inactiveClients' => $inactiveClients,
+        'expiringSoon' => $expiringsoon,
+        'totalrevenue' => $totalrevenue,
+        'months' => $months,
+        'clientdata' => $totalActivePerMonth,
+        'revenuedata' => $newClientData,
+        'warningClients' => $warningClients 
+    ]);
+}
     // ========== 🆕 TAMBAHKAN METHOD INI UNTUK DETAIL POPUP ==========
 
     /**
@@ -212,33 +240,76 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * GET DETAIL TOTAL PENDAPATAN (SORT BY REVENUE)
-     */
-    public function getTotalPendapatanDetail()
-    {
-        $clients = Client::where('revenue', '>', 0)
-            ->select('id', 'name', 'company', 'revenue')
-            ->orderBy('revenue', 'desc')
-            ->get()
-            ->map(function($client) {
-                return [
-                    'id' => $client->id,
-                    'name' => $client->name,
-                    'company' => $client->company,
-                    'revenue' => $client->revenue,
-                    'revenue_formatted' => 'Rp ' . number_format($client->revenue, 0, ',', '.')
-                ];
-            });
-        
-        $totalRevenue = $clients->sum('revenue');
-        
-        return response()->json([
-            'success' => true,
-            'total' => $clients->count(),
-            'total_revenue' => $totalRevenue,
-            'total_revenue_formatted' => 'Rp ' . number_format($totalRevenue, 0, ',', '.'),
-            'data' => $clients
-        ]);
-    }
+   /**
+ * GET DETAIL TOTAL PENDAPATAN (SORT BY REVENUE) - DENGAN FILTER TAHUN
+ */
+/**
+ * GET DETAIL TOTAL PENDAPATAN - HANYA TAHUN YANG PUNYA DATA
+ */
+public function getTotalPendapatanDetail(Request $request)
+{
+    $tahun = $request->get('tahun', date('Y'));
+    
+    // Ambil klien yang revenue > 0 DAN tahunnya sesuai
+    $clients = Client::whereYear('subscription_start_date', $tahun)
+        ->where('revenue', '>', 0)
+        ->select('id', 'name', 'company', 'revenue', 'subscription_start_date')
+        ->orderBy('revenue', 'desc')
+        ->get()
+        ->map(function($client) {
+            return [
+                'id' => $client->id,
+                'name' => $client->name,
+                'company' => $client->company,
+                'revenue' => $client->revenue,
+                'revenue_formatted' => 'Rp ' . number_format($client->revenue, 0, ',', '.'),
+                'start_date' => date('d M Y', strtotime($client->subscription_start_date))
+            ];
+        });
+    
+    $totalRevenue = $clients->sum('revenue');
+    
+    return response()->json([
+        'success' => true,
+        'total' => $clients->count(),
+        'total_revenue' => $totalRevenue,
+        'total_revenue_formatted' => 'Rp ' . number_format($totalRevenue, 0, ',', '.'),
+        'data' => $clients,
+        'tahun' => $tahun
+    ]);
+}
+
+/**
+ * GET DAFTAR TAHUN YANG PUNYA DATA PENDAPATAN
+ */
+public function getTahunPendapatan()
+{
+    $tahunList = Client::where('revenue', '>', 0)
+        ->selectRaw('YEAR(subscription_start_date) as tahun')
+        ->distinct()
+        ->orderBy('tahun', 'asc')
+        ->pluck('tahun');
+    
+    // Pastikan return array meskipun kosong
+    return response()->json([
+        'success' => true,
+        'tahun_list' => $tahunList->isEmpty() ? [date('Y')] : $tahunList
+    ]);
+}
+
+/**
+ * GET TAHUN TERTUA DARI DATA KLIEN
+ */
+/**
+ * GET TAHUN TERTUA DARI DATA KLIEN
+ */
+public function getOldestYear()
+{
+    $oldestYear = Client::min(\DB::raw('YEAR(subscription_start_date)'));
+    
+    return response()->json([
+        'success' => true,
+        'oldest_year' => $oldestYear ?? date('Y')  // ← perbaiki: $oldest_year jadi $oldestYear
+    ]);
+}
 }

@@ -30,15 +30,13 @@
             <img src="{{ asset('img/klien.png') }}">Klien
         </a>
 
-        <a class="menu-btn {{ request()->is('analistik') ? 'active' : '' }}" href="/analistik">
-            <img src="{{ asset('img/analis.png') }}">Analistik
-        </a>
+      
 
         <hr class="hr" style="margin-top: 5px">
 
-        <a class="menu-btn {{ request()->is('bantuan') ? 'active' : '' }}" href="/help">
-            <img src="{{ asset('img/help.png') }}">Bantuan
-        </a>
+        <a class="menu-btn {{ request()->is('aktivitas') ? 'active' : '' }}" href="/aktivitas">
+    <img src="{{ asset('img/help.png') }}"> Aktivitas
+</a>
         <hr class="hr" style="margin-top: 5px">
 
          <div class="user-card">
@@ -90,7 +88,7 @@
                     </div>
                     <div class="form-group">
                         <label>Total Pendapatan (Rp)</label>
-                        <input type="number" name="pendapatan" id="pendapatan" value="0">
+                        <input type="text" name="pendapatan" id="pendapatan" placeholder="1.000.000" value="0">
                     </div>
                     <div class="form-group full-width">
                         <label>Langganan</label>
@@ -123,103 +121,103 @@
         </div>
     </div>
 
-<!-- ================= POPUP LIHAT ================= -->
-<div class="add" id="popupLihat">
-    <div class="addklien lihat-popup-modern">
-        <div class="lihat-header">
-            <div class="avatar-table" id="lihatAvatar">AR</div>
-            <h3 id="lihatNama">Ahmad Rizki</h3>
-            <p id="lihatEmail">ahmad.rizki@techcorp.co.id</p>
-            <div class="status aktif2" id="lihatStatus">Aktif</div>
-        </div>
+    <!-- ================= POPUP LIHAT ================= -->
+    <div class="add" id="popupLihat">
+        <div class="addklien lihat-popup-modern">
+            <div class="lihat-header">
+                <div class="avatar-table" id="lihatAvatar">AR</div>
+                <h3 id="lihatNama">Ahmad Rizki</h3>
+                <p id="lihatEmail">ahmad.rizki@techcorp.co.id</p>
+                <div class="status aktif2" id="lihatStatus">Aktif</div>
+            </div>
 
-        <div class="lihat-grid">
-            <div class="card">
-                <span>Perusahaan</span>
-                <strong id="lihatPerusahaan">-</strong>
+            <div class="lihat-grid">
+                <div class="card">
+                    <span>Perusahaan</span>
+                    <strong id="lihatPerusahaan">-</strong>
+                </div>
+                <div class="card">
+                    <span>No. Telepon</span>
+                    <strong id="lihatPhone">-</strong>
+                </div>
+                <div class="card">
+                    <span>Total Pendapatan</span>
+                    <strong id="lihatPendapatan">-</strong>
+                </div>
+                <div class="card">
+                    <span>Mulai Langganan</span>
+                    <strong id="lihatMulai">-</strong>
+                </div>
+                <div class="card">
+                    <span>Berakhir Langganan</span>
+                    <strong id="lihatAkhir">-</strong>
+                </div>
+                <div class="card">
+                    <span>Durasi</span>
+                    <strong id="lihatDurasi">-</strong>
+                </div>
+                <div class="card">
+                    <span>Sisa Waktu</span>
+                    <strong id="lihatSisa" class="green">-</strong>
+                </div>
             </div>
-            <div class="card">
-                <span>No. Telepon</span>
-                <strong id="lihatPhone">-</strong>
-            </div>
-            <div class="card">
-                <span>Total Pendapatan</span>
-                <strong id="lihatPendapatan">-</strong>
-            </div>
-            <div class="card">
-                <span>Mulai Langganan</span>
-                <strong id="lihatMulai">-</strong>
-            </div>
-            <div class="card">
-                <span>Berakhir Langganan</span>
-                <strong id="lihatAkhir">-</strong>
-            </div>
-            <div class="card">
-                <span>Durasi</span>
-                <strong id="lihatDurasi">-</strong>
-            </div>
-            <div class="card">
-                <span>Sisa Waktu</span>
-                <strong id="lihatSisa" class="green">-</strong>
-            </div>
-        </div>
 
-        <button class="btn-tutup2 close">Tutup</button>
+            <button class="btn-tutup2 close">Tutup</button>
+        </div>
     </div>
-</div>
 
-<!-- ================= POPUP EDIT ================= -->
-<div class="add" id="popupEdit">
-    <div class="addklien">
-        <h2>Edit Klien</h2>
-        <form id="formEditKlien">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Nama Lengkap</label>
-                    <input type="text" id="editNama" placeholder="Contoh: Ahmad Rizki" required>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="editEmail" placeholder="email@perusahaan.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Perusahaan</label>
-                    <input type="text" id="editPerusahaan" placeholder="Nama Perusahaan" required>
-                </div>
-                <div class="form-group">
-                    <label>No. Telepon</label>
-                    <input type="text" id="editNomer" placeholder="08xxxxxx" required>
-                </div>
-                <div class="form-group">
-                    <label>Total Pendapatan (Rp)</label>
-                    <input type="number" id="editPendapatan" value="0">
-                </div>
-                <div class="form-group full-width">
-                    <label>Masa Langganan</label>
-                    <div class="row-date">
-                        <input type="date" id="editMulai" readonly style="background:#f5f5f5">
-                        <input type="date" id="editAkhir">
-                        <select id="editDurasi">
-                            <option value="">Pilih Durasi</option>
-                            <option value="1">1 Tahun</option>
-                            <option value="2">2 Tahun</option>
-                            <option value="3">3 Tahun</option>
-                            <option value="4">4 Tahun</option>
-                            <option value="5">5 Tahun</option>
-                        </select>
+    <!-- ================= POPUP EDIT ================= -->
+    <div class="add" id="popupEdit">
+        <div class="addklien">
+            <h2>Edit Klien</h2>
+            <form id="formEditKlien">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nama Lengkap</label>
+                        <input type="text" id="editNama" placeholder="Contoh: Ahmad Rizki" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="editEmail" placeholder="email@perusahaan.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Perusahaan</label>
+                        <input type="text" id="editPerusahaan" placeholder="Nama Perusahaan" required>
+                    </div>
+                    <div class="form-group">
+                        <label>No. Telepon</label>
+                        <input type="text" id="editNomer" placeholder="08xxxxxx" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Pendapatan (Rp)</label>
+                        <input type="text" id="editPendapatan" value="0">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Masa Langganan</label>
+                        <div class="row-date">
+                            <input type="date" id="editMulai" readonly style="background:#f5f5f5">
+                            <input type="date" id="editAkhir">
+                            <select id="editDurasi">
+                                <option value="">Pilih Durasi</option>
+                                <option value="1">1 Tahun</option>
+                                <option value="2">2 Tahun</option>
+                                <option value="3">3 Tahun</option>
+                                <option value="4">4 Tahun</option>
+                                <option value="5">5 Tahun</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="info-box">
-                💡 Tip: Masa langganan standar adalah 1 tahun (365 hari).
-            </div>
-            <div class="form-action">
-                <button type="button" id="btnUpdate" class="simpan-btn">Update</button>
-                <button class="btn-tutup close">Tutup</button>
-            </div>
-        </form>
+                <div class="info-box">
+                    💡 Tip: Masa langganan standar adalah 1 tahun (365 hari).
+                </div>
+                <div class="form-action">
+                    <button type="button" id="btnUpdate" class="simpan-btn">Update</button>
+                    <button class="btn-tutup close">Tutup</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
     <!-- ================= POPUP HAPUS ================= -->
     <div class="add" id="popupHapus">
@@ -241,32 +239,28 @@
 
     <!-- ================= SEARCH & FILTER ================= -->
     <div class="search">
-    <input type="text" id="searchInput" class="search2" placeholder="Cari Klien Berdasarkan Nama, Email Atau Perusahaan">
-    <div class="view-buttons">
-        <button onclick="showTable()" class="view-button">Tampilan Tabel</button>
-        <button onclick="showCard()" class="view-button">Tampilan Kartu</button>
-    </div>
-    
-    <div class="dropdown-group">
-        <div class="dropdown">
-            <button onclick="toggleDropdown()" class="dropbtn">Filter Status ▼</button>
-            <div id="myDropdown" class="dropdown-content">
-                <a href="#" onclick="filterStatus('all')">Semua</a>
-                <a href="#" onclick="filterStatus('aktif')">Aktif</a>
-                <a href="#" onclick="filterStatus('akan_berakhir')">Akan Berakhir</a>
-                <a href="#" onclick="filterStatus('berakhir')">Berakhir</a>
+        <input type="text" id="searchInput" class="search2" placeholder="Cari Klien Berdasarkan Nama, Email Atau Perusahaan">
+        
+        <div class="dropdown-group">
+            <div class="dropdown">
+                <button onclick="toggleDropdown()" class="dropbtn">Filter Status ▼</button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="#" onclick="filterStatus('all')">Semua</a>
+                    <a href="#" onclick="filterStatus('aktif')">Aktif</a>
+                    <a href="#" onclick="filterStatus('akan_berakhir')">Akan Berakhir</a>
+                    <a href="#" onclick="filterStatus('berakhir')">Berakhir</a>
+                </div>
             </div>
-        </div>
 
-        <div class="dropdown">
-            <button onclick="toggleSortDropdown()" class="dropbtn">Urutkan ▼</button>
-            <div id="sortDropdown" class="dropdown-content">
-                <a href="#" onclick="sortTable('tercepat')">Paling Cepat</a>
-                <a href="#" onclick="sortTable('terlama')">Paling Lama</a>
+            <div class="dropdown">
+                <button onclick="toggleSortDropdown()" class="dropbtn">Urutkan ▼</button>
+                <div id="sortDropdown" class="dropdown-content">
+                    <a href="#" onclick="sortTable('tercepat')">Paling Cepat</a>
+                    <a href="#" onclick="sortTable('terlama')">Paling Lama</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- ================= TABEL ================= -->
     <table class="table" id="tableView">
@@ -282,64 +276,27 @@
             </tr>
         </thead>
         <tbody id="tableBody">
-    @foreach($clients as $client)
-    <tr 
-        data-id="{{ $client->id }}"
-        data-phone="{{ $client->phone_number }}"
-        data-mulai="{{ \Carbon\Carbon::parse($client->subscription_start_date)->format('Y-m-d') }}"
-        data-akhir="{{ \Carbon\Carbon::parse($client->subscription_end_date)->format('Y-m-d') }}"
-        data-pendapatan="{{ $client->revenue }}"
-        data-status="{{ $client->status }}">
-        <td class="klien">
-            <div class="avatar">{{ strtoupper(substr($client->name, 0, 2)) }}</div>
-            <span>{{ $client->name }}</span>
-        </td>
-        <td>{{ $client->company }}</td>
-        <td>{{ $client->email }}</td>
-        <td>{{ date('d M Y', strtotime($client->subscription_end_date)) }}</td>
-        <td>
-  @php
-    $endDate = \Carbon\Carbon::parse($client->subscription_end_date);
-    $today = \Carbon\Carbon::now();
-    $daysLeft = round($today->diffInDays($endDate, false));
-    
-    if ($daysLeft <= 0) {
-        $statusHtml = '<span class="status status-expired">
-                        <span class="status-icon">❌</span>
-                        <span class="status-text">Berakhir</span>
-                      </span>';
-    } elseif ($daysLeft <= 10 && $daysLeft > 0) {
-        // MERAH untuk 1-10 hari (darurat)
-        $statusHtml = '<span class="status status-danger">
-                        <span class="status-icon">🔴</span>
-                        <span class="status-text">' . $daysLeft . ' hari</span>
-                      </span>';
-    } elseif ($daysLeft <= 20 && $daysLeft > 10) {
-        // KUNING untuk 11-20 hari
-        $statusHtml = '<span class="status status-warning">
-                        <span class="status-icon">⚠️</span>
-                        <span class="status-text">' . $daysLeft . ' hari</span>
-                      </span>';
-    } elseif ($daysLeft <= 30 && $daysLeft > 20) {
-        // BIRU untuk 21-30 hari
-        $statusHtml = '<span class="status status-info">
-                        <span class="status-icon">ℹ️</span>
-                        <span class="status-text">' . $daysLeft . ' hari</span>
-                      </span>';
-    } else {
-        // HIJAU untuk >30 hari
-        $statusHtml = '<span class="status status-active">
-                        <span class="status-icon">✅</span>
-                        <span class="status-text">Aktif</span>
-                      </span>';
-    }
-@endphp
-{!! $statusHtml !!}
-            
-            
-        </td>
-        <td>Rp {{ number_format($client->revenue, 0, ',', '.') }}</td>
-        <td>
+            @foreach($clients as $client)
+            <tr 
+                data-id="{{ $client->id }}"
+                data-phone="{{ $client->phone_number }}"
+                data-mulai="{{ \Carbon\Carbon::parse($client->subscription_start_date)->format('Y-m-d') }}"
+                data-akhir="{{ \Carbon\Carbon::parse($client->subscription_end_date)->format('Y-m-d') }}"
+                data-pendapatan="{{ $client->revenue }}"
+                data-status="{{ $client->status }}">
+                <td class="klien">
+                    <div class="avatar">{{ strtoupper(substr($client->name, 0, 2)) }}</div>
+                    <span>{{ $client->name }}</span>
+                </td>
+                <td>{{ $client->company }}</td>
+                <td>{{ $client->email }}</td>
+                <td>{{ date('d M Y', strtotime($client->subscription_end_date)) }}</td>
+                <td class="status-cell" data-end-date="{{ $client->subscription_end_date }}">
+                    <!-- Status akan diisi oleh JS -->
+                    <span class="status status-loading">Loading...</span>
+                </td>
+                <td>Rp {{ number_format($client->revenue, 0, ',', '.') }}</td>
+                <td>
                     <div class="aksi">
                         <span class="icon lihat">👁️</span>
                         <span class="icon edit">✏️</span>
