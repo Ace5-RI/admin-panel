@@ -99,7 +99,51 @@ body {
 
 
 
+.table-txt{
+    font-size: 16px;
+    margin-top: 10px;
 
+}
+
+.year-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 20px 0;
+    background: white;
+    padding: 10px 20px;
+    border-radius: 40px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.year-nav {
+    background: #20b486;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.year-nav:hover {
+    background: #189a6f;
+    transform: scale(1.05);
+}
+
+.current-year {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1f2937;
+    min-width: 80px;
+    text-align: center;
+}
 
 .menu-lgt:hover{
     background-color:red;
@@ -149,6 +193,7 @@ body {
 
 /* CARD CLIENT */
 
+/* CARD CLIENT */
 .container{
     display:flex;
     flex-wrap:wrap;
@@ -156,19 +201,60 @@ body {
     justify-content:center;
 }
 
-.total{
-    flex:1 1 250px;
-    max-width:400px;
-    height:200px;
-
-    background:white;
-    border-radius:15px;
-    padding:20px;
-    position:relative;
-    outline:black solid 1px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+/* Base style untuk semua card */
+.total {
+    flex: 1 1 250px;
+    max-width: 400px;
+    height: 200px;
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    outline: black solid 1px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
     transition: 0.3s;
+    cursor: pointer;
+    outline: none;
+}
+
+/* Card 1 - Total Klien */
+.total:nth-child(1) {
+    background: linear-gradient(135deg, #468CF6 0%, #60A5FA 100%);
+    color: white;
     
+}
+
+/* Card 2 - Klien Aktif */
+.total:nth-child(2) {
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+    color: white;
+}
+
+/* Card 3 - Tidak Aktif */
+.total:nth-child(3) {
+    background: linear-gradient(135deg, #DC2626 0%, #F87171 100%);
+    color: white;
+}
+
+/* Card 4 - Total Pendapatan */
+.total:nth-child(4) {
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+    color: white;
+}
+
+.total:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.total h4 {
+    margin: 0;
+    font-size: 23px;
+    font-weight: 500;
+}
+
+.total h1 {
+    margin: 10px 0;
+    font-size: 32px;
 }
 
 .avatar-lgt {
@@ -231,22 +317,9 @@ body {
 }
 
 
-.total:hover{
-    transform: translateY(-8px);
-    box-shadow:0 15px 30px rgba(0,0,0,0.15);
-    
-}
 
-.total h4{
-    margin:0;
-    font-size:23px;
-    font-weight:500;
-}
 
-.total h1{
-    margin:10px 0;
-    font-size:32px;
-}
+
 
 .percentage{
     font-size:20px;
@@ -281,19 +354,22 @@ body {
 }
 
 
-.table{
-    flex:1 1 500px;
-    height:350px;
-    background:white;
-    border-radius:15px;
-    outline:black solid 1px;
-    padding:20px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+.table {
+    flex: 1 1 500px;
+    height: 400px;
+    background: white;
+    border-radius: 15px;
+    outline: black solid 1px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;  /* ← TAMBAHKAN */
 }
 
-canvas{
-    width:100% !important;
-    height:100% !important;
+.table canvas {
+    width: 100% !important;
+    flex: 1;                 /* ← TAMBAHKAN */
+    min-height: 0;          /* ← TAMBAHKAN */
 }
 
 /* INFO */
@@ -928,27 +1004,22 @@ canvas{
 
 /* Warna header tiap modal */
 .modal-klien .modal-header {
-    background: linear-gradient(135deg,  #0A8AAD 20%, #00C8FF 100%);
+    background: linear-gradient(135deg, #468CF6 0%, #60A5FA 100%);
     color: white;
 }
 
 .modal-aktif .modal-header {
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
     color: white;
 }
 
 .modal-tidak-aktif .modal-header {
-    background: linear-gradient(135deg,  #C72137 25%, #EB4050 75%, #FD88A5 100%);
-    color: white;
-}
-
-.modal-warning .modal-header {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #DC2626 0%, #F87171 100%);
     color: white;
 }
 
 .modal-pendapatan .modal-header {
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
     color: white;
 }
 
@@ -1024,3 +1095,42 @@ canvas{
     background: #189a6f;
     transform: scale(1.02);
 }
+
+.warning-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.delete-warning-btn,
+.invoice-warning-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    text-align: center;
+    border: none;
+}
+
+.delete-warning-btn {
+    background: #ef4444;
+    color: white;
+}
+
+.delete-warning-btn:hover {
+    background: #dc2626;
+}
+
+.invoice-warning-btn {
+    background: #f59e0b;
+    color: white;
+}
+
+.invoice-warning-btn:hover {
+    background: #d97706;
+    transform: scale(1.02);
+}
+

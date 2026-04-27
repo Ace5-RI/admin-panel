@@ -1,0 +1,402 @@
+/* ==================== INVOICE MODAL STYLES ==================== */
+.invoice-container {
+    background: white;
+    border-radius: 20px;
+    width: 550px;
+    max-width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+    animation: fadeIn 0.3s ease;
+}
+
+#popupInvoice {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Header */
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+    border-radius: 20px 20px 0 0;
+}
+
+.invoice-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.invoice-logo img {
+    height: 45px;
+}
+
+.invoice-title {
+    text-align: right;
+}
+
+.invoice-title h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.invoice-title p {
+    margin: 4px 0 0;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.close-invoice {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.close-invoice:hover {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.05);
+}
+
+/* Body */
+.invoice-body {
+    padding: 24px;
+    background: white;
+}
+
+/* Kepada Yth */
+.invoice-to {
+    background: #f8fafc;
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    border-left: 4px solid #22c55e;
+}
+
+.to-label {
+    font-size: 11px;
+    color: #6b7280;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.to-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.to-detail {
+    font-size: 13px;
+    color: #4b5563;
+    margin-top: 6px;
+}
+
+/* Info Grid */
+.invoice-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.info-card {
+    background: #f9fafb;
+    padding: 12px 16px;
+    border-radius: 10px;
+}
+
+.info-card .info-label {
+    font-size: 10px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+.info-card .info-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.info-card .status-active {
+    color: #22c55e;
+}
+
+.info-card .status-warning {
+    color: #f97316;
+}
+
+.info-card .status-expired {
+    color: #dc2626;
+}
+
+/* Divider */
+.invoice-divider {
+    height: 1px;
+    background: linear-gradient(to right, #e5e7eb, transparent);
+    margin: 20px 0;
+}
+
+/* Tabel */
+.invoice-table-modern {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.invoice-table-modern th {
+    text-align: left;
+    padding: 12px 0;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6b7280;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.invoice-table-modern td {
+    padding: 12px 0;
+    font-size: 14px;
+    color: #1f2937;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.invoice-table-modern .text-right {
+    text-align: right;
+}
+
+.invoice-table-modern tfoot td {
+    border-top: 2px solid #e5e7eb;
+    border-bottom: none;
+    padding-top: 16px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #22c55e;
+}
+
+/* Informasi Pembayaran */
+.invoice-payment-info {
+    background: #f0fdf4;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 20px 0;
+    border-left: 4px solid #22c55e;
+}
+
+.payment-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #166534;
+    margin-bottom: 12px;
+}
+
+.payment-bank {
+    background: white;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.bank-name {
+    font-weight: 700;
+    color: #1f2937;
+    font-size: 13px;
+}
+
+.bank-account {
+    font-family: monospace;
+    font-weight: 600;
+    color: #059669;
+    font-size: 13px;
+}
+
+.bank-owner {
+    font-size: 10px;
+    color: #6b7280;
+}
+
+.payment-note {
+    font-size: 10px;
+    color: #dc2626;
+    margin-top: 8px;
+    text-align: center;
+}
+
+/* Pesan Penutup */
+.invoice-message {
+    text-align: center;
+    margin: 20px 0 16px;
+}
+
+.invoice-message p {
+    margin: 6px 0;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.signature {
+    margin-top: 16px;
+}
+
+.signature p {
+    margin: 3px 0;
+}
+
+.signature strong {
+    color: #1f2937;
+}
+
+.invoice-note {
+    font-size: 9px;
+    text-align: center;
+    color: #9ca3af;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px dashed #e5e7eb;
+}
+
+/* Tombol Aksi */
+.invoice-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.btn-print, .btn-wa, .btn-close {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 12px;
+    transition: 0.3s;
+}
+
+.btn-print {
+    background: #20b486;
+    color: white;
+}
+
+.btn-print:hover {
+    background: #189a6f;
+    transform: translateY(-2px);
+}
+
+.btn-wa {
+    background: #25D366;
+    color: white;
+}
+
+.btn-wa:hover {
+    background: #128C7E;
+    transform: translateY(-2px);
+}
+
+.btn-close {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.btn-close:hover {
+    background: #e5e7eb;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .invoice-container {
+        width: 95%;
+    }
+    
+    .invoice-info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .invoice-actions {
+        flex-wrap: wrap;
+    }
+    
+    .btn-print, .btn-wa, .btn-close {
+        flex: 1;
+        text-align: center;
+        padding: 8px 16px;
+    }
+    
+    .payment-bank {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .to-detail {
+        font-size: 11px;
+        word-break: break-all;
+    }
+}
+
+/* Print */
+@media print {
+    .panel, .year-selector, .invoice-actions, .close-invoice {
+        display: none !important;
+    }
+    
+    .main, .container2 {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .invoice-container {
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        border-radius: 0;
+    }
+    
+    .invoice-header {
+        background: #1a1a2e !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .invoice-payment-info {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
