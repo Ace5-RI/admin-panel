@@ -6,6 +6,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PaymentController;
 // ================= GUEST =================
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'showLogin']);
@@ -46,17 +47,14 @@ Route::prefix('api/dashboard')->group(function () {
     Route::get('/klien-tidak-aktif', [DashboardController::class, 'getKlienTidakAktifDetail']);
     Route::get('/klien-akan-berakhir', [DashboardController::class, 'getKlienAkanBerakhirDetail']);
     Route::get('/total-pendapatan', [DashboardController::class, 'getTotalPendapatanDetail']);
-<<<<<<< HEAD
+
 });
 
 // ================= PAYMENT ROUTE =================
 Route::middleware('auth')->group(function (){
     Route::get('payment/{client_id}',[PaymentController::class,'show'])->name('payment.page');
-    Route::post();
-    Route::get();
-});
-=======
-    Route::get('/tahun-pendapatan', [DashboardController::class, 'getTahunPendapatan']); 
+    Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');
+    Route::get('payment/invoice/{client_id/{invoice_id}',[PaymentController::class, 'invoice'])->name('payment.invoice');
 });
 
 
@@ -64,4 +62,3 @@ Route::middleware('auth')->group(function (){
 Route::get('/aktivitas', [ActivityController::class, 'index']);
 Route::get('/api/activities', [ActivityController::class, 'getActivities']);
 Route::post('/invoice/generate/{id}', [InvoiceController::class, 'generateAndSend']);
->>>>>>> 25d930959d8f54cec523aafbb73fc773177c6ddc
