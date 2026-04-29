@@ -143,60 +143,40 @@ function openInvoicePopup(data) {
    // Tombol WA - Kirim Link Download PDF
 // Tombol WA - Kirim Link Download PDF (TANPA EMOJI)
 const waBtn = document.getElementById('sendWABtn');
+
 if (waBtn) {
     waBtn.addEventListener('click', function() {
-       fetch(`/invoice/generate/${data.id}`, {
-    method: 'POST',
-    headers: {
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-        'Accept': 'application/json'
-    }
-})
-.then(res => res.json())
-.then(res => {
-    if (!res.success) {
-        alert("Gagal generate invoice");
-        return;
-    }
 
-    const pdfLink = res.url;
+        fetch(`/invoice/generate/${data.id}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(res => {
+            if (!res.success) {
+                alert("Gagal generate invoice");
+                return;
+            }
 
-    const message = encodeURIComponent(
-        `Yth. ${data.nama}\n\n` +
-        `Berikut invoice Anda:\n\n` +
-        `${pdfLink}\n\n` +
-        `Hormat kami,\nAdmin Panel`
-    );
+            const pdfLink = res.url;
 
-    window.open(`https://wa.me/${data.phone}?text=${message}`, '_blank');
-});
-        
-        
-        
-        const phoneNumber = data.phone || '';
-        
-        if (phoneNumber) {
+            const message = encodeURIComponent(
+                `Yth. ${data.nama}\n\n` +
+                `Berikut invoice Anda:\n\n` +
+                `${pdfLink}\n\n` +
+                `Hormat kami,\nAdmin Panel`
+            );
+
+            const phoneNumber = "6281338447310"; // TEST MANUAL
+
             window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
-        } else {
-            Swal.fire({
-                title: 'Masukkan Nomor WhatsApp',
-                input: 'tel',
-                inputLabel: 'Nomor WhatsApp Klien',
-                inputPlaceholder: 'Contoh: 6281234567890',
-                showCancelButton: true,
-                confirmButtonText: 'Kirim',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed && result.value) {
-                    let phone = result.value.replace(/[^0-9]/g, '');
-                    if (phone.startsWith('0')) phone = '62' + phone.substring(1);
-                    window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
-                }
-            });
-        }
+        });
+
     });
 }
-    
     document.querySelectorAll('.close-invoice').forEach(btn => {
         btn.addEventListener('click', () => document.getElementById('popupInvoice')?.remove());
     });

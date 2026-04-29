@@ -119,7 +119,8 @@ function openInvoicePopup(data) {
     document.body.insertAdjacentHTML('beforeend', popupHtml);
     
     // Tombol WA Kirim Link
-    const waBtn = document.getElementById('sendWABtn');
+const waBtn = document.getElementById('sendWABtn');
+
 if (waBtn) {
     waBtn.addEventListener('click', function() {
 
@@ -179,7 +180,7 @@ if (waBtn) {
                     }
                 });
             }
-        });
+  
     }
     
     document.querySelectorAll('.close-invoice').forEach(btn => {
@@ -189,7 +190,7 @@ if (waBtn) {
     document.getElementById('popupInvoice')?.addEventListener('click', function(e) {
         if (e.target === this) this.remove();
     });
-}
+
 
 // Fungsi print
 window.printInvoiceFromDashboard = function() {
