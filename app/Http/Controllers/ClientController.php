@@ -167,4 +167,13 @@ class ClientController extends Controller
             'data' => $clients
         ]);
     }
+
+    public function sendReminder($id)
+    {
+        $client = Client::findOrFail($id);
+        
+        $response = Fonnte::sendMessage($client->phone, 'Halo, ini pesan dari sistem');
+
+        return back()->with('success', 'Pesan Terkirim!');
+    }
 }
