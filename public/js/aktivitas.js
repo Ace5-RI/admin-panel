@@ -3,13 +3,12 @@
 // ==================== FUNGSI UTILITY ====================
 function getIconByType(type) {
     const icons = {
-        login: '🔐',
-        invoice: '📄',
-        payment: '💳',
-        edit: '✏️',
-        create: '➕',
-        delete: '🗑️'
-    };
+    login: '🔐',
+    invoice: '📄',
+    edit: '✏️',
+    create: '➕',
+    delete: '🗑️'
+};
     return icons[type] || '📋';
 }
 
@@ -125,14 +124,14 @@ function renderActivities(activities, filter) {
 
 function updateStatCounts(stats) {
     const totalLoginEl = document.getElementById('totalLogin');
-    const totalInvoiceEl = document.getElementById('totalInvoice');
+    const totalClientEl = document.getElementById('totalClient');  // ← GANTI
     const totalEditEl = document.getElementById('totalEdit');
-    const totalPaymentEl = document.getElementById('totalPayment');
+    const totalInvoiceEl = document.getElementById('totalInvoice');
     
     if (totalLoginEl) totalLoginEl.innerText = stats?.total_login || 0;
-    if (totalInvoiceEl) totalInvoiceEl.innerText = stats?.total_invoice || 0;
+    if (totalClientEl) totalClientEl.innerText = stats?.total_client || 0;  // ← GANTI
     if (totalEditEl) totalEditEl.innerText = stats?.total_edit || 0;
-    if (totalPaymentEl) totalPaymentEl.innerText = stats?.total_payment || 0;
+    if (totalInvoiceEl) totalInvoiceEl.innerText = stats?.total_invoice || 0;
 }
 
 function showEmptyState(message) {

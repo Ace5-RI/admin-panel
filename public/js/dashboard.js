@@ -1,6 +1,16 @@
-// dashboard.js - JAVASCRIPT KHUSUS UNTUK HALAMAN DASHBOARD
+// ==================== DASHBOARD JS ====================
 
 console.log("DASHBOARD JS LOADED 🔥");
+
+// ================== LOAD INVOICE CSS & JS ==================
+const invoiceCss = document.createElement('link');
+invoiceCss.rel = 'stylesheet';
+invoiceCss.href = '/css/invoice.css';
+document.head.appendChild(invoiceCss);
+
+const invoiceScript = document.createElement('script');
+invoiceScript.src = '/js/invoice.js';
+document.head.appendChild(invoiceScript);
 
 // ================== GLOBAL VARIABLES ==================
 let currentYear = new Date().getFullYear();
@@ -8,11 +18,6 @@ let userChart = null;
 let activityChart = null;
 let warningClientIdToDelete = null;
 let warningClientNameToDelete = null;
-
-const invoiceCss = document.createElement('link');
-invoiceCss.rel = 'stylesheet';
-invoiceCss.href = '/css/invoice.css';
-document.head.appendChild(invoiceCss);
 
 // ================== FUNGSI MAX Y AXIS ==================
 function getMaxYAxis(data) {
@@ -39,182 +44,6 @@ function escapeHtml(str) {
         return m;
     });
 }
-
-function formatDateInvoice(dateStr) {
-    if (!dateStr) return '-';
-    const d = new Date(dateStr);
-    const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-    return `${d.getDate()} ${bulan[d.getMonth()]} ${d.getFullYear()}`;
-}
-
-// ==================== INVOICE POPUP ====================
-function openInvoicePopup(data) {
-    const oldPopup = document.getElementById('popupInvoice');
-    if (oldPopup) oldPopup.remove();
-    
-    const today = new Date();
-    const endDate = new Date(data.akhir);
-    const daysLeft = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
-    
-    let statusText = '';
-    let statusClass = '';
-    if (daysLeft <= 0) {
-        statusText = 'EXPIRED';
-        statusClass = 'status-expired';
-    } else if (daysLeft <= 7) {
-        statusText = `BERAKHIR DALAM ${daysLeft} HARI`;
-        statusClass = 'status-warning';
-    } else {
-        statusText = 'AKTIF';
-        statusClass = 'status-active';
-    }
-    
-    const nomorInvoice = `INV/${new Date().getFullYear()}/${String(data.id).padStart(4, '0')}`;
-    
-    const popupHtml = `
-    <div class="add open" id="popupInvoice" style="opacity:1; pointer-events:auto; z-index:10001;">
-        <div class="invoice-container">
-            <div class="invoice-header">
-                <div>
-                    <h2>INVOICE</h2>
-                    <p>${nomorInvoice}</p>
-                </div>
-                <button class="close-invoice">&times;</button>
-            </div>
-            
-            <div class="invoice-body">
-                <div class="invoice-to">
-                    <div class="to-label">KEPADA YTH:</div>
-                    <div class="to-name">${escapeHtml(data.nama)}</div>
-                    <div class="to-detail">${escapeHtml(data.perusahaan || '-')}</div>
-                    <div class="to-detail">📧 ${escapeHtml(data.email)}</div>
-                </div>
-                
-                <div class="invoice-info-grid">
-                    <div class="info-card">
-                        <div class="info-label">TANGGAL INVOICE</div>
-                        <div class="info-value">${formatDateInvoice(today)}</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">STATUS</div>
-                        <div class="info-value ${statusClass}">${statusText}</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">MASA BERAKHIR</div>
-                        <div class="info-value">${formatDateInvoice(data.akhir)}</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">SISA HARI</div>
-                        <div class="info-value">${daysLeft > 0 ? daysLeft + ' hari' : 'Berakhir'}</div>
-                    </div>
-                </div>
-                
-                <div class="invoice-divider"></div>
-                
-                <table class="invoice-table-modern">
-                    <thead><tr><th>DESKRIPSI</th><th class="text-right">TOTAL</th></tr></thead>
-                    <tbody><tr><td>Langganan Tahunan</td><td class="text-right">${data.pendapatan}</td></tr></tbody>
-                    <tfoot><tr><td class="text-right"><strong>TOTAL</strong></td><td class="text-right"><strong>${data.pendapatan}</strong></td></tr></tfoot>
-                </table>
-                
-                <div class="invoice-divider"></div>
-                
-                <div class="invoice-message">
-                    <p>Terima kasih atas kepercayaan dan kerja samanya.</p>
-                    <div class="signature">
-                        <p>Hormat kami,</p>
-                        <p><strong>Admin Panel</strong></p>
-                    </div>
-                </div>
-                
-                <div class="invoice-note">*Invoice ini digenerate secara otomatis oleh sistem.</div>
-                
-                <div class="invoice-actions">
-                    <button class="btn-print" onclick="window.printInvoiceFromDashboard()">🖨️ CETAK</button>
-                    <button class="btn-wa" id="sendWABtn">📱 KIRIM KE WA</button>
-                    <button class="btn-close close-invoice">TUTUP</button>
-                </div>
-            </div>
-        </div>
-    </div>`;
-    
-    document.body.insertAdjacentHTML('beforeend', popupHtml);
-    
-   // Tombol WA - Kirim Link Download PDF
-// Tombol WA - Kirim Link Download PDF (TANPA EMOJI)
-const waBtn = document.getElementById('sendWABtn');
-
-if (waBtn) {
-    waBtn.addEventListener('click', function() {
-
-        fetch(`/invoice/generate/${data.id}`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Accept': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(res => {
-            if (!res.success) {
-                alert("Gagal generate invoice");
-                return;
-            }
-
-            const pdfLink = res.url;
-
-            const message = encodeURIComponent(
-                `Yth. ${data.nama}\n\n` +
-                `Berikut invoice Anda:\n\n` +
-                `${pdfLink}\n\n` +
-                `Hormat kami,\nAdmin Panel`
-            );
-
-            const phoneNumber = "6281338447310"; // TEST MANUAL
-
-            window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
-        });
-
-    });
-}
-    document.querySelectorAll('.close-invoice').forEach(btn => {
-        btn.addEventListener('click', () => document.getElementById('popupInvoice')?.remove());
-    });
-    
-    document.getElementById('popupInvoice')?.addEventListener('click', function(e) {
-        if (e.target === this) this.remove();
-    });
-}
-
-// Fungsi print
-window.printInvoiceFromDashboard = function() {
-    const invoiceContainer = document.querySelector('#popupInvoice .invoice-container');
-    if (!invoiceContainer) return;
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write(`
-        <html><head><title>Invoice</title>
-        <style>
-            body { font-family: Arial, sans-serif; padding: 40px; }
-            .invoice-container { max-width: 550px; margin: 0 auto; }
-            .invoice-header { background: #1a1a2e; color: white; padding: 20px; text-align: center; }
-            .invoice-body { padding: 20px; }
-            .invoice-to { background: #f8fafc; padding: 15px; margin-bottom: 20px; }
-            .invoice-info-grid { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-            .info-card { background: #f1f5f9; padding: 10px; flex: 1; }
-            .invoice-table-modern { width: 100%; border-collapse: collapse; margin: 20px 0; }
-            .invoice-table-modern th, .invoice-table-modern td { padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: left; }
-            .text-right { text-align: right; }
-            .invoice-divider { border-top: 1px dashed #e5e7eb; margin: 15px 0; }
-            .invoice-message { text-align: center; margin: 20px 0; }
-            .invoice-note { text-align: center; font-size: 10px; color: #9ca3af; }
-            .invoice-actions { display: none; }
-        </style>
-        </head><body>${invoiceContainer.outerHTML}</body></html>
-    `);
-    printWindow.document.close();
-    printWindow.print();
-    printWindow.close();
-};
 
 // ================== LOAD DASHBOARD ==================
 async function loadDashboard() {
@@ -267,11 +96,22 @@ async function loadDashboard() {
             container.innerHTML = "";
             data.warningClients.forEach(client => {
                 let color = "green", statusText = "";
-                if (client.days_left <= 0) { color = "red"; statusText = "⚠️ Langganan telah berakhir"; }
-                else if (client.days_left <= 5) { color = "red"; statusText = `🔴 Berakhir dalam ${client.days_left} hari`; }
-                else if (client.days_left <= 15) { color = "orange"; statusText = `🟠 Berakhir dalam ${client.days_left} hari`; }
-                else if (client.days_left <= 20) { color = "yellow"; statusText = `🟡 Berakhir dalam ${client.days_left} hari`; }
-                else { color = "green"; statusText = `🟢 Aktif, berakhir ${client.days_left} hari`; }
+                if (client.days_left <= 0) {
+                    color = "red";
+                    statusText = "⚠️ Langganan telah berakhir";
+                } else if (client.days_left <= 5) {
+                    color = "red";
+                    statusText = `🔴 Berakhir dalam ${client.days_left} hari`;
+                } else if (client.days_left <= 15) {
+                    color = "orange";
+                    statusText = `🟠 Berakhir dalam ${client.days_left} hari`;
+                } else if (client.days_left <= 20) {
+                    color = "yellow";
+                    statusText = `🟡 Berakhir dalam ${client.days_left} hari`;
+                } else {
+                    color = "green";
+                    statusText = `🟢 Aktif, berakhir ${client.days_left} hari`;
+                }
                 
                 const showDeleteBtn = client.days_left <= 0;
                 const card = `
@@ -280,12 +120,13 @@ async function loadDashboard() {
                         <div class="card-name">${escapeHtml(client.name)}</div>
                         <div class="card-company">${escapeHtml(client.company)}</div>
                         <div class="detail-row"><span>📧</span><span>${escapeHtml(client.email || '-')}</span></div>
+                        <div class="detail-row"><span>📞</span><span>${escapeHtml(client.phone || '-')}</span></div>
                         <div class="detail-row"><span>📅</span><span>${client.subscription_end_date}</span></div>
                         <div class="detail-row"><span>💰</span><span>${client.price}</span></div>
                         <div class="status-message">${statusText}</div>
                         <div class="warning-actions">
                             ${showDeleteBtn ? `<button class="delete-warning-btn" data-id="${client.id}" data-name="${escapeHtml(client.name)}">✕ Hapus</button>` : ''}
-                            <button class="invoice-warning-btn" data-id="${client.id}" data-name="${escapeHtml(client.name)}" data-company="${escapeHtml(client.company)}" data-email="${escapeHtml(client.email)}" data-price="${client.price}" data-end="${client.subscription_end_date}">📄 Invoice</button>
+                            <button class="invoice-warning-btn" data-id="${client.id}" data-name="${escapeHtml(client.name)}" data-company="${escapeHtml(client.company)}" data-email="${escapeHtml(client.email)}" data-phone="${client.phone || ''}" data-price="${client.price}" data-end="${client.subscription_end_date}">📄 Invoice</button>
                         </div>
                     </div>
                 `;
@@ -327,12 +168,18 @@ document.body.addEventListener('click', function(e) {
         const name = invoiceBtn.getAttribute('data-name');
         const company = invoiceBtn.getAttribute('data-company');
         const email = invoiceBtn.getAttribute('data-email');
+        const phone = invoiceBtn.getAttribute('data-phone');
         const price = invoiceBtn.getAttribute('data-price');
         const endDate = invoiceBtn.getAttribute('data-end');
         
         openInvoicePopup({
-            id: id, nama: name, perusahaan: company, email: email,
-            pendapatan: price, akhir: endDate
+            id: id,
+            nama: name,
+            perusahaan: company,
+            email: email,
+            phone: phone,
+            pendapatan: price,
+            akhir: endDate
         });
         return;
     }

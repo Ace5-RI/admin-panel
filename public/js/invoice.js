@@ -7,6 +7,16 @@ function formatDateInvoice(dateStr) {
     return `${d.getDate()} ${bulan[d.getMonth()]} ${d.getFullYear()}`;
 }
 
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
 function openInvoicePopup(data) {
     const oldPopup = document.getElementById('popupInvoice');
     if (oldPopup) oldPopup.remove();
@@ -15,8 +25,7 @@ function openInvoicePopup(data) {
     const endDate = new Date(data.akhir);
     const daysLeft = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
     
-    let statusText = '';
-    let statusClass = '';
+    let statusText = '', statusClass = '';
     if (daysLeft <= 0) {
         statusText = 'EXPIRED';
         statusClass = 'status-expired';
@@ -105,7 +114,7 @@ function openInvoicePopup(data) {
                     </div>
                 </div>
                 
-                <div class="invoice-note">*Invoice ini digenerate secara otomatis oleh sistem.</div>
+                <div class="invoice-note">*Invoice ini digenerate secara otomatis oleh sistema.</div>
                 
                 <div class="invoice-actions">
                     <button class="btn-print" onclick="printInvoiceFromDashboard()">🖨️ CETAK</button>
@@ -118,71 +127,55 @@ function openInvoicePopup(data) {
     
     document.body.insertAdjacentHTML('beforeend', popupHtml);
     
-    // Tombol WA Kirim Link
-const waBtn = document.getElementById('sendWABtn');
-
-if (waBtn) {
-    waBtn.addEventListener('click', function() {
-
-        fetch(`/invoice/generate/${data.id}`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Accept': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(res => {
-            if (!res.success) {
-                alert("Gagal generate invoice");
-                return;
-            }
-
-            const pdfLink = res.url;
-
-            const message = encodeURIComponent(
-                `Yth. ${data.nama}\n\n` +
-                `Berikut invoice langganan Anda:\n\n` +
-                `📄 Link Invoice: ${pdfLink}\n` +
-                `📅 Jatuh Tempo: ${formatDateInvoice(data.akhir)}\n` +
-                `💰 Total: ${data.pendapatan}\n\n` +
-                `Hormat kami,\nAdmin Panel`
-            );
-
-            const phoneNumber = data.phone || '';
-            if (phoneNumber) {
+    // ========== TOMBOL WA (HANYA SATU!) ==========
+    const waBtn = document.getElementById('sendWABtn');
+    if (waBtn) {
+        waBtn.addEventListener('click', function() {
+            fetch(`/invoice/generate/${data.id}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(result => {
+                if (!result.success) {
+                    alert(result.message || "Gagal generate invoice");
+                    return;
+                }
+                
+                const pdfLink = result.url;
+                let phoneNumber = (data.phone || '').replace(/[^0-9]/g, '');
+                
+                if (!phoneNumber) {
+                    alert('Nomor WhatsApp client belum ada');
+                    return;
+                }
+                
+                if (phoneNumber.startsWith('0')) {
+                    phoneNumber = '62' + phoneNumber.substring(1);
+                }
+                
+                const message = encodeURIComponent(
+                    `Yth. ${data.nama}\n\n` +
+                    `Berikut invoice langganan Anda:\n\n` +
+                    `🔗 Link Invoice: ${pdfLink}\n` +
+                    `📅 Jatuh Tempo: ${formatDateInvoice(data.akhir)}\n` +
+                    `💰 Total: ${data.pendapatan}\n\n` +
+                    `Hormat kami,\nAdmin Panel`
+                );
+                
                 window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
-            } else {
-                alert("Nomor tidak ada");
-            }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Terjadi kesalahan saat generate invoice");
+            });
         });
-
-    });
-}
-            
-            const phoneNumber = data.phone || '';
-            if (phoneNumber) {
-                window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
-            } else {
-                Swal.fire({
-                    title: 'Masukkan Nomor WhatsApp',
-                    input: 'tel',
-                    inputLabel: 'Nomor WhatsApp Klien',
-                    inputPlaceholder: 'Contoh: 6281234567890',
-                    showCancelButton: true,
-                    confirmButtonText: 'Kirim',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed && result.value) {
-                        let phone = result.value.replace(/[^0-9]/g, '');
-                        if (phone.startsWith('0')) phone = '62' + phone.substring(1);
-                        window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
-                    }
-                });
-            }
-  
     }
     
+    // Tombol close
     document.querySelectorAll('.close-invoice').forEach(btn => {
         btn.addEventListener('click', () => document.getElementById('popupInvoice')?.remove());
     });
@@ -190,7 +183,7 @@ if (waBtn) {
     document.getElementById('popupInvoice')?.addEventListener('click', function(e) {
         if (e.target === this) this.remove();
     });
-
+}
 
 // Fungsi print
 window.printInvoiceFromDashboard = function() {
@@ -213,13 +206,3 @@ window.printInvoiceFromDashboard = function() {
     printWindow.print();
     printWindow.close();
 };
-
-function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-    });
-}

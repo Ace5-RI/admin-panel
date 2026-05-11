@@ -26,11 +26,11 @@ class ActivityController extends Controller
         $activities = $query->get();
         
         $stats = [
-            'total_login' => Activity::where('type', 'login')->count(),
-            'total_invoice' => Activity::where('type', 'invoice')->count(),
-            'total_edit' => Activity::whereIn('type', ['edit', 'delete'])->count(),
-            'total_payment' => Activity::where('type', 'payment')->count(),
-        ];
+    'total_login' => Activity::where('type', 'login')->count(),
+    'total_client' => Activity::where('type', 'create_client')->count(),  // ← TAMBAH
+    'total_edit' => Activity::where('type', 'edit')->count(),
+    'total_invoice' => Activity::where('type', 'invoice')->count(),
+];
         
         return response()->json([
             'success' => true,

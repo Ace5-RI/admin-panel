@@ -471,3 +471,7 @@ body {
         font-size: 12px;
     }
 }
+
+.stat-card.client .stat-icon { 
+    background: linear-gradient(135deg, #f59e0b, #d97706); 
+}

@@ -161,8 +161,8 @@
                 <h3>KEPADA YTH:</h3>
                 <p><strong>{{ $client->name }}</strong></p>
                 <p>{{ $client->company }}</p>
-                <p>📧 {{ $client->email }}</p>
-                <p>📞 {{ $client->phone_number }}</p>
+                <p>{{ $client->email }}</p>
+                <p>{{ $client->phone_number }}</p>
             </div>
             
             <div class="detail-grid">
@@ -198,7 +198,7 @@
             
             <div class="footer">
                 <p>Terima kasih atas kepercayaan dan kerja samanya.</p>
-                <p><strong>Admin Panel</strong></p>
+                <p><strong>Bali Solution Biz</strong></p>
             </div>
         </div>
     </div>

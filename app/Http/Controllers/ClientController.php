@@ -4,23 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Client;
+use App\Models\Activity;  // ✅ TAMBAHKAN INI
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ClientController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $clients = Client::orderBy('created_at', 'desc')->get();
         return view('Langganan.klien', compact('clients'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -51,7 +46,18 @@ class ClientController extends Controller
             'subscription_start_date' => $request->mulai,
             'subscription_end_date' => $request->akhir,
             'revenue' => $request->pendapatan,
-            'status' => 'aktif',  // ✅ Kembali ke 'aktif'
+            'status' => 'aktif',
+        ]);
+
+        // ✅ LOG: Tambah Klien
+        Activity::create([
+            'type' => 'create',
+            'title' => 'Menambah Klien Baru',
+            'detail' => "Menambahkan klien: {$client->name} ({$client->company})",
+            'user_name' => auth()->user()->name ?? 'System',
+            'user_email' => auth()->user()->email ?? 'system',
+            'status' => 'success',
+            'ip_address' => $request->ip()
         ]);
 
         if ($request->ajax() || $request->wantsJson()) {
@@ -65,14 +71,11 @@ class ClientController extends Controller
         return redirect()->back()->with('success', 'Klien berhasil ditambahkan!');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
-        // Ambil id dari request body atau parameter URL
         $clientId = $request->id ?: $id;
         $client = Client::findOrFail($clientId);
+        $oldName = $client->name;  // ✅ SIMPAN NAMA LAMA
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -81,15 +84,15 @@ class ClientController extends Controller
             'subscription_end_date' => 'required|date',
             'revenue' => 'required|numeric|min:0',
             'phone_number' => 'nullable|string|max:15',
-            'status' => 'required|in:aktif,tidak,expired',  // ✅ Ganti ke Bahasa Indonesia
+            'status' => 'required|in:aktif,tidak,expired',
         ]);
 
         if ($validator->fails()) {
             if ($request->expectsJson()) {
                 return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
             }
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -104,6 +107,17 @@ class ClientController extends Controller
             'status' => $request->status,
         ]);
 
+        // ✅ LOG: Edit Klien
+        Activity::create([
+            'type' => 'edit',
+            'title' => 'Mengubah Data Klien',
+            'detail' => "Mengubah data klien: {$oldName} → {$client->name}",
+            'user_name' => auth()->user()->name ?? 'System',
+            'user_email' => auth()->user()->email ?? 'system',
+            'status' => 'success',
+            'ip_address' => $request->ip()
+        ]);
+
         return response()->json([
             'success' => true,
             'message' => 'Klien berhasil diupdate!',
@@ -111,14 +125,23 @@ class ClientController extends Controller
         ]);
     } 
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         try {
             $client = Client::findOrFail($id);
+            $clientName = $client->name;
             $client->delete();
+
+            // ✅ LOG: Hapus Klien
+            Activity::create([
+                'type' => 'delete',
+                'title' => 'Menghapus Klien',
+                'detail' => "Menghapus klien: {$clientName}",
+                'user_name' => auth()->user()->name ?? 'System',
+                'user_email' => auth()->user()->email ?? 'system',
+                'status' => 'warning',
+                'ip_address' => request()->ip()
+            ]);
 
             if (request()->expectsJson()) {
                 return response()->json([
@@ -136,9 +159,6 @@ class ClientController extends Controller
         }
     }
 
-    /**
-     * Get client data for AJAX (optional)
-     */
     public function getData()
     {
         $clients = Client::orderBy('created_at', 'desc')->get();

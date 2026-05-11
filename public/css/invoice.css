@@ -1,4 +1,4 @@
-/* ==================== INVOICE MODAL STYLES ==================== */
+/* ==================== INVOICE STYLES ==================== */
 .invoice-container {
     background: white;
     border-radius: 20px;
@@ -14,7 +14,6 @@
     background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
-/* Header */
 .invoice-header {
     display: flex;
     justify-content: space-between;
@@ -25,28 +24,14 @@
     border-radius: 20px 20px 0 0;
 }
 
-.invoice-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.invoice-logo img {
-    height: 45px;
-}
-
-.invoice-title {
-    text-align: right;
-}
-
-.invoice-title h2 {
+.invoice-header h2 {
     margin: 0;
     font-size: 24px;
     font-weight: 600;
     letter-spacing: 2px;
 }
 
-.invoice-title p {
+.invoice-header p {
     margin: 4px 0 0;
     font-size: 12px;
     opacity: 0.7;
@@ -72,19 +57,17 @@
     transform: scale(1.05);
 }
 
-/* Body */
 .invoice-body {
     padding: 24px;
     background: white;
 }
 
-/* Kepada Yth */
 .invoice-to {
     background: #f8fafc;
-    padding: 16px 20px;
+    padding: 16px;
     border-radius: 12px;
     margin-bottom: 24px;
-    border-left: 4px solid #22c55e;
+    border-left: 4px solid #20b486;
 }
 
 .to-label {
@@ -99,7 +82,6 @@
     font-size: 18px;
     font-weight: bold;
     color: #1f2937;
-    margin-bottom: 4px;
 }
 
 .to-detail {
@@ -108,7 +90,6 @@
     margin-top: 6px;
 }
 
-/* Info Grid */
 .invoice-info-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -118,7 +99,7 @@
 
 .info-card {
     background: #f9fafb;
-    padding: 12px 16px;
+    padding: 12px;
     border-radius: 10px;
 }
 
@@ -148,14 +129,12 @@
     color: #dc2626;
 }
 
-/* Divider */
 .invoice-divider {
     height: 1px;
     background: linear-gradient(to right, #e5e7eb, transparent);
     margin: 20px 0;
 }
 
-/* Tabel */
 .invoice-table-modern {
     width: 100%;
     border-collapse: collapse;
@@ -189,63 +168,13 @@
     padding-top: 16px;
     font-weight: bold;
     font-size: 16px;
-    color: #22c55e;
 }
 
-/* Informasi Pembayaran */
-.invoice-payment-info {
-    background: #f0fdf4;
-    border-radius: 12px;
-    padding: 16px;
-    margin: 20px 0;
-    border-left: 4px solid #22c55e;
+.invoice-table-modern tfoot .text-right {
+    font-size: 18px;
+    color: #20b486;
 }
 
-.payment-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #166534;
-    margin-bottom: 12px;
-}
-
-.payment-bank {
-    background: white;
-    border-radius: 10px;
-    padding: 10px 12px;
-    margin-bottom: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.bank-name {
-    font-weight: 700;
-    color: #1f2937;
-    font-size: 13px;
-}
-
-.bank-account {
-    font-family: monospace;
-    font-weight: 600;
-    color: #059669;
-    font-size: 13px;
-}
-
-.bank-owner {
-    font-size: 10px;
-    color: #6b7280;
-}
-
-.payment-note {
-    font-size: 10px;
-    color: #dc2626;
-    margin-top: 8px;
-    text-align: center;
-}
-
-/* Pesan Penutup */
 .invoice-message {
     text-align: center;
     margin: 20px 0 16px;
@@ -278,7 +207,6 @@
     border-top: 1px dashed #e5e7eb;
 }
 
-/* Tombol Aksi */
 .invoice-actions {
     display: flex;
     justify-content: center;
@@ -289,7 +217,7 @@
 }
 
 .btn-print, .btn-wa, .btn-close {
-    padding: 10px 24px;
+    padding: 10px 20px;
     border: none;
     border-radius: 40px;
     cursor: pointer;
@@ -328,48 +256,27 @@
     transform: translateY(-2px);
 }
 
-/* Responsive */
 @media (max-width: 600px) {
     .invoice-container {
         width: 95%;
     }
-    
     .invoice-info-grid {
         grid-template-columns: 1fr;
     }
-    
     .invoice-actions {
         flex-wrap: wrap;
     }
-    
     .btn-print, .btn-wa, .btn-close {
         flex: 1;
         text-align: center;
         padding: 8px 16px;
     }
-    
-    .payment-bank {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .to-detail {
-        font-size: 11px;
-        word-break: break-all;
-    }
 }
 
-/* Print */
 @media print {
     .panel, .year-selector, .invoice-actions, .close-invoice {
         display: none !important;
     }
-    
-    .main, .container2 {
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-    
     .invoice-container {
         box-shadow: none;
         margin: 0;
@@ -377,14 +284,8 @@
         width: 100%;
         border-radius: 0;
     }
-    
     .invoice-header {
         background: #1a1a2e !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
-    
-    .invoice-payment-info {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }

@@ -51,6 +51,7 @@ public function api(Request $request)
                 'name' => $client->name,
                 'company' => $client->company,
                 'email' => $client->email,
+                'phone' => $client->phone_number,
                 'price' => 'Rp ' . number_format($client->revenue, 0, ',', '.'),
                 'subscription_end_date' => $endDate->translatedFormat('d M Y'),
                 'days_left' => max(0, $today->diffInDays($endDate, false))

@@ -83,13 +83,15 @@
             </div>
             <div class="stat-icon">✏️</div>
         </div>
-        <div class="stat-card payment">
-            <div class="stat-info">
-                <h4>Pembayaran</h4>
-                <div class="stat-number" id="totalPayment">0</div>
-            </div>
-            <div class="stat-icon">💳</div>
-        </div>
+
+        <div class="stat-card client">
+    <div class="stat-info">
+        <h4>Klien Ditambahkan</h4>
+        <div class="stat-number" id="totalClient">0</div>
+    </div>
+    <div class="stat-icon">➕</div>
+</div>
+        
     </div>
 
     <!-- Filters -->
@@ -99,7 +101,6 @@
             <button class="filter-btn active" data-filter="all">📋 Semua</button>
             <button class="filter-btn" data-filter="login">🔐 Login Dan Logout</button>
             <button class="filter-btn" data-filter="invoice">📄 Invoice</button>
-            <button class="filter-btn" data-filter="payment">💳 Pembayaran</button>
             <button class="filter-btn" data-filter="edit">✏️ Edit</button>
             <button class="filter-btn" data-filter="create">➕ Tambah</button>
             <button class="filter-btn" data-filter="delete">🗑️ Hapus</button>

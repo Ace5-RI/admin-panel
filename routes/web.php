@@ -50,6 +50,20 @@ Route::prefix('api/dashboard')->group(function () {
 
 });
 
+// ================= PUBLIC ACCESS FOR INVOICE PDF =================
+Route::get('/invoices/{filename}', function ($filename) {
+    $path = public_path('invoices/' . $filename);
+    
+    if (!file_exists($path)) {
+        abort(404, 'File not found');
+    }
+    
+    return response()->file($path, [
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'inline; filename="' . $filename . '"'
+    ]);
+})->where('filename', '.*\.pdf$');
+
 // ================= PAYMENT ROUTE =================
 Route::middleware('auth')->group(function (){
     Route::get('payment/{client_id}',[PaymentController::class,'show'])->name('payment.page');
@@ -62,3 +76,4 @@ Route::middleware('auth')->group(function (){
 Route::get('/aktivitas', [ActivityController::class, 'index']);
 Route::get('/api/activities', [ActivityController::class, 'getActivities']);
 Route::post('/invoice/generate/{id}', [InvoiceController::class, 'generateAndSend']);
+Route::get('/invoice/generate/{id}', [InvoiceController::class, 'generateAndSend']);
