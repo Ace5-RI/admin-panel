@@ -139,7 +139,7 @@ class ClientController extends Controller
                 'detail' => "Menghapus klien: {$clientName}",
                 'user_name' => auth()->user()->name ?? 'System',
                 'user_email' => auth()->user()->email ?? 'system',
-                'status' => 'warning',
+                'status' => 'warning',    
                 'ip_address' => request()->ip()
             ]);
 

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('subscription_end_date');
             $table->enum('status',['aktif','nonaktif','expired'])->default('aktif');
             $table->decimal('revenue',15,2)->default(0);
-            $table->text('address')->nullable();
+            $table->text('Langganan')->nullable();
             $table->timestamps();
         });
     }
