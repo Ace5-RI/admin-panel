@@ -108,7 +108,13 @@
                     <div class="form-group full-width">
                         <label>Nomer Telepon</label>
                         <input type="text" name="nomer" id="nomer" placeholder="08xxxxxx" required>
+                         
+                        <label>Deskripsi Langganan</label>
+                        <input type="text" name="nomer" id="nomer" placeholder="Langganan Website" required>
                     </div>
+                    </div>
+
+
                 </div>
                 <div class="info-box">
                     💡 Tip: Masa langganan standar adalah 1 tahun (365 hari).

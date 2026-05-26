@@ -3,12 +3,12 @@
 // ==================== FUNGSI UTILITY ====================
 function getIconByType(type) {
     const icons = {
-    login: '🔐',
-    invoice: '📄',
-    edit: '✏️',
-    create: '➕',
-    delete: '🗑️'
-};
+        login: '🔐',
+        invoice: '📄',
+        edit: '✏️',
+        create: '➕',
+        delete: '🗑️'
+    };
     return icons[type] || '📋';
 }
 
@@ -100,7 +100,10 @@ function renderActivities(activities, filter) {
     }
     
     activityListEl.innerHTML = activities.map(activity => `
-        <div class="activity-item" data-type="${activity.type}">
+        <div class="activity-item" data-id="${activity.id}" data-type="${activity.type}">
+            <div class="activity-checkbox">
+                <input type="checkbox" class="select-activity" value="${activity.id}">
+            </div>
             <div class="activity-icon ${activity.type}">
                 ${getIconByType(activity.type)}
             </div>
@@ -113,23 +116,36 @@ function renderActivities(activities, filter) {
                     ${activity.ip_address ? `<span>🌐 ${activity.ip_address}</span>` : ''}
                 </div>
             </div>
-            <div>
+            <div style="display: flex; align-items: center; gap: 10px;">
                 <span class="status-badge ${activity.status}">
                     ${getStatusText(activity.status)}
                 </span>
+                <button class="delete-activity-btn" data-id="${activity.id}" data-title="${escapeHtml(activity.title)}" title="Hapus aktivitas">
+                    🗑️
+                </button>
             </div>
         </div>
     `).join('');
+    
+    // Event listener untuk tombol hapus per item
+    document.querySelectorAll('.delete-activity-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const id = this.getAttribute('data-id');
+            const title = this.getAttribute('data-title');
+            deleteSingleActivity(id, title);
+        });
+    });
 }
 
 function updateStatCounts(stats) {
     const totalLoginEl = document.getElementById('totalLogin');
-    const totalClientEl = document.getElementById('totalClient');  // ← GANTI
+    const totalClientEl = document.getElementById('totalClient');
     const totalEditEl = document.getElementById('totalEdit');
     const totalInvoiceEl = document.getElementById('totalInvoice');
     
     if (totalLoginEl) totalLoginEl.innerText = stats?.total_login || 0;
-    if (totalClientEl) totalClientEl.innerText = stats?.total_client || 0;  // ← GANTI
+    if (totalClientEl) totalClientEl.innerText = stats?.total_client || 0;
     if (totalEditEl) totalEditEl.innerText = stats?.total_edit || 0;
     if (totalInvoiceEl) totalInvoiceEl.innerText = stats?.total_invoice || 0;
 }
@@ -147,6 +163,43 @@ function showEmptyState(message) {
     }
 }
 
+// ==================== HAPUS PER ITEM (1-1) ====================
+async function deleteSingleActivity(activityId, activityTitle) {
+    const result = await Swal.fire({
+        title: 'Hapus Aktivitas?',
+        text: `Apakah Anda yakin ingin menghapus aktivitas: "${activityTitle}"?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal'
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+        const response = await fetch(`/api/activities/${activityId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content,
+                'Accept': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            Swal.fire('Berhasil!', 'Aktivitas berhasil dihapus', 'success');
+            loadActivities('all');
+        } else {
+            Swal.fire('Gagal!', data.message || 'Gagal menghapus aktivitas', 'error');
+        }
+    } catch (err) {
+        console.error(err);
+        Swal.fire('Error!', 'Terjadi kesalahan', 'error');
+    }
+}
+
 // ==================== FILTER HANDLER ====================
 function initFilters() {
     const filterBtns = document.querySelectorAll('.filter-btn');
@@ -158,6 +211,43 @@ function initFilters() {
             loadActivities(filter);
         });
     });
+}
+
+// ==================== CLEAR ALL ACTIVITIES ====================
+async function clearAllActivities() {
+    const result = await Swal.fire({
+        title: 'Hapus Semua Aktivitas?',
+        text: 'Data aktivitas akan dihapus permanen!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        confirmButtonText: 'Ya, Hapus Semua!',
+        cancelButtonText: 'Batal'
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+        const response = await fetch('/api/activities/clear', {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content,
+                'Accept': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            Swal.fire('Berhasil!', 'Semua aktivitas berhasil dihapus', 'success');
+            loadActivities('all');
+        } else {
+            Swal.fire('Gagal!', data.message || 'Gagal menghapus aktivitas', 'error');
+        }
+    } catch (err) {
+        console.error(err);
+        Swal.fire('Error!', 'Terjadi kesalahan', 'error');
+    }
 }
 
 // ==================== SIDEBAR USER ====================
@@ -199,10 +289,116 @@ function initLogout() {
     });
 }
 
+// ==================== CHECKLIST FUNCTIONS ====================
+let selectedActivities = new Set();
+
+function updateDeleteButton() {
+    const deleteBtn = document.getElementById('deleteSelectedBtn');
+    const count = selectedActivities.size;
+    
+    if (deleteBtn) {
+        if (count > 0) {
+            deleteBtn.style.display = 'flex';
+            deleteBtn.innerHTML = `🗑️ Hapus ${count} Aktivitas Yang Dipilih`;
+        } else {
+            deleteBtn.style.display = 'none';
+        }
+    }
+}
+
+function bindCheckboxEvents() {
+    const checkboxes = document.querySelectorAll('.select-activity');
+    const selectAll = document.getElementById('selectAllCheckbox');
+    
+    checkboxes.forEach(cb => {
+        cb.removeEventListener('change', handleCheckboxChange);
+        cb.addEventListener('change', handleCheckboxChange);
+    });
+    
+    if (selectAll) {
+        selectAll.removeEventListener('change', handleSelectAll);
+        selectAll.addEventListener('change', handleSelectAll);
+    }
+}
+
+function handleCheckboxChange(e) {
+    const id = parseInt(e.target.value);
+    if (e.target.checked) {
+        selectedActivities.add(id);
+    } else {
+        selectedActivities.delete(id);
+        const selectAll = document.getElementById('selectAllCheckbox');
+        if (selectAll) selectAll.checked = false;
+    }
+    updateDeleteButton();
+}
+
+function handleSelectAll(e) {
+    const allCheckboxes = document.querySelectorAll('.select-activity');
+    allCheckboxes.forEach(cb => {
+        cb.checked = e.target.checked;
+        const id = parseInt(cb.value);
+        if (e.target.checked) {
+            selectedActivities.add(id);
+        } else {
+            selectedActivities.delete(id);
+        }
+    });
+    updateDeleteButton();
+}
+
+async function deleteSelectedActivities() {
+    if (selectedActivities.size === 0) return;
+    
+    const result = await Swal.fire({
+        title: `Hapus ${selectedActivities.size} aktivitas?`,
+        text: 'Data aktivitas yang dipilih akan dihapus permanen!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal'
+    });
+    
+    if (!result.isConfirmed) return;
+    
+    try {
+        const res = await fetch('/api/activities/delete-multiple', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                ids: Array.from(selectedActivities)
+            })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+            Swal.fire('Berhasil!', `${selectedActivities.size} aktivitas dihapus`, 'success');
+            selectedActivities.clear();
+            loadActivities('all');
+        } else {
+            Swal.fire('Gagal!', data.message, 'error');
+        }
+    } catch (err) {
+        console.error(err);
+        Swal.fire('Error!', 'Terjadi kesalahan', 'error');
+    }
+}
+
 // ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', function() {
     initFilters();
     initSidebar();
     initLogout();
     loadActivities('all');
+    
+    // Event listener untuk tombol clear all
+    document.getElementById('clearAllActivities')?.addEventListener('click', clearAllActivities);
+    
+    // Event listener untuk tombol delete selected
+    document.getElementById('deleteSelectedBtn')?.addEventListener('click', deleteSelectedActivities);
 });

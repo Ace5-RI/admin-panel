@@ -53,4 +53,60 @@ class ActivityController extends Controller
             'ip_address' => request()->ip()
         ]);
     }
+
+    public function clearAll()
+{
+    try {
+        Activity::truncate(); // Hapus semua data
+        return response()->json([
+            'success' => true,
+            'message' => 'Semua aktivitas berhasil dihapus'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 500);
+    }
 }
+public function delete($id)
+{
+    try {
+        $activity = Activity::findOrFail($id);
+        $activity->delete();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Aktivitas berhasil dihapus'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 500);
+    }
+}
+
+public function deleteMultiple(Request $request)
+{
+    try {
+        $ids = $request->get('ids', []);
+        if (empty($ids)) {
+            return response()->json(['success' => false, 'message' => 'Tidak ada data dipilih'], 400);
+        }
+        
+        Activity::whereIn('id', $ids)->delete();
+        
+        return response()->json([
+            'success' => true,
+            'message' => count($ids) . ' aktivitas dihapus'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 500);
+    }
+}
+}
+

@@ -45,6 +45,7 @@ function openInvoicePopup(data) {
             <div class="invoice-header">
                 <div class="invoice-logo">
                     <img src="/img/logos.png" alt="Logo">
+                    
                     <div class="invoice-title">
                         <h2>INVOICE</h2>
                         <p>${nomorInvoice}</p>
@@ -58,8 +59,8 @@ function openInvoicePopup(data) {
                     <div class="to-label">KEPADA YTH:</div>
                     <div class="to-name">${escapeHtml(data.nama)}</div>
                     <div class="to-detail">${escapeHtml(data.perusahaan || '-')}</div>
-                    <div class="to-detail">📧 ${escapeHtml(data.email)}</div>
-                    <div class="to-detail">📞 ${data.phone || '-'}</div>
+                    <div class="to-detail"> Email : ${escapeHtml(data.email)}</div>
+                    <div class="to-detail"> Nomer : ${data.phone || '-'}</div>
                 </div>
                 
                 <div class="invoice-info-grid">
@@ -89,32 +90,16 @@ function openInvoicePopup(data) {
                     <tfoot><tr><td class="text-right"><strong>TOTAL</strong></td><td class="text-right"><strong>${data.pendapatan}</strong></td></tr></tfoot>
                 </table>
                 
-                <div class="invoice-payment-info">
-                    <div class="payment-title">💳 INFORMASI PEMBAYARAN</div>
-                    <div class="payment-bank">
-                        <span class="bank-name">Bank BCA</span>
-                        <span class="bank-account">123-456-7890</span>
-                        <span class="bank-owner">a.n PT Admin Panel</span>
-                    </div>
-                    <div class="payment-bank">
-                        <span class="bank-name">Bank Mandiri</span>
-                        <span class="bank-account">987-654-3210</span>
-                        <span class="bank-owner">a.n PT Admin Panel</span>
-                    </div>
-                    <div class="payment-note">*Konfirmasi pembayaran via WA ke nomor admin</div>
-                </div>
-                
-                <div class="invoice-divider"></div>
                 
                 <div class="invoice-message">
                     <p>Terima kasih atas kepercayaan dan kerja samanya.</p>
                     <div class="signature">
                         <p>Hormat kami,</p>
-                        <p><strong>Admin Panel</strong></p>
+                        <p><strong>Bali Solution Biz</strong></p>
                     </div>
                 </div>
                 
-                <div class="invoice-note">*Invoice ini digenerate secara otomatis oleh sistema.</div>
+                
                 
                 <div class="invoice-actions">
                     <button class="btn-print" onclick="printInvoiceFromDashboard()">🖨️ CETAK</button>
@@ -160,10 +145,9 @@ function openInvoicePopup(data) {
                 const message = encodeURIComponent(
                     `Yth. ${data.nama}\n\n` +
                     `Berikut invoice langganan Anda:\n\n` +
-                    `🔗 Link Invoice: ${pdfLink}\n` +
-                    `📅 Jatuh Tempo: ${formatDateInvoice(data.akhir)}\n` +
-                    `💰 Total: ${data.pendapatan}\n\n` +
-                    `Hormat kami,\nAdmin Panel`
+                    `Link Invoice: ${pdfLink}\n` +
+                    
+                    `Hormat kami,\nBali Solution Biz`
                 );
                 
                 window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');

@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
+
 // ================= GUEST =================
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'showLogin']);
@@ -77,3 +78,11 @@ Route::get('/aktivitas', [ActivityController::class, 'index']);
 Route::get('/api/activities', [ActivityController::class, 'getActivities']);
 Route::post('/invoice/generate/{id}', [InvoiceController::class, 'generateAndSend']);
 Route::get('/invoice/generate/{id}', [InvoiceController::class, 'generateAndSend']);
+
+
+Route::delete('/api/activities/clear', [ActivityController::class, 'clearAll']);
+// Delete single activity
+Route::delete('/api/activities/{id}', [ActivityController::class, 'delete']);
+
+// Delete multiple activities
+Route::post('/api/activities/delete-multiple', [ActivityController::class, 'deleteMultiple']);

@@ -8,6 +8,7 @@
     overflow-y: auto;
     box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
     animation: fadeIn 0.3s ease;
+    font-size: 18px;
 }
 
 #popupInvoice {
@@ -24,14 +25,30 @@
     border-radius: 20px 20px 0 0;
 }
 
-.invoice-header h2 {
+/* 🔥 PERBAIKI INI - Logo dan title sejajar ke kiri */
+.invoice-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.invoice-logo img {
+    height: 50px;
+    width: auto;
+}
+
+.invoice-title {
+    text-align: left;
+}
+
+.invoice-title h2 {
     margin: 0;
     font-size: 24px;
     font-weight: 600;
     letter-spacing: 2px;
 }
 
-.invoice-header p {
+.invoice-title p {
     margin: 4px 0 0;
     font-size: 12px;
     opacity: 0.7;
@@ -56,6 +73,8 @@
     background: rgba(255,255,255,0.2);
     transform: scale(1.05);
 }
+
+/* ... sisanya tetap sama seperti kode kamu ... */
 
 .invoice-body {
     padding: 24px;

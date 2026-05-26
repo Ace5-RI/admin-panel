@@ -29,12 +29,10 @@
             <img src="{{ asset('img/klien.png') }}">Klien
         </a>
 
-        
-
         <hr class="hr" style="margin-top: 5px">
 
-        <a class="menu-btn {{ request()->is('bantuan') ? 'active' : '' }}" href="/aktivitas">
-            <img src="{{ asset('img/help.png') }}">Bantuan
+        <a class="menu-btn {{ request()->is('aktivitas') ? 'active' : '' }}" href="/aktivitas">
+            <img src="{{ asset('img/help.png') }}">Aktivitas
         </a>
         <hr class="hr" style="margin-top: 5px">
 
@@ -57,7 +55,6 @@
     <div class="page-header">
         <h1 class="page-title">Log Aktivitas</h1>
         <p class="page-subtitle">Pantau semua aktivitas yang terjadi di sistem</p>
-        
     </div>
 
     <!-- Stats Cards -->
@@ -83,18 +80,23 @@
             </div>
             <div class="stat-icon">✏️</div>
         </div>
-
         <div class="stat-card client">
-    <div class="stat-info">
-        <h4>Klien Ditambahkan</h4>
-        <div class="stat-number" id="totalClient">0</div>
-    </div>
-    <div class="stat-icon">➕</div>
-</div>
-        
+            <div class="stat-info">
+                <h4>Klien Ditambahkan</h4>
+                <div class="stat-number" id="totalClient">0</div>
+            </div>
+            <div class="stat-icon">➕</div>
+        </div>
     </div>
 
-    <!-- Filters -->
+    <!-- 🔥 TOMBOL HAPUS SEMUA -->
+    <div class="clear-section">
+        <button id="clearAllActivities" class="btn-clear">
+            🗑️ Hapus Semua Aktivitas
+        </button>
+    </div>
+
+       <!-- Filters -->
     <div class="filter-section">
         <div class="filter-title">📌 Filter Aktivitas</div>
         <div class="filter-buttons">
@@ -104,6 +106,21 @@
             <button class="filter-btn" data-filter="edit">✏️ Edit</button>
             <button class="filter-btn" data-filter="create">➕ Tambah</button>
             <button class="filter-btn" data-filter="delete">🗑️ Hapus</button>
+        </div>
+    </div>
+
+    <!-- Checklist Controls -->
+    <div class="checklist-controls">
+        <div class="checklist-left">
+            <label class="checkbox-label">
+                <input type="checkbox" id="selectAllCheckbox">
+                <span>✓ Pilih Semua</span>
+            </label>
+        </div>
+        <div class="checklist-right">
+            <button id="deleteSelectedBtn" class="btn-delete-selected" style="display: none;">
+                🗑️ Hapus Yang Dipilih
+            </button>
         </div>
     </div>
 
@@ -121,7 +138,8 @@
             </div>
         </div>
     </div>
-</div>
+
+  
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('js/aktivitas.js') }}"></script>
