@@ -42,6 +42,7 @@ class ClientController extends Controller
             'name' => $request->nama,
             'company' => $request->perusahaan,
             'email' => $request->email,
+            'description' => $request->description,
             'phone_number' => $request->nomer,
             'subscription_start_date' => $request->mulai,
             'subscription_end_date' => $request->akhir,
@@ -81,6 +82,7 @@ class ClientController extends Controller
             'name' => 'required|string|max:255',
             'company' => 'required|string|max:255',
             'email' => 'required|email|unique:clients,email,' . $clientId,
+            'description' => 'nullable|string',
             'subscription_end_date' => 'required|date',
             'revenue' => 'required|numeric|min:0',
             'phone_number' => 'nullable|string|max:15',
@@ -101,6 +103,7 @@ class ClientController extends Controller
             'name' => $request->name,
             'company' => $request->company,
             'email' => $request->email,
+            'description' => $request->description,
             'phone_number' => $request->phone_number,
             'subscription_end_date' => $request->subscription_end_date,
             'revenue' => $request->revenue,
@@ -139,7 +142,7 @@ class ClientController extends Controller
                 'detail' => "Menghapus klien: {$clientName}",
                 'user_name' => auth()->user()->name ?? 'System',
                 'user_email' => auth()->user()->email ?? 'system',
-                'status' => 'warning',
+                'status' => 'warning',    
                 'ip_address' => request()->ip()
             ]);
 

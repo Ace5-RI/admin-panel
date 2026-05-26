@@ -16,12 +16,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('company');
             $table->string('email')->unique();
+            $table->string('description')->nullable();
             $table->string('phone_number')->nullable();
             $table->date('subscription_start_date');
             $table->date('subscription_end_date');
             $table->enum('status',['aktif','nonaktif','expired'])->default('aktif');
             $table->decimal('revenue',15,2)->default(0);
-            $table->text('address')->nullable();
+            $table->text('Langganan')->nullable();
             $table->timestamps();
         });
     }
