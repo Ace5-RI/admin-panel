@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('company');
             $table->string('email')->unique();
+            $table->string('description')->nullable();
             $table->string('phone_number')->nullable();
             $table->date('subscription_start_date');
             $table->date('subscription_end_date');

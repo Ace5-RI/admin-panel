@@ -14,6 +14,7 @@ class Client extends Model
     'name',
     'company',
     'email',
+    'description',
     'phone_number',
     'subscription_start_date',
     'subscription_end_date',
