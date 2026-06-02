@@ -13,7 +13,7 @@ class AuthController extends Controller
     // ================= LOGIN VIEW =================
     public function showLogin()
     {
-        return view('Langganan.Login');
+        return view('Langganan.login');
     }
 
     // ================= LOGIN =================
