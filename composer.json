@@ -8,11 +8,6 @@
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.1",
-<<<<<<< HEAD
-        "cloudinary-labs/cloudinary-laravel": "3.0",
-=======
-        "guzzlehttp/guzzle": "^7.10",
->>>>>>> 2c8ed6e8440ec2af30a86fe14367ced9e8ad6824
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.3",
         "laravel/tinker": "^2.10.1",
