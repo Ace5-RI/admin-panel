@@ -8,16 +8,17 @@ return new class extends Migration
 {
     public function up()
     {
+        Schema::dropIfExists('activities');
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->string('type');        // login, create, edit, delete, invoice, payment
-            $table->string('title');       // Judul aktivitas
-            $table->text('detail')->nullable();  // Detail lengkap
-            $table->string('user_name');   // Nama user yg melakukan
-            $table->string('user_email')->nullable(); // Email user
-            $table->string('status')->default('success'); // success, warning, error
-            $table->string('Langganan')->nullable();
-            $table->timestamps();          // created_at, updated_at
+            $table->string('type');
+            $table->string('title');
+            $table->text('detail')->nullable();
+            $table->string('user_name');
+            $table->string('user_email')->nullable();
+            $table->string('status')->default('success');
+            $table->string('ip_address')->nullable();
+            $table->timestamps();
         });
     }
 
