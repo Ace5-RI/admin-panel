@@ -10,7 +10,7 @@ class ActivityController extends Controller
 {
     public function index()
     {
-        return view('langganan.aktivitas');
+        return view('Langganan.aktivitas');
     }
 
     public function getActivities(Request $request)

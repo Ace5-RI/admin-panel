@@ -22,7 +22,7 @@ class SettingController extends Controller
             'invoice_footer' => Setting::get('invoice_footer', 'Terima kasih atas kepercayaan Anda.'),
         ];
         
-        return view('langganan.settings', compact('settings'));
+        return view('Langganan.settings', compact('settings'));
     }
 
     public function update(Request $request)

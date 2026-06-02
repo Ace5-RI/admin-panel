@@ -13,7 +13,7 @@ class DashboardController extends Controller
     // ✅ VIEW DOANG
     public function index()
     {
-        return view('langganan.dashboard');
+        return view('Langganan.dashboard');
     }
 
     // ✅ API DATA
