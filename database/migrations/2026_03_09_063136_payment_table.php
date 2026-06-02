@@ -6,25 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
+        Schema::dropIfExists('payments');
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('subcription_id')
-            ->constrained('subcription')
-            ->onDelete('cascade');
-
-            $table->foreignId('payment_id')
-            ->nullable()
-            ->constrained('payments')
-            ->onDelete('set null');
+            $table->foreignId('subscription_id')
+                ->constrained('subscriptions')
+                ->onDelete('cascade');
 
             $table->string('invoice_number')->unique();
-            $table->decimal('amount', 15,2);
+            $table->decimal('amount', 15, 2);
 
             $table->date('payment_date')->nullable();
             $table->date('due_date')->nullable();
@@ -48,24 +41,20 @@ return new class extends Migration
             $table->string('proof_of_payment')->nullable();
 
             $table->foreignId('approved_by')
-            ->nullable()
-            ->constrained('users')
-            ->onDelete('set null');
+                ->nullable()
+                ->constrained('users')
+                ->onDelete('set null');
 
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index('payment_id');
-            $table->index('subcription_id');
+            $table->index('subscription_id');
             $table->index('status');
             $table->index('payment_date');
-            $table->index('invoice_number');           
+            $table->index('invoice_number');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('payments');
