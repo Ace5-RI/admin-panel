@@ -12,14 +12,16 @@
     <meta http-equiv="Expires" content="0">
     <title>Dashboard</title>
     <base href="/">
-
+    <script>
+    window.companyName = "{{ \App\Models\Setting::get('company_name', 'Bali Solution Biz') }}";
+</script>
    
 </head>
 
 
 <body>
 <div class="panel">
-    <img src="{{ asset('img/logos.png') }}" alt="" class="logo">
+    <img src="{{ \App\Models\Setting::get('company_logo', '/img/logos.png') }}" alt="Logo" class="logo" id="sidebarLogo" onerror="this.src='/img/logos.png'">
     <h1>Admin Panel</h1>
     <p>Manajemen Klien</p>
 
@@ -37,6 +39,9 @@
         </a>
 
         
+        <a class="menu-btn {{ request()->is('settings') ? 'active' : '' }}" href="/settings">
+    <img src="{{ asset('img/setting.png') }}"> Pengaturan
+</a>
 
         <hr class="hr" style="margin-top: 5px">
 
@@ -249,5 +254,24 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{{ asset('js/dashboard.js') }}"></script>
+<script>
+// Update logo sidebar dari database
+async function updateSidebarLogo() {
+    try {
+        const response = await fetch('/api/settings');
+        const settings = await response.json();
+        const sidebarLogo = document.getElementById('sidebarLogo');
+        if (sidebarLogo && settings.company_logo) {
+            sidebarLogo.src = settings.company_logo + '?t=' + Date.now();
+        }
+        // Update juga variable global
+        window.companyName = settings.company_name;
+        window.companyLogo = settings.company_logo;
+    } catch (error) {
+        console.error('Gagal update logo:', error);
+    }
+}
+updateSidebarLogo();
+</script>
 </body>
 </html>

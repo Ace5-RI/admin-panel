@@ -156,7 +156,6 @@ class AuthController extends Controller
 {
     $user = Auth::user();
     
-    // ✅ LOG ACTIVITY: Logout
     if ($user) {
         Activity::create([
             'type' => 'login',
@@ -168,22 +167,12 @@ class AuthController extends Controller
             'ip_address' => $request->ip()
         ]);
     }
-    
-    if ($request->user() && method_exists($request->user(), 'currentAccessToken')) {
-        $token = $request->user()->currentAccessToken();
-        if ($token) {
-            $token->delete();
-        }
-    }
 
-    Auth::guard('web')->logout();
-
+    Auth::logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 
-    return response()->json([
-        'success' => true,
-        'message' => 'Logout berhasil!'
-    ]);
+    // LANGSUNG REDIRECT KE LOGIN
+    return redirect('/login');
 }
 }

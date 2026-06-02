@@ -114,6 +114,7 @@ async function loadDashboard() {
                 }
                 
                 const showDeleteBtn = client.days_left <= 0;
+                
                 const card = `
                     <div class="warning-card ${color}" data-id="${client.id}">
                         <div class="badge">${client.days_left} hari</div>
@@ -126,7 +127,15 @@ async function loadDashboard() {
                         <div class="status-message">${statusText}</div>
                         <div class="warning-actions">
                             ${showDeleteBtn ? `<button class="delete-warning-btn" data-id="${client.id}" data-name="${escapeHtml(client.name)}">✕ Hapus</button>` : ''}
-                            <button class="invoice-warning-btn" data-id="${client.id}" data-name="${escapeHtml(client.name)}" data-company="${escapeHtml(client.company)}" data-email="${escapeHtml(client.email)}" data-phone="${client.phone || ''}" data-price="${client.price}" data-end="${client.subscription_end_date}">📄 Invoice</button>
+                            <button class="invoice-warning-btn" 
+                                data-id="${client.id}" 
+                                data-name="${escapeHtml(client.name)}" 
+                                data-company="${escapeHtml(client.company)}" 
+                                data-email="${escapeHtml(client.email)}" 
+                                data-phone="${client.phone || ''}" 
+                                data-price="${client.price}" 
+                                data-end="${client.subscription_end_date}"
+                                data-description="${escapeHtml(client.description || '')}">📄 Invoice</button>
                         </div>
                     </div>
                 `;
@@ -171,6 +180,12 @@ document.body.addEventListener('click', function(e) {
         const phone = invoiceBtn.getAttribute('data-phone');
         const price = invoiceBtn.getAttribute('data-price');
         const endDate = invoiceBtn.getAttribute('data-end');
+        const description = invoiceBtn.getAttribute('data-description') || '';
+        
+        console.log("Description dari button:", description);
+        console.log("Data lengkap dari button:", {
+            id, name, company, email, phone, price, endDate, description
+        });
         
         openInvoicePopup({
             id: id,
@@ -179,7 +194,8 @@ document.body.addEventListener('click', function(e) {
             email: email,
             phone: phone,
             pendapatan: price,
-            akhir: endDate
+            akhir: endDate,
+            description: description
         });
         return;
     }

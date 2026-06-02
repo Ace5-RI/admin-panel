@@ -1,27 +1,16 @@
-/* ==================== CSS ASLI PERTAMA ==================== */
-/* File ini adalah CSS asli Anda tanpa perubahan apapun */
-/* Hanya ditambahkan komentar untuk dokumentasi */
-
+/* ==================== CSS GLOBAL UNTUK SEMUA HALAMAN ==================== */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    overflow: auto !important;
 }
 
-.container {
-    width: 100%;
-}
-
-*{
+* {
     box-sizing: border-box;
 }
 
-.sidebar{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
+/* ========== SIDEBAR ========== */
 .panel {
     position: fixed;
     left: 0;
@@ -31,166 +20,204 @@ body {
     background: black;
     color: white;
     padding: 20px;
+    overflow-y: auto;
 }
 
-.menu{
-    margin-top: 310px;
+/* ========== SIDEBAR HEADER ========== */
+.sidebar-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar-header .logo {
+    max-width: 130px;
+    max-height: 110px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    margin: 10px auto 15px;
+    border-radius: 16px;
+    display: block;
+}
+
+.sidebar-header h1 {
+    font-size: 20px;
+    margin: 0 0 5px;
+    color: white;
+}
+
+.sidebar-header p {
+    font-size: 12px;
+    color: #aaa;
+    margin: 0;
+}
+
+/* ========== MENU ========== */
+.menu {
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    text-decoration: none;
 }
 
-
-
-.menu-btn{
+.menu-btn {
     width: 350px;
     height: 70px;
     background-color: black;
     color: white;
     border: none;
-    border-radius: 15px;
+    border-radius: 15px; /* Berubah dari 12px ke 15px */
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 10px;
-
-    padding-left: 20px;
+    gap: 10px; /* Jarak icon ke teks jadi 10px */
+    padding-left: 15px; /* Padding kiri jadi 15px */
     font-size: 18px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
-.menu-lgt{
-    width: 350px;
-    height: 70px;
-    background-color: black;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    padding-left: 20px;
-    font-size: 18px;
+.menu-btn img {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
 }
 
-.hr {
-    width:350px;
-    height: 0.5px;
-    outline-color: gray;
-}
-
-.menu-bottom{
-    margin-top: -10px;
-}
-
-.menu-bottom2{
-    margin-top: 30px;
-}
-
-/* warna saat aktif */
 .menu-btn.active {
     background-color: #1fb381;
 }
 
-
-
-.menu-btn:hover{
-    background-color:#18a374;
+.menu-btn:hover {
+    background-color: #18a374;
+    transform: translateX(5px);
 }
 
-
-
-
-
-.menu-lgt:hover{
-    background-color:red;
+/* ========== LOGOUT BUTTON ========== */
+.menu-lgt {
+    width: 350px;
+    height: 70px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.panel h1 {
-    position: absolute;
-    top: 210px;
+.menu-lgt:hover {
+    background-color: red;
 }
 
-.panel p {
-    position: absolute;
-    top: 260px;
+/* ========== HR LINE ========== */
+.hr {
+    width: 350px;
+    height: 1px;
+    background: #333;
+    margin: 5px 0;
 }
 
-#userChart, #activityChart {
-    text-align: right !important;
-}
-
-.logo {
-    position: absolute;
-    width: 180px;
-    height: 120px;
-    top: 50px;
-    left: 100px;
-}
-
-.gray{
-    color: gray;
-}
-
-/* MAIN */
-
-.main {
-    margin-left: 400px; /* sama persis kayak width sidebar */
-    padding: 30px;
-    width: calc(100% - 400px); /* ini yang sering kelewat */
-}
-
-.title {
-    font-size: 48px;
-    margin-bottom:5px;
-}
-
-.subtitle {
-    color: gray;
-    font-size:18px;
-    margin-bottom:30px;
-}
-
-.user-card{
+/* ========== USER CARD ========== */
+.user-card {
     display: flex;
     align-items: center;
     background: #111;
     padding: 15px;
     border-radius: 12px;
-    width: 280px;
-    font-size: 20px;
+    width: 350px;
+    margin-top: 20px;
 }
 
-.user-icon{
+.user-icon {
     width: 40px;
     height: 40px;
     background: #10b981;
     border-radius: 50%;
-    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
     margin-right: 10px;
     font-size: 14px;
+    color: white;
 }
 
-.user-name{
+.user-name {
     color: white;
     font-weight: bold;
 }
 
-.user-role{
+.user-role {
     color: #22c55e;
     font-size: 13px;
     font-weight: bold;
 }
 
-.user-email{
+.user-email {
     color: #aaa;
     font-size: 13px;
+}
+
+/* ========== MAIN CONTENT ========== */
+.main {
+    margin-left: 400px;
+    padding: 30px;
+    width: calc(100% - 400px);
+    min-height: 100vh;
+    background: #f5f7fa;
+}
+
+/* ========== TITLE ========== */
+.title {
+    font-size: 48px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: gray;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1200px) {
+    .panel {
+        width: 280px;
+    }
+    .main {
+        margin-left: 280px;
+        width: calc(100% - 280px);
+    }
+    .sidebar-header .logo {
+        max-width: 100px;
+        max-height: 90px;
+    }
+}
+
+@media (max-width: 768px) {
+    .panel {
+        position: relative;
+        width: 100%;
+        height: auto;
+        overflow: visible;
+    }
+    .main {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+    }
+    .sidebar-header .logo {
+        max-width: 80px;
+        max-height: 70px;
+    }
+    .menu-btn, .menu-lgt, .user-card {
+        width: 100%;
+    }
 }
 
 
@@ -934,6 +961,7 @@ td {
     color: #10b981;
 }
 
+
 #popupLihat .btn-tutup2 {
     margin: 0 20px 20px 20px !important; /* kurangi margin */
     width: calc(100% - 40px);
@@ -1126,6 +1154,31 @@ td {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+
+/* Input Deskripsi Langganan - samain kayak input nomor telepon */
+.form-group input#description {
+    width: 100%;
+    font-size: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 14px;
+    font-family: inherit;
+}
+
+.form-group input#description:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1);
+}
+
+/* Di popup lihat */
+#lihatDeskripsi {
+    font-size: 14px !important;
+    font-weight: normal;
+    color: #111827;
+    word-break: break-word;
 }
 
 .tahun-nav:hover {

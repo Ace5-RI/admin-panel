@@ -41,22 +41,24 @@ public function api(Request $request)
     $activeClients = Client::whereDate('subscription_end_date', '>', today())->count();
 
     $warningClients = Client::whereDate('subscription_end_date', '>=', today())
-        ->whereDate('subscription_end_date', '<=', today()->addDays(30))
-        ->get()
-        ->map(function ($client) {
-            $endDate = Carbon::parse($client->subscription_end_date)->startOfDay();
-            $today = Carbon::today();
-            return [
-                'id' => $client->id,
-                'name' => $client->name,
-                'company' => $client->company,
-                'email' => $client->email,
-                'phone' => $client->phone_number,
-                'price' => 'Rp ' . number_format($client->revenue, 0, ',', '.'),
-                'subscription_end_date' => $endDate->translatedFormat('d M Y'),
-                'days_left' => max(0, $today->diffInDays($endDate, false))
-            ];
-        });
+    ->whereDate('subscription_end_date', '<=', today()->addDays(30))
+    ->get()
+    ->map(function ($client) {
+        $endDate = Carbon::parse($client->subscription_end_date)->startOfDay();
+        $today = Carbon::today();
+        return [
+            'id' => $client->id,
+            'name' => $client->name,
+            'company' => $client->company,
+            'email' => $client->email,
+            'phone' => $client->phone_number,
+            'price' => 'Rp ' . number_format($client->revenue, 0, ',', '.'),
+            'subscription_end_date' => $endDate->translatedFormat('d M Y'),
+            'days_left' => max(0, $today->diffInDays($endDate, false)),
+            'description' => $client->description, // <-- TAMBAHKAN INI
+        ];
+    });
+      
 
     $expiringsoon = Client::whereBetween(
         DB::raw('DATE(subscription_end_date)'),

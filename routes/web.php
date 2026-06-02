@@ -7,13 +7,13 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SettingController;
 
 // ================= GUEST =================
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'showLogin']);
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
-
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 });
@@ -24,23 +24,27 @@ Route::middleware('auth')->group(function() {
     Route::get('/klien', [ClientController::class, 'index'])->name('klien.index');
     Route::post('/klien', [ClientController::class, 'store'])->name('klien.store');
     Route::post('/klien/{id}', [ClientController::class, 'update'])->name('klien.update');
-    Route::delete('klien/{id}', [ClientController::class, 'destroy'])->name('klien.destroy');
-
-    Route::get('/analitik', function () {
-        return view('langganan.analitik');
-    });
-
-    Route::get('/aktivitas', function () {
-        return view('langganan.aktivitas');
-    });
-
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout'); // ← cukup satu
+    Route::delete('/klien/{id}', [ClientController::class, 'destroy'])->name('klien.destroy');
+    
+    // Settings
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings/update', [SettingController::class, 'update'])->name('settings.update');
+    Route::get('/api/settings', [SettingController::class, 'apiGet'])->name('settings.api');
+    Route::post('/api/settings/logo', [SettingController::class, 'uploadLogo'])->name('settings.upload-logo');
+    
+    // Aktivitas
+    Route::get('/aktivitas', [ActivityController::class, 'index'])->name('aktivitas.index');
+    
+    // Payment
+    Route::get('/payment/{client_id}', [PaymentController::class, 'show'])->name('payment.page');
+    Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');
+    Route::get('/payment/invoice/{client_id}/{invoice_id}', [PaymentController::class, 'invoice'])->name('payment.invoice');
+    
+    // Logout
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
 // ================= API ROUTES (Dashboard) =================
-
-
-// Biarkan yang ini saja (sudah benar)
 Route::prefix('api/dashboard')->group(function () {
     Route::get('/', [DashboardController::class, 'api']);
     Route::get('/total-klien', [DashboardController::class, 'getTotalKlienDetail']);
@@ -48,7 +52,23 @@ Route::prefix('api/dashboard')->group(function () {
     Route::get('/klien-tidak-aktif', [DashboardController::class, 'getKlienTidakAktifDetail']);
     Route::get('/klien-akan-berakhir', [DashboardController::class, 'getKlienAkanBerakhirDetail']);
     Route::get('/total-pendapatan', [DashboardController::class, 'getTotalPendapatanDetail']);
+});
 
+// ================= API ACTIVITIES =================
+Route::middleware('auth')->group(function () {
+    Route::get('/api/activities', [ActivityController::class, 'getActivities']);
+    Route::delete('/api/activities/clear', [ActivityController::class, 'clearAll']);
+    Route::delete('/api/activities/{id}', [ActivityController::class, 'delete']);
+    Route::post('/api/activities/delete-multiple', [ActivityController::class, 'deleteMultiple']);
+});
+
+// INVOICE ROUTES
+Route::middleware('auth')->group(function () {
+    
+    // INVOICE ROUTES
+Route::post('/invoice/generate/{id}', [InvoiceController::class, 'generateAndSend']);
+Route::get('/invoice/generate/{id}', [InvoiceController::class, 'generateAndSend']); // buat test
+Route::get('/invoice/print/{id}', [InvoiceController::class, 'show'])->name('invoice.print');
 });
 
 // ================= PUBLIC ACCESS FOR INVOICE PDF =================
@@ -65,24 +85,14 @@ Route::get('/invoices/{filename}', function ($filename) {
     ]);
 })->where('filename', '.*\.pdf$');
 
-// ================= PAYMENT ROUTE =================
-Route::middleware('auth')->group(function (){
-    Route::get('payment/{client_id}',[PaymentController::class,'show'])->name('payment.page');
-    Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');
-    Route::get('payment/invoice/{client_id/{invoice_id}',[PaymentController::class, 'invoice'])->name('payment.invoice');
+Route::get('/test-logo', function () {
+    $companyLogo = ltrim(\App\Models\Setting::get('company_logo', 'img/logos.png'), '/');
+
+    $logoPath = public_path($companyLogo);
+
+    dd([
+        'db_value' => $companyLogo,
+        'full_path' => $logoPath,
+        'exists' => file_exists($logoPath),
+    ]);
 });
-
-
-
-Route::get('/aktivitas', [ActivityController::class, 'index']);
-Route::get('/api/activities', [ActivityController::class, 'getActivities']);
-Route::post('/invoice/generate/{id}', [InvoiceController::class, 'generateAndSend']);
-Route::get('/invoice/generate/{id}', [InvoiceController::class, 'generateAndSend']);
-
-
-Route::delete('/api/activities/clear', [ActivityController::class, 'clearAll']);
-// Delete single activity
-Route::delete('/api/activities/{id}', [ActivityController::class, 'delete']);
-
-// Delete multiple activities
-Route::post('/api/activities/delete-multiple', [ActivityController::class, 'deleteMultiple']);

@@ -286,11 +286,14 @@ async function deleteKlien(id) {
 }
 
 // ==================== DROPDOWN 1 - FILTER ====================
-window.toggleDropdown = function() {
+window.toggleDropdown = function(event) {
+    if (event) event.preventDefault();
     document.getElementById("myDropdown").classList.toggle("show");
 }
 
-window.filterStatus = function(status) {
+window.filterStatus = function(status, event) {
+    if (event) event.preventDefault();
+    
     const rows = document.querySelectorAll("#tableBody tr");
     rows.forEach(row => {
         const endDate = row.getAttribute('data-akhir');
@@ -307,9 +310,9 @@ window.filterStatus = function(status) {
         
         if (status === "all") {
             show = true;
-        } else if (status === "aktif" && daysLeft > 20) {  // >20 hari
+        } else if (status === "aktif" && daysLeft > 20) {
             show = true;
-        } else if (status === "akan_berakhir" && daysLeft > 0 && daysLeft <= 20) {  // 1-20 hari
+        } else if (status === "akan_berakhir" && daysLeft > 0 && daysLeft <= 20) {
             show = true;
         } else if (status === "berakhir" && daysLeft <= 0) {
             show = true;
@@ -322,11 +325,14 @@ window.filterStatus = function(status) {
 }
 
 // ==================== DROPDOWN 2 - SORT ====================
-window.toggleSortDropdown = function() {
+window.toggleSortDropdown = function(event) {
+    if (event) event.preventDefault();
     document.getElementById("sortDropdown").classList.toggle("show");
 }
 
-window.sortTable = function(type) {
+window.sortTable = function(type, event) {
+    if (event) event.preventDefault();
+    
     const tbody = document.getElementById("tableBody");
     const rows = Array.from(tbody.querySelectorAll("tr"));
     
@@ -505,6 +511,7 @@ if (form) {
             perusahaan: document.getElementById("perusahaan")?.value || '',
             email: document.getElementById("email")?.value || '',
             nomer: document.getElementById("nomer")?.value || '',
+            description: document.getElementById("editDeskripsi")?.value || '',
             pendapatan: parseInt(pendapatanBersih) || 0,  // <== pake yang udah bersih
             mulai: document.getElementById("mulai")?.value || '',
             akhir: document.getElementById("akhir")?.value || ''
@@ -570,6 +577,7 @@ if (form) {
         const mulai = row.getAttribute('data-mulai') || '';
         const akhir = row.getAttribute('data-akhir') || '';
         const pendapatan = row.getAttribute('data-pendapatan') || 0;
+        const description = row.getAttribute('data-description') || '-';  // TAMBAH INI
         
         // ========== LIHAT ==========
         if (btn.classList.contains("lihat")) {
@@ -651,6 +659,7 @@ if (form) {
             document.getElementById('lihatStatus').innerText = sisa.includes('Berakhir dalam') || sisa.includes('Berakhir hari') ? 'Aktif' : 'Tidak Aktif';
             document.getElementById('lihatPerusahaan').innerText = perusahaan;
             document.getElementById('lihatPhone').innerText = phone;
+            document.getElementById('lihatDeskripsi').innerText = description;
             document.getElementById('lihatPendapatan').innerText = revenue;
             document.getElementById('lihatMulai').innerText = formatTgl(mulai);
             document.getElementById('lihatAkhir').innerText = formatTgl(akhir);
@@ -668,11 +677,13 @@ if (form) {
             const nama = row.querySelector(".klien span")?.innerText || '';
             const perusahaan = row.children[1]?.innerText || '';
             const email = row.children[2]?.innerText || '';
+            const description = row.getAttribute('data-description') || '';
             
             document.getElementById("editNama").value = nama;
             document.getElementById("editPerusahaan").value = perusahaan;
             document.getElementById("editEmail").value = email;
             document.getElementById("editNomer").value = phone;
+            document.getElementById("editDeskripsi").value = description;
             document.getElementById("editMulai").value = mulai;
             document.getElementById("editAkhir").value = akhir;
             document.getElementById("editPendapatan").value = pendapatan;
@@ -750,6 +761,7 @@ const formData = {
     company: document.getElementById("editPerusahaan")?.value || '',
     email: document.getElementById("editEmail")?.value || '',
     phone_number: document.getElementById("editNomer")?.value || '',
+    description: document.getElementById("editDeskripsi")?.value || '',
     subscription_end_date: document.getElementById("editAkhir")?.value || '',
     revenue: parseInt(revenueBersih) || 0,  // <== pake yang udah bersih
     status: 'aktif'
@@ -782,36 +794,38 @@ const nameSidebar = document.getElementById("userNameSidebar");
 const emailSidebar = document.getElementById("userEmailSidebar");
 
 function updateSidebar(user) {
-    nameSidebar.textContent = user.name;
-    emailSidebar.textContent = user.email;
+    if (nameSidebar) nameSidebar.textContent = user.name;
+    if (emailSidebar) emailSidebar.textContent = user.email;
     if (avatarSidebar) {
         const nameParts = user.name.split(" ").slice(0, 2);
         avatarSidebar.textContent = nameParts.map(w => w[0]).join("").toUpperCase();
     }
 }
 
-const userName = localStorage.getItem("user_name");
-const userEmail = localStorage.getItem("user_email");
-
-if (userName && userEmail) {
-    updateSidebar({ name: userName, email: userEmail });
-} else {
-    async function fetchLoginUser() {
+const logoutBtn = document.getElementById("logoutBtn");
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const result = await Swal.fire({ title: 'Yakin ingin logout?', icon: 'question', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Ya, Logout!', cancelButtonText: 'Batal' });
+        if (!result.isConfirmed) return;
         try {
-            const token = document.querySelector('meta[name="csrf-token"]').content;
-            const res = await fetch('/account', {
-                method: 'GET',
-                credentials: 'include',
-                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': token }
-            });
-            const data = await res.json();
-            if (data.success && data.user) {
-                updateSidebar(data.user);
-            }
-        } catch (err) {
-            console.error("Gagal ambil user login:", err);
-        }
-    }
-    fetchLoginUser();
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+            await fetch('/logout', { method: 'POST', headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' } });
+            localStorage.clear();
+            sessionStorage.clear();
+            await Swal.fire({ title: 'Logout Berhasil!', icon: 'success', timer: 1200, showConfirmButton: false });
+            window.location.href = '/';
+        } catch (err) { console.error(err); Swal.fire('Error!', 'Gagal logout!', 'error'); }
+    });
 }
 
+const userLS = localStorage.getItem("user_name");
+const emailLS = localStorage.getItem("user_email");
+
+if (userLS && emailLS) {
+    updateSidebar({ name: userLS, email: emailLS });
+    if (!localStorage.getItem("welcome_shown")) {
+        Swal.fire({ title: "Selamat Datang 👋", text: "Halo " + userLS, icon: "success", confirmButtonText: "OK" });
+        localStorage.setItem("welcome_shown", "true");
+    }
+}

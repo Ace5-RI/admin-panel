@@ -22,6 +22,7 @@ class ClientController extends Controller
             'nama' => 'required|string|max:255',
             'perusahaan' => 'required|string|max:255',
             'email' => 'required|email|unique:clients,email',
+            'description' => 'nullable|string',
             'pendapatan' => 'required|numeric|min:0',
             'mulai' => 'required|date', 
             'akhir' => 'required|date', 

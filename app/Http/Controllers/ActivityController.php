@@ -27,7 +27,7 @@ class ActivityController extends Controller
         
         $stats = [
     'total_login' => Activity::where('type', 'login')->count(),
-    'total_client' => Activity::where('type', 'create_client')->count(),  // ← TAMBAH
+    'total_client' => Activity::where('type', 'create')->count(),      // ← type 'create'
     'total_edit' => Activity::where('type', 'edit')->count(),
     'total_invoice' => Activity::where('type', 'invoice')->count(),
 ];

@@ -7,16 +7,18 @@
     <link rel="stylesheet" href="{{ asset('css/klien.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
+    <base href="/">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <title>Dashboard</title>
 </head>
 <body>
 
 <div class="panel">
-    <img src="{{ asset('img/logos.png') }}" alt="" class="logo">
-    <h1>Admin Panel</h1>
-    <p>Manajemen Klien</p>
-
+    <div class="sidebar-header">
+        <img src="{{ \App\Models\Setting::get('company_logo', '/img/logos.png') }}" alt="Logo" class="logo" id="sidebarLogo" onerror="this.src='/img/logos.png'">
+        <h1>Admin Panel</h1>
+        <p>Manajemen Klien</p>
+    </div>
     <div class="menu">
         @if (session('success'))
         <script>alert("{{ session('success') }}");</script>
@@ -30,7 +32,9 @@
             <img src="{{ asset('img/klien.png') }}">Klien
         </a>
 
-      
+         <a class="menu-btn {{ request()->is('settings') ? 'active' : '' }}" href="/settings">
+    <img src="{{ asset('img/setting.png') }}"> Pengaturan
+</a>
 
         <hr class="hr" style="margin-top: 5px">
 
@@ -105,14 +109,15 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group full-width">
-                        <label>Nomer Telepon</label>
-                        <input type="text" name="nomer" id="nomer" placeholder="08xxxxxx" required>
-                         
-                        <label>Deskripsi Langganan</label>
-                        <input type="text" name="nomer" id="nomer" placeholder="Langganan Website" required>
-                    </div>
-                    </div>
+                   <div class="form-group">
+    <label>Nomor Telepon</label>
+    <input type="text" name="nomer" id="nomer" placeholder="08xxxxxx" required>
+</div>
+
+<div class="form-group">
+    <label>Deskripsi Langganan</label>
+    <input type="text" name="description" id="description" placeholder="Masukkan deskripsi langganan">
+</div>
 
 
                 </div>
@@ -145,6 +150,10 @@
                 <div class="card">
                     <span>No. Telepon</span>
                     <strong id="lihatPhone">-</strong>
+                </div>
+                 <div class="card">
+                    <span>Deskripsi Langganan</span>  <!-- TAMBAH INI -->
+                    <strong id="lihatDeskripsi">-</strong>
                 </div>
                 <div class="card">
                     <span>Total Pendapatan</span>
@@ -189,6 +198,10 @@
                     <div class="form-group">
                         <label>Perusahaan</label>
                         <input type="text" id="editPerusahaan" placeholder="Nama Perusahaan" required>
+                    </div>
+                    <div class="form-group">  <!-- TAMBAH INI -->
+                        <label>Deskripsi Langganan</label>
+                        <input type="text" id="editDeskripsi" placeholder="Masukkan deskripsi langganan">
                     </div>
                     <div class="form-group">
                         <label>No. Telepon</label>
@@ -243,30 +256,30 @@
         </div>
     </div>
 
-    <!-- ================= SEARCH & FILTER ================= -->
-    <div class="search">
-        <input type="text" id="searchInput" class="search2" placeholder="Cari Klien Berdasarkan Nama, Email Atau Perusahaan">
-        
-        <div class="dropdown-group">
-            <div class="dropdown">
-                <button onclick="toggleDropdown()" class="dropbtn">Filter Status ▼</button>
-                <div id="myDropdown" class="dropdown-content">
-                    <a href="#" onclick="filterStatus('all')">Semua</a>
-                    <a href="#" onclick="filterStatus('aktif')">Aktif</a>
-                    <a href="#" onclick="filterStatus('akan_berakhir')">Akan Berakhir</a>
-                    <a href="#" onclick="filterStatus('berakhir')">Berakhir</a>
-                </div>
+   <!-- ================= SEARCH & FILTER ================= -->
+<div class="search">
+    <input type="text" id="searchInput" class="search2" placeholder="Cari Klien Berdasarkan Nama, Email Atau Perusahaan">
+    
+    <div class="dropdown-group">
+        <div class="dropdown">
+            <button onclick="toggleDropdown(event)" class="dropbtn">Filter Status ▼</button>
+            <div id="myDropdown" class="dropdown-content">
+                <a href="javascript:void(0)" onclick="filterStatus('all', event); return false;">Semua</a>
+                <a href="javascript:void(0)" onclick="filterStatus('aktif', event); return false;">Aktif</a>
+                <a href="javascript:void(0)" onclick="filterStatus('akan_berakhir', event); return false;">Akan Berakhir</a>
+                <a href="javascript:void(0)" onclick="filterStatus('berakhir', event); return false;">Berakhir</a>
             </div>
+        </div>
 
-            <div class="dropdown">
-                <button onclick="toggleSortDropdown()" class="dropbtn">Urutkan ▼</button>
-                <div id="sortDropdown" class="dropdown-content">
-                    <a href="#" onclick="sortTable('tercepat')">Paling Cepat</a>
-                    <a href="#" onclick="sortTable('terlama')">Paling Lama</a>
-                </div>
+        <div class="dropdown">
+            <button onclick="toggleSortDropdown(event)" class="dropbtn">Urutkan ▼</button>
+            <div id="sortDropdown" class="dropdown-content">
+                <a href="javascript:void(0)" onclick="sortTable('tercepat', event); return false;">Paling Cepat</a>
+                <a href="javascript:void(0)" onclick="sortTable('terlama', event); return false;">Paling Lama</a>
             </div>
         </div>
     </div>
+</div> 
 
     <!-- ================= TABEL ================= -->
     <table class="table" id="tableView">
@@ -288,6 +301,7 @@
                 data-phone="{{ $client->phone_number }}"
                 data-mulai="{{ \Carbon\Carbon::parse($client->subscription_start_date)->format('Y-m-d') }}"
                 data-akhir="{{ \Carbon\Carbon::parse($client->subscription_end_date)->format('Y-m-d') }}"
+                data-description="{{ $client->description }}"
                 data-pendapatan="{{ $client->revenue }}"
                 data-status="{{ $client->status }}">
                 <td class="klien">
@@ -314,8 +328,27 @@
         </tbody>
     </table>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{{ asset('js/klien.js') }}"></script>
+<script>
+// Update logo sidebar dari database
+async function updateSidebarLogo() {
+    try {
+        const response = await fetch('/api/settings');
+        const settings = await response.json();
+        const sidebarLogo = document.getElementById('sidebarLogo');
+        if (sidebarLogo && settings.company_logo) {
+            sidebarLogo.src = settings.company_logo + '?t=' + Date.now();
+        }
+        // Update juga variable global
+        window.companyName = settings.company_name;
+        window.companyLogo = settings.company_logo;
+    } catch (error) {
+        console.error('Gagal update logo:', error);
+    }
+}
+updateSidebarLogo();
+</script>
 </body>
 </html>

@@ -6,15 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('css/aktivitas.css') }}">
+    <base href="/">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <title>Aktivitas - Admin Panel</title>
 </head>
 <body>
 
 <div class="panel">
-    <img src="{{ asset('img/logos.png') }}" alt="" class="logo">
-    <h1>Admin Panel</h1>
-    <p>Manajemen Klien</p>
+    <div class="sidebar-header">
+        <img src="{{ \App\Models\Setting::get('company_logo', '/img/logos.png') }}" alt="Logo" class="logo" id="sidebarLogo" onerror="this.src='/img/logos.png'">
+        <h1>Admin Panel</h1>
+        <p>Manajemen Klien</p>
+    </div>
 
     <div class="menu">
         @if (session('success'))
@@ -29,24 +32,30 @@
             <img src="{{ asset('img/klien.png') }}">Klien
         </a>
 
-        <hr class="hr" style="margin-top: 5px">
+        <a class="menu-btn {{ request()->is('settings') ? 'active' : '' }}" href="/settings">
+            <img src="{{ asset('img/setting.png') }}"> Pengaturan
+        </a>
+
+        <hr class="hr">
 
         <a class="menu-btn {{ request()->is('aktivitas') ? 'active' : '' }}" href="/aktivitas">
             <img src="{{ asset('img/help.png') }}">Aktivitas
         </a>
-        <hr class="hr" style="margin-top: 5px">
+        <hr class="hr">
 
         <div class="user-card">
-            <div class="user-icon" id="avatarSidebar">A</div>
+            <div class="user-icon" id="avatarSidebar">
+                {{ substr(Auth::user()->name ?? 'A', 0, 1) }}
+            </div>
             <div class="user-info">
-                <div class="user-name" id="userNameSidebar">Admin User</div>
-                <div class="user-role" id="userRoleSidebar">ADMIN</div>
-                <div class="user-email" id="userEmailSidebar">admin@adminportal.com</div>
+                <div class="user-name" id="userNameSidebar">{{ Auth::user()->name ?? 'Admin User' }}</div>
+                <div class="user-role" id="userRoleSidebar">{{ strtoupper(Auth::user()->role ?? 'ADMIN') }}</div>
+                <div class="user-email" id="userEmailSidebar">{{ Auth::user()->email ?? 'admin@adminportal.com' }}</div>
             </div>
         </div>
 
         <button class="menu-lgt menu-bottom2" id="logoutBtn">
-            <img src="{{ asset('img/Logout.png') }}">Log Out
+            <img src="{{ asset('img/Logout.png') }}"> Log Out
         </button>
     </div>
 </div>
@@ -89,14 +98,14 @@
         </div>
     </div>
 
-    <!-- 🔥 TOMBOL HAPUS SEMUA -->
+    <!-- TOMBOL HAPUS SEMUA -->
     <div class="clear-section">
         <button id="clearAllActivities" class="btn-clear">
             🗑️ Hapus Semua Aktivitas
         </button>
     </div>
 
-       <!-- Filters -->
+    <!-- Filters -->
     <div class="filter-section">
         <div class="filter-title">📌 Filter Aktivitas</div>
         <div class="filter-buttons">
@@ -138,10 +147,30 @@
             </div>
         </div>
     </div>
-
-  
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('js/aktivitas.js') }}"></script>
+
+<script>
+// Update logo sidebar dari database
+async function updateSidebarLogo() {
+    try {
+        const response = await fetch('/api/settings');
+        const settings = await response.json();
+        const sidebarLogo = document.getElementById('sidebarLogo');
+        if (sidebarLogo && settings.company_logo) {
+            sidebarLogo.src = settings.company_logo + '?t=' + Date.now();
+        }
+        // Update juga variable global
+        window.companyName = settings.company_name;
+        window.companyLogo = settings.company_logo;
+    } catch (error) {
+        console.error('Gagal update logo:', error);
+    }
+}
+updateSidebarLogo();
+</script>
+
 </body>
 </html>

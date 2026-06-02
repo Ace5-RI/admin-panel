@@ -1,20 +1,15 @@
-/* ==================== AKTIVITAS CSS ==================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     overflow: auto !important;
-    background: linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 50%, #F3F4F6 100%);
-    min-height: 100vh;
 }
 
-/* ========== SIDEBAR (SAMA DENGAN DASHBOARD) ========== */
+* {
+    box-sizing: border-box;
+}
+
+/* ========== SIDEBAR ========== */
 .panel {
     position: fixed;
     left: 0;
@@ -24,14 +19,44 @@ body {
     background: black;
     color: white;
     padding: 20px;
+    overflow-y: auto;
 }
 
+/* ========== SIDEBAR HEADER ========== */
+.sidebar-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar-header .logo {
+    max-width: 130px;
+    max-height: 110px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    margin: 10px auto 15px;
+    border-radius: 16px;
+    display: block;
+}
+
+.sidebar-header h1 {
+    font-size: 20px;
+    margin: 0 0 5px;
+    color: white;
+}
+
+.sidebar-header p {
+    font-size: 12px;
+    color: #aaa;
+    margin: 0;
+}
+
+/* ========== MENU ========== */
 .menu {
-    margin-top: 310px;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    text-decoration: none;
 }
 
 .menu-btn {
@@ -40,16 +65,34 @@ body {
     background-color: black;
     color: white;
     border: none;
-    border-radius: 15px;
+    border-radius: 15px; /* Berubah dari 12px ke 15px */
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding-left: 20px;
+    gap: 10px; /* Jarak icon ke teks jadi 10px */
+    padding-left: 15px; /* Padding kiri jadi 15px */
     font-size: 18px;
-    transition: 0.3s;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
+.menu-btn img {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+}
+
+.menu-btn.active {
+    background-color: #1fb381;
+}
+
+.menu-btn:hover {
+    background-color: #18a374;
+    transform: translateX(5px);
+}
+
+/* ========== LOGOUT BUTTON ========== */
 .menu-lgt {
     width: 350px;
     height: 70px;
@@ -57,70 +100,36 @@ body {
     color: white;
     border: none;
     border-radius: 15px;
-    text-decoration: none;
     display: flex;
     align-items: center;
     gap: 10px;
     padding-left: 20px;
     font-size: 18px;
     cursor: pointer;
-    transition: 0.3s;
-}
-
-.hr {
-    width: 350px;
-    height: 0.5px;
-    outline-color: gray;
-}
-
-.menu-bottom {
-    margin-top: -10px;
-}
-
-.menu-bottom2 {
-    margin-top: 30px;
-}
-
-/* warna saat aktif */
-.menu-btn.active {
-    background-color: #1fb381;
-}
-
-.menu-btn:hover {
-    background-color: #18a374;
+    transition: all 0.3s ease;
 }
 
 .menu-lgt:hover {
     background-color: red;
 }
 
-.panel h1 {
-    position: absolute;
-    top: 210px;
+/* ========== HR LINE ========== */
+.hr {
+    width: 350px;
+    height: 1px;
+    background: #333;
+    margin: 5px 0;
 }
 
-.panel p {
-    position: absolute;
-    top: 260px;
-}
-
-.logo {
-    position: absolute;
-    width: 180px;
-    height: 120px;
-    top: 50px;
-    left: 100px;
-}
-
-/* User Card (SAMA DENGAN DASHBOARD) */
+/* ========== USER CARD ========== */
 .user-card {
     display: flex;
     align-items: center;
     background: #111;
     padding: 15px;
     border-radius: 12px;
-    width: 280px;
-    font-size: 20px;
+    width: 350px;
+    margin-top: 20px;
 }
 
 .user-icon {
@@ -128,13 +137,13 @@ body {
     height: 40px;
     background: #10b981;
     border-radius: 50%;
-    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
     margin-right: 10px;
     font-size: 14px;
+    color: white;
 }
 
 .user-name {
@@ -152,6 +161,7 @@ body {
     color: #aaa;
     font-size: 13px;
 }
+
 
 /* ========== MAIN CONTENT ========== */
 .main {
@@ -223,6 +233,7 @@ body {
     font-weight: 500;
     margin-bottom: 8px;
 }
+
 
 .stat-number {
     font-size: 32px;

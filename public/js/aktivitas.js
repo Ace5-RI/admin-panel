@@ -251,41 +251,45 @@ async function clearAllActivities() {
 }
 
 // ==================== SIDEBAR USER ====================
-function initSidebar() {
-    const userName = localStorage.getItem("user_name");
-    const userEmail = localStorage.getItem("user_email");
-    
-    if (userName && userEmail) {
-        const nameEl = document.getElementById('userNameSidebar');
-        const emailEl = document.getElementById('userEmailSidebar');
-        const avatarEl = document.getElementById('avatarSidebar');
-        
-        if (nameEl) nameEl.innerText = userName;
-        if (emailEl) emailEl.innerText = userEmail;
-        if (avatarEl) avatarEl.innerText = userName.substring(0, 2).toUpperCase();
+const avatarSidebar = document.getElementById("avatarSidebar");
+const nameSidebar = document.getElementById("userNameSidebar");
+const emailSidebar = document.getElementById("userEmailSidebar");
+
+function updateSidebar(user) {
+    if (nameSidebar) nameSidebar.textContent = user.name;
+    if (emailSidebar) emailSidebar.textContent = user.email;
+    if (avatarSidebar) {
+        const nameParts = user.name.split(" ").slice(0, 2);
+        avatarSidebar.textContent = nameParts.map(w => w[0]).join("").toUpperCase();
+    }
+}
+
+const userLS = localStorage.getItem("user_name");
+const emailLS = localStorage.getItem("user_email");
+
+if (userLS && emailLS) {
+    updateSidebar({ name: userLS, email: emailLS });
+    if (!localStorage.getItem("welcome_shown")) {
+        Swal.fire({ title: "Selamat Datang 👋", text: "Halo " + userLS, icon: "success", confirmButtonText: "OK" });
+        localStorage.setItem("welcome_shown", "true");
     }
 }
 
 // ==================== LOGOUT ====================
-function initLogout() {
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (!logoutBtn) return;
-    
-    logoutBtn.addEventListener('click', async () => {
-        const result = await Swal.fire({
-            title: 'Yakin ingin logout?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'Ya, Logout!',
-            cancelButtonText: 'Batal'
-        });
-        
-        if (result.isConfirmed) {
+const logoutBtn = document.getElementById("logoutBtn");
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const result = await Swal.fire({ title: 'Yakin ingin logout?', icon: 'question', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Ya, Logout!', cancelButtonText: 'Batal' });
+        if (!result.isConfirmed) return;
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+            await fetch('/logout', { method: 'POST', headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' } });
             localStorage.clear();
             sessionStorage.clear();
+            await Swal.fire({ title: 'Logout Berhasil!', icon: 'success', timer: 1200, showConfirmButton: false });
             window.location.href = '/';
-        }
+        } catch (err) { console.error(err); Swal.fire('Error!', 'Gagal logout!', 'error'); }
     });
 }
 
@@ -391,14 +395,20 @@ async function deleteSelectedActivities() {
 
 // ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM loaded, memuat aktivitas...");
+    
     initFilters();
-    initSidebar();
-    initLogout();
-    loadActivities('all');
+    loadActivities('all');  // ← HARUS ADA INI
     
     // Event listener untuk tombol clear all
-    document.getElementById('clearAllActivities')?.addEventListener('click', clearAllActivities);
+    const clearBtn = document.getElementById('clearAllActivities');
+    if (clearBtn) {
+        clearBtn.addEventListener('click', clearAllActivities);
+    }
     
     // Event listener untuk tombol delete selected
-    document.getElementById('deleteSelectedBtn')?.addEventListener('click', deleteSelectedActivities);
+    const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
+    if (deleteSelectedBtn) {
+        deleteSelectedBtn.addEventListener('click', deleteSelectedActivities);
+    }
 });
