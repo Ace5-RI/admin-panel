@@ -276,22 +276,33 @@ if (userLS && emailLS) {
 }
 
 // ==================== LOGOUT ====================
-const logoutBtn = document.getElementById("logoutBtn");
-if (logoutBtn) {
-    logoutBtn.addEventListener("click", async (e) => {
-        e.preventDefault();
-        const result = await Swal.fire({ title: 'Yakin ingin logout?', icon: 'question', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Ya, Logout!', cancelButtonText: 'Batal' });
-        if (!result.isConfirmed) return;
-        try {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
-            await fetch('/logout', { method: 'POST', headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' } });
-            localStorage.clear();
-            sessionStorage.clear();
-            await Swal.fire({ title: 'Logout Berhasil!', icon: 'success', timer: 1200, showConfirmButton: false });
-            window.location.href = '/';
-        } catch (err) { console.error(err); Swal.fire('Error!', 'Gagal logout!', 'error'); }
+logoutBtn.addEventListener("click", async (e) => {
+    const result = await Swal.fire({ 
+        title: 'Yakin ingin logout?', 
+        icon: 'question', 
+        showCancelButton: true, 
+        confirmButtonColor: '#d33', 
+        confirmButtonText: 'Ya, Logout!', 
+        cancelButtonText: 'Batal' 
     });
-}
+    
+    if (result.isConfirmed) {
+        try {
+            await fetch('/logout', { 
+                method: 'POST', 
+                credentials: 'include',
+                headers: { 
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json' 
+                } 
+            });
+            window.location.href = '/login'; // ← INI yang kurang!
+        } catch (err) { 
+            console.error(err); 
+            Swal.fire('Error!', 'Gagal logout!', 'error'); 
+        }
+    }
+});
 
 // ==================== CHECKLIST FUNCTIONS ====================
 let selectedActivities = new Set();
