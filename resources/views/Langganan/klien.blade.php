@@ -318,9 +318,10 @@
                 <td>Rp {{ number_format($client->revenue, 0, ',', '.') }}</td>
                 <td>
                     <div class="aksi">
-                        <span class="icon lihat">👁️</span>
-                        <span class="icon edit">✏️</span>
-                        <span class="icon delete">🗑️</span>
+                         <span class="icon lihat">👁️</span>
+                         <span class="icon edit">✏️</span>
+                         <span class="icon delete">🗑️</span>
+                         <a href="/invoice/generate/{{ $client->id }}" target="_blank" class="icon" title="Generate Invoice">🧾</a>
                     </div>
                 </td>
             </tr>
