@@ -323,8 +323,6 @@ if (logoutBtn) {
 
 // ================== INIT ==================
 document.addEventListener('DOMContentLoaded', () => {
-    loadUserData();
     loadSettings();
-    setupLogout();
     console.log('✅ Settings page ready!');
 });
