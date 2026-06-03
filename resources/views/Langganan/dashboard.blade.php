@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="Expires" content="0">
     <title>Dashboard</title>
     <base href="/">
