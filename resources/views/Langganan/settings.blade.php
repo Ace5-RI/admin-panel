@@ -213,23 +213,7 @@ async function updateSidebarLogo() {
 }
 updateSidebarLogo();
 
-// Load user data dari localStorage
-function loadUserData() {
-    const userLS = localStorage.getItem("user_name");
-    const emailLS = localStorage.getItem("user_email");
-    const roleLS = localStorage.getItem("user_role");
-    
-    if (userLS && emailLS) {
-        document.getElementById('userNameSidebar').textContent = userLS;
-        document.getElementById('userEmailSidebar').textContent = emailLS;
-        const nameParts = userLS.split(" ").slice(0, 2);
-        document.getElementById('avatarSidebar').textContent = nameParts.length === 1 
-        ? nameParts[0].substring(0, 2).toUpperCase() 
-        : nameParts.map(w => w[0]).join("").toUpperCase();
-        document.getElementById('userRoleSidebar').textContent = roleLS ? roleLS.toUpperCase() : 'ADMIN';
-    }
-}
-loadUserData();
+
 
 // Logout handler
 document.getElementById('logoutBtn')?.addEventListener('click', async (e) => {
