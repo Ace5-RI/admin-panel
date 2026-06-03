@@ -156,23 +156,25 @@ class AuthController extends Controller
 {
     $user = Auth::user();
     
-    if ($user) {
-        Activity::create([
-            'type' => 'login',
-            'title' => 'Logout Sistem',
-            'detail' => "Admin {$user->name} telah logout dari dashboard",
-            'user_name' => $user->name,
-            'user_email' => $user->email,
-            'status' => 'success',
-            'ip_address' => $request->ip()
-        ]);
-    }
+   // Ganti semua Activity::create(...) dengan:
+try {
+    Activity::create([
+        'type' => 'login',
+        'title' => 'Logout Sistem',
+        'detail' => "Admin {$user->name} telah logout dari dashboard",
+        'user_name' => $user->name,
+        'user_email' => $user->email,
+        'status' => 'success',
+        'ip_address' => $request->ip()
+    ]);
+} catch (\Exception $e) {
+    // ignore activity log error
+}
 
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
+Auth::logout();
+$request->session()->invalidate();
+$request->session()->regenerateToken();
+return redirect('/login');
 
-    // LANGSUNG REDIRECT KE LOGIN
-    return redirect('/login');
 }
 }
