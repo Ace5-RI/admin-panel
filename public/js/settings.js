@@ -288,33 +288,34 @@ if (userLS && emailLS) {
 }
 
 // ================== LOGOUT ==================
-logoutBtn.addEventListener("click", async (e) => {
-    const result = await Swal.fire({ 
-        title: 'Yakin ingin logout?', 
-        icon: 'question', 
-        showCancelButton: true, 
-        confirmButtonColor: '#d33', 
-        confirmButtonText: 'Ya, Logout!', 
-        cancelButtonText: 'Batal' 
-    });
-    
-    if (result.isConfirmed) {
-        try {
-            await fetch('/logout', { 
-                method: 'POST', 
-                credentials: 'include',
-                headers: { 
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Accept': 'application/json' 
-                } 
-            });
-            window.location.href = '/login'; // ← INI yang kurang!
-        } catch (err) { 
-            console.error(err); 
-            Swal.fire('Error!', 'Gagal logout!', 'error'); 
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", async (e) => {
+        const result = await Swal.fire({ 
+            title: 'Yakin ingin logout?', 
+            icon: 'question', 
+            showCancelButton: true, 
+            confirmButtonColor: '#d33', 
+            confirmButtonText: 'Ya, Logout!', 
+            cancelButtonText: 'Batal' 
+        });
+        
+        if (result.isConfirmed) {
+            // Buat form POST dan submit — cara paling reliable
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/logout';
+            
+            const csrf = document.createElement('input');
+            csrf.type = 'hidden';
+            csrf.name = '_token';
+            csrf.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+            form.appendChild(csrf);
+            document.body.appendChild(form);
+            form.submit();
         }
-    }
-});
+    });
+}
 
 // ================== INIT ==================
 document.addEventListener('DOMContentLoaded', () => {
