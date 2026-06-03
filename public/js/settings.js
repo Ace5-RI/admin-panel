@@ -273,10 +273,10 @@ function updateSidebar(user) {
     if (avatarSidebar) {
     const nameParts = user.name.split(" ").slice(0, 2);
     if (nameParts.length === 1) {
-        avatarSidebar.textContent = nameParts[0].substring(0, 2).toUpperCase();
-    } else {
-        avatarSidebar.textContent = nameParts.map(w => w[0]).join("").toUpperCase();
-    }
+    avatarSidebar.textContent = nameParts[0].substring(0, 2).toUpperCase();
+} else {
+    avatarSidebar.textContent = nameParts.map(w => w[0]).join("").toUpperCase();
+}
 }
 }
 
