@@ -1,20 +1,9 @@
-// login.js - MODIFIKASI (hapus role user)
 console.log("JS KELOAD 🔥");
 
-// ==================== JS AWAL ANDA (TETAP) ====================
-
-// ambil semua tombol yang punya class select-btn
 const buttons = document.querySelectorAll('.select-btn');
-
-// looping setiap tombol
 buttons.forEach(button => {
-    // kasih event ketika tombol diklik
     button.addEventListener('click', function(){
-        // hapus class active dari semua tombol
-        buttons.forEach(btn => {
-            btn.classList.remove('active');
-        });
-        // tambahkan class active ke tombol yang diklik
+        buttons.forEach(btn => btn.classList.remove('active'));
         this.classList.add('active');
     });
 });
@@ -37,18 +26,26 @@ if (showLogin) {
     }
 }
 
-// ==================== TAMBAHAN: Ambil CSRF Token ====================
-const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+// ==================== Helper: ambil CSRF token ====================
+function getCsrfToken() {
+    return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+}
 
-// ==================== HAPUS selectedRole - admin SAJA ====================
-// Tidak perlu selectedRole lagi karena hanya admin
+function updateCsrfToken(token) {
+    document.querySelector('meta[name="csrf-token"]').setAttribute('content', token);
+}
 
-// ==================== MODIFIKASI: Login function ====================
+async function refreshCsrf() {
+    await fetch('/sanctum/csrf-cookie', { credentials: 'include' });
+    // Ambil token terbaru dari meta tag yang diupdate Laravel
+    return getCsrfToken();
+}
+
+// ==================== Login ====================
 async function loginUser(email, password){
     try {
-        await fetch('/sanctum/csrf-cookie', {
-            credentials: 'include'
-        });
+        await refreshCsrf();
+        const token = getCsrfToken();
 
         const response = await fetch("/login", {
             method: "POST",
@@ -56,22 +53,20 @@ async function loginUser(email, password){
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                "X-CSRF-TOKEN": csrfToken
+                "X-CSRF-TOKEN": token
             },
-            body: JSON.stringify({ email, password, role: 'admin' }) // ← FIXED role admin
+            body: JSON.stringify({ email, password, role: 'admin' })
         });
 
         const text = await response.text();
         console.log("RESPONSE LOGIN:", text);
 
-        let data;
-        try {
-            data = JSON.parse(text);
-        } catch {
-            return { success: false, message: text };
-        }
+        // Update CSRF token dari response header jika ada
+        const newToken = response.headers.get('X-CSRF-TOKEN');
+        if (newToken) updateCsrfToken(newToken);
 
-        return data;
+        try { return JSON.parse(text); }
+        catch { return { success: false, message: text }; }
 
     } catch (error) {
         console.error(error);
@@ -79,10 +74,11 @@ async function loginUser(email, password){
     }
 }
 
-// ==================== Register function ====================
+// ==================== Register ====================
 async function registerUser(name, email, password, phone){
     try {
-        await fetch('/sanctum/csrf-cookie', { credentials: 'include' });
+        await refreshCsrf();
+        const token = getCsrfToken();
 
         const res = await fetch('/register', {
             method: 'POST',
@@ -90,24 +86,18 @@ async function registerUser(name, email, password, phone){
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
+                'X-CSRF-TOKEN': token
             },
             body: JSON.stringify({
-                name,
-                email,
-                password,
+                name, email, password,
                 password_confirmation: password,
                 phone_number: phone
             })
         });
 
         const text = await res.text();
-        let data;
-        try {
-            data = JSON.parse(text);
-        } catch { return { success: false, message: text }; }
-
-        return data;
+        try { return JSON.parse(text); }
+        catch { return { success: false, message: text }; }
 
     } catch (err) {
         console.error(err);
@@ -132,7 +122,6 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
     submitBtn.innerText = "Loading...";
     submitBtn.disabled = true;
 
-    // Kirim login tanpa parameter role
     const res = await loginUser(email, password);
 
     if(res.success){
@@ -141,14 +130,11 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
         localStorage.setItem("user_role", res.user.role);
         localStorage.setItem("auth_token", res.token);
         localStorage.setItem("welcome_message", "Selamat datang " + res.user.name);
-        
-        // Redirect ke dashboard admin
         window.location.href = "/dashboard";
     } else {
-        const errorMsg = res.message || res.errors || "Login gagal! Periksa email dan password Anda.";
-        alert(errorMsg);
+        alert(res.message || "Login gagal! Periksa email dan password Anda.");
     }
-    
+
     submitBtn.innerText = originalText;
     submitBtn.disabled = false;
 });
@@ -162,7 +148,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     const password = document.getElementById("regPassword").value.trim();
     const phone = document.getElementById("regPhone").value.trim();
     const passwordConfirm = document.getElementById("regPasswordConfirmation").value.trim();
-    
+
     if (!nama || !email || !password) {
         alert("Nama, Email, dan Password harus diisi!");
         return;
@@ -192,23 +178,18 @@ document.getElementById("registerForm").addEventListener("submit", async functio
             icon: "success",
             timer: 2000,
             showConfirmButton: false
-        }).then(() => {
-            card.classList.remove("active");
-        });
-
+        }).then(() => card.classList.remove("active"));
         document.getElementById("registerForm").reset();
     } else {
         if (res.errors) {
-            let errorMessages = [];
-            Object.values(res.errors).forEach(error => {
-                errorMessages.push(error.join(', '));
-            });
-            alert("Validasi gagal:\n" + errorMessages.join('\n'));
+            let msgs = [];
+            Object.values(res.errors).forEach(e => msgs.push(e.join(', ')));
+            alert("Validasi gagal:\n" + msgs.join('\n'));
         } else {
             alert(res.message || "Register gagal! Silakan coba lagi.");
         }
     }
-    
+
     submitBtn.innerText = originalText;
     submitBtn.disabled = false;
 });
