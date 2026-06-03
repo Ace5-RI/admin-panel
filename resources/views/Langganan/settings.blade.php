@@ -194,8 +194,7 @@
 <!-- SCRIPTS (SAMA PERSIS KAYAK DASHBOARD) -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('js/settings.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('js/settings.js') }}"></script>
+
 <script>
 // Update logo sidebar dari database
 async function updateSidebarLogo() {
@@ -223,7 +222,10 @@ function loadUserData() {
     if (userLS && emailLS) {
         document.getElementById('userNameSidebar').textContent = userLS;
         document.getElementById('userEmailSidebar').textContent = emailLS;
-        document.getElementById('avatarSidebar').textContent = userLS.charAt(0).toUpperCase();
+        const nameParts = userLS.split(" ").slice(0, 2);
+        document.getElementById('avatarSidebar').textContent = nameParts.length === 1 
+        ? nameParts[0].substring(0, 2).toUpperCase() 
+        : nameParts.map(w => w[0]).join("").toUpperCase();
         document.getElementById('userRoleSidebar').textContent = roleLS ? roleLS.toUpperCase() : 'ADMIN';
     }
 }
