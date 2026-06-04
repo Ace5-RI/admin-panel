@@ -4,7 +4,8 @@ nixPkgs = ["php82", "php82Extensions.mbstring", "php82Extensions.xml", "php82Ext
 [phases.build]
 cmds = [
   "composer install --no-dev --optimize-autoloader",
-  "php artisan migrate:fresh --force",
+  "php artisan migrate --force",
+  "php artisan db:seed --force",
   "php artisan storage:link",
   "php artisan optimize"
 ]
