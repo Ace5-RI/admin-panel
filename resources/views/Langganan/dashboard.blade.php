@@ -103,12 +103,12 @@
 
         <div class="container2">
     <div class="table">
-        <h4 class="table-txt">📊 Tren Klien Aktif</h4>
+        <h4 class="table-txt"> Tren Klien Aktif</h4>
         <canvas id="userChart"></canvas>
         
     </div>
     <div class="table">
-        <h4 class="table-txt">🚀 Tren Klien Baru</h4>
+        <h4 class="table-txt"> Tren Klien Baru</h4>
         <canvas id="activityChart"></canvas>
        
     </div>
@@ -133,7 +133,7 @@
         <p style="font-size: 18px">Apakah Anda Yakin Untuk Menghapus Klien Berikut?</p>
         <p style="font-size: 18px" class="nama-klien-warning">"Client"</p>
         <div class="danger-box">
-            ⚠️ Peringatan: Tindakan ini tidak dapat dibatalkan. Semua data terkait klien ini akan dihapus secara permanen.
+             Peringatan: Tindakan ini tidak dapat dibatalkan. Semua data terkait klien ini akan dihapus secara permanen.
         </div>
         <button class="hapusred" id="confirmDeleteWarningBtn">Ya, Hapus</button>
         <button class="close2" id="cancelDeleteWarningBtn">Batal</button>
