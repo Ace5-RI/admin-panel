@@ -79,6 +79,8 @@ function loadFromLocalStorage() {
     updatePreview();
 }
 
+
+
 async function saveSettings() {
     const companyNameInput = document.getElementById('companyName');
     if (!companyNameInput || !companyNameInput.value) {

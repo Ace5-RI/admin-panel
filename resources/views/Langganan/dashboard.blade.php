@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
@@ -13,107 +14,110 @@
     <title>Dashboard</title>
     <base href="/">
     <script>
-    window.companyName = "{{ \App\Models\Setting::get('company_name', 'Bali Solution Biz') }}";
-</script>
-   
+        window.companyName = "{{ \App\Models\Setting::get('company_name', 'Bali Solution Biz') }}";
+    </script>
+
 </head>
 
 
 <body>
-<div class="panel">
-    <img src="{{ \App\Models\Setting::get('company_logo', '/img/logos.png') }}" alt="Logo" class="logo" id="sidebarLogo" onerror="this.src='/img/logos.png'">
-    <h1>Admin Panel</h1>
-    <p>Manajemen Klien</p>
+    <div class="panel">
+        <img src="{{ \App\Models\Setting::get('company_logo', '/img/logos.png') }}" alt="Logo" class="logo"
+            id="sidebarLogo" onerror="this.src='/img/logos.png'">
+        <h1>Admin Panel</h1>
+        <p>Manajemen Klien</p>
 
-    <div class="menu">
-        @if (session('success'))
-        <script>alert("{{ session('success') }}");</script>
-        @endif
+        <div class="menu">
+            @if (session('success'))
+                <script>
+                    alert("{{ session('success') }}");
+                </script>
+            @endif
 
-        <a class="menu-btn {{ request()->is('dashboard') ? 'active' : '' }}" href="/dashboard">
-            <img src="{{ asset('img/menu.png') }}">Dashboard
-        </a>
+            <a class="menu-btn {{ request()->is('dashboard') ? 'active' : '' }}" href="/dashboard">
+                <img src="{{ asset('img/menu.png') }}">Dashboard
+            </a>
 
-        <a class="menu-btn {{ request()->is('klien') ? 'active' : '' }}" href="/klien">
-            <img src="{{ asset('img/klien.png') }}">Klien
-        </a>
+            <a class="menu-btn {{ request()->is('klien') ? 'active' : '' }}" href="/klien">
+                <img src="{{ asset('img/klien.png') }}">Klien
+            </a>
 
-        
-        <a class="menu-btn {{ request()->is('settings') ? 'active' : '' }}" href="/settings">
-    <img src="{{ asset('img/setting.png') }}"> Pengaturan
-</a>
 
-        <hr class="hr" style="margin-top: 5px">
+            <a class="menu-btn {{ request()->is('settings') ? 'active' : '' }}" href="/settings">
+                <img src="{{ asset('img/setting.png') }}"> Pengaturan
+            </a>
 
-        <a class="menu-btn {{ request()->is('aktivitas') ? 'active' : '' }}" href="/aktivitas">
-    <img src="{{ asset('img/help.png') }}"> Aktivitas
-</a>
-        <hr class="hr" style="margin-top: 5px">
+            <hr class="hr" style="margin-top: 5px">
 
-        <div class="user-card">
-            <div class="user-icon" id="avatarSidebar">A</div>
-            <div class="user-info">
-                <div class="user-name" id="userNameSidebar">Admin User</div>
-                <div class="user-role" id="userRoleSidebar">ADMIN</div>
-                <div class="user-email" id="userEmailSidebar">admin@adminportal.com</div>
+            <a class="menu-btn {{ request()->is('aktivitas') ? 'active' : '' }}" href="/aktivitas">
+                <img src="{{ asset('img/help.png') }}"> Aktivitas
+            </a>
+            <hr class="hr" style="margin-top: 5px">
+
+            <div class="user-card">
+                <div class="user-icon" id="avatarSidebar">A</div>
+                <div class="user-info">
+                    <div class="user-name" id="userNameSidebar">Admin User</div>
+                    <div class="user-role" id="userRoleSidebar">ADMIN</div>
+                    <div class="user-email" id="userEmailSidebar">admin@adminportal.com</div>
+                </div>
+            </div>
+
+            <button class="menu-lgt menu-bottom2" id="logoutBtn">
+                <img src="{{ asset('img/Logout.png') }}">Log Out
+            </button>
+        </div>
+    </div>
+
+    <div class="main">
+        <h1 class="title">Dashboard</h1>
+        <p class="subtitle">Selamat Datang Kembali</p>
+
+        <div class="container">
+            <div class="total">
+                <h4>Total Klien</h4>
+                <img src="{{ asset('img/profile.png') }}" class="profile" alt="">
+                <h1 id="totalClient"></h1>
+            </div>
+
+            <div class="total">
+                <h4>Klien Aktif</h4>
+                <img src="{{ asset('img/upline.png') }}" class="aktif" alt="">
+                <h1 id="activeClient"></h1>
+            </div>
+
+            <div class="total">
+                <h4>Tidak Aktif</h4>
+                <img src="{{ asset('img/dangers.png') }}" class="tanggal" alt="">
+                <h1 id="inactiveClient"></h1>
+            </div>
+
+            <div class="total">
+                <h4>Total Pendapatan</h4>
+                <img src="{{ asset('img/cash.png') }}" class="keuangan" alt="">
+                <h1 id="totalRevenue"></h1>
             </div>
         </div>
 
-        <button class="menu-lgt menu-bottom2" id="logoutBtn">
-            <img src="{{ asset('img/Logout.png') }}">Log Out
-        </button>
-    </div>
-</div>
-
-<div class="main">
-    <h1 class="title">Dashboard</h1>
-    <p class="subtitle">Selamat Datang Kembali</p>
-
-    <div class="container">
-  <div class="total">
-    <h4>Total Klien</h4>
-    <img src="{{ asset('img/profile.png') }}" class="profile" alt="">
-    <h1 id="totalClient"></h1>
-</div>
-
-<div class="total">
-    <h4>Klien Aktif</h4>
-    <img src="{{ asset('img/upline.png') }}" class="aktif" alt="">
-    <h1 id="activeClient"></h1>
-</div>
-
-<div class="total">
-    <h4>Tidak Aktif</h4>
-    <img src="{{ asset('img/dangers.png') }}" class="tanggal" alt="">
-    <h1 id="inactiveClient"></h1>
-</div>
-
-<div class="total">
-    <h4>Total Pendapatan</h4>
-    <img src="{{ asset('img/cash.png') }}" class="keuangan" alt="">
-    <h1 id="totalRevenue"></h1>
-</div>
+        <!-- Tombol Ganti Tahun -->
+        <div class="year-selector">
+            <button id="prevYearBtn" class="year-nav">◀</button>
+            <span id="currentYear" class="current-year">2026</span>
+            <button id="nextYearBtn" class="year-nav">▶</button>
         </div>
 
-<!-- Tombol Ganti Tahun -->
-<div class="year-selector">
-    <button id="prevYearBtn" class="year-nav">◀</button>
-    <span id="currentYear" class="current-year">2026</span>
-    <button id="nextYearBtn" class="year-nav">▶</button>
-</div>
-
         <div class="container2">
-    <div class="table">
-        <h4 class="table-txt">📊 Tren Klien Aktif</h4>
-        <canvas id="userChart"></canvas>
-        
-    </div>
-    <div class="table">
-        <h4 class="table-txt">🚀 Tren Klien Baru</h4>
-        <canvas id="activityChart"></canvas>
-       
-    </div>
-</div>
+            <div class="table">
+                <h4 class="table-txt"> Tren Klien Aktif</h4>
+                <canvas id="userChart"></canvas>
+
+            </div>
+            <div class="table">
+                <h4 class="table-txt"> Tren Klien Baru</h4>
+                <canvas id="activityChart"></canvas>
+
+            </div>
+        </div>
     </div>
 
     <div id="warningContainer" class="warning-grid"></div>
@@ -125,153 +129,155 @@
     </div>
 
     <div class="add" id="popupHapusWarning">
-    <div class="hapusklien">
-        <div class="header-konfirmasi">
-            <img src="{{ asset('img/peringatan.png') }}" class="peringatan" alt="">
-            <h2>Konfirmasi Hapus</h2>
-        </div>
-        <hr>
-        <p style="font-size: 18px">Apakah Anda Yakin Untuk Menghapus Klien Berikut?</p>
-        <p style="font-size: 18px" class="nama-klien-warning">"Client"</p>
-        <div class="danger-box">
-            ⚠️ Peringatan: Tindakan ini tidak dapat dibatalkan. Semua data terkait klien ini akan dihapus secara permanen.
-        </div>
-        <button class="hapusred" id="confirmDeleteWarningBtn">Ya, Hapus</button>
-        <button class="close2" id="cancelDeleteWarningBtn">Batal</button>
-    </div>
-</div>
-</div>
-
-
-
-<!-- ================= MODAL POPUP UNTUK BOX STATISTIK ================= -->
-
-<!-- Modal Total Klien -->
-<div id="popupTotalKlien" class="modal-popup">
-    <div class="modal-content modal-klien">
-        <div class="modal-header">
-            <div class="header-title">
-                <img src="{{ asset('img/profile.png') }}" class="modal-icon" alt="Total Klien">
-                <h2>Total Klien</h2>
+        <div class="hapusklien">
+            <div class="header-konfirmasi">
+                <img src="{{ asset('img/peringatan.png') }}" class="peringatan" alt="">
+                <h2>Konfirmasi Hapus</h2>
             </div>
-            <span class="close-popup" data-popup="popupTotalKlien">&times;</span>
-        </div>
-        <div class="modal-body">
-            <p class="total-count">Total <strong id="totalKlienCount">0</strong> klien terdaftar</p>
-            <div class="client-list" id="totalKlienList">
-                <div class="loading-text">Loading data...</div>
+            <hr>
+            <p style="font-size: 18px">Apakah Anda Yakin Untuk Menghapus Klien Berikut?</p>
+            <p style="font-size: 18px" class="nama-klien-warning">"Client"</p>
+            <div class="danger-box">
+                Peringatan: Tindakan ini tidak dapat dibatalkan. Semua data terkait klien ini akan dihapus secara
+                permanen.
             </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-tutup" data-popup="popupTotalKlien">Tutup</button>
+            <button class="hapusred" id="confirmDeleteWarningBtn">Ya, Hapus</button>
+            <button class="close2" id="cancelDeleteWarningBtn">Batal</button>
         </div>
     </div>
-</div>
+    </div>
 
-<!-- Modal Klien Aktif -->
-<div id="popupKlienAktif" class="modal-popup">
-    <div class="modal-content modal-aktif">
-        <div class="modal-header">
-            <div class="header-title">
-                <img src="{{ asset('img/upline.png') }}" class="modal-icon" alt="Klien Aktif">
-                <h2>Klien Aktif</h2>
+
+
+    <!-- ================= MODAL POPUP UNTUK BOX STATISTIK ================= -->
+
+    <!-- Modal Total Klien -->
+    <div id="popupTotalKlien" class="modal-popup">
+        <div class="modal-content modal-klien">
+            <div class="modal-header">
+                <div class="header-title">
+                    <img src="{{ asset('img/profile.png') }}" class="modal-icon" alt="Total Klien">
+                    <h2>Total Klien</h2>
+                </div>
+                <span class="close-popup" data-popup="popupTotalKlien">&times;</span>
             </div>
-            <span class="close-popup" data-popup="popupKlienAktif">&times;</span>
-        </div>
-        <div class="modal-body">
-            <p class="total-count"><strong id="aktifCount">0</strong> klien dengan langganan aktif</p>
-            <div class="client-list" id="klienAktifList">
-                <div class="loading-text">Loading data...</div>
+            <div class="modal-body">
+                <p class="total-count">Total <strong id="totalKlienCount">0</strong> klien terdaftar</p>
+                <div class="client-list" id="totalKlienList">
+                    <div class="loading-text">Loading data...</div>
+                </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-tutup" data-popup="popupKlienAktif">Tutup</button>
+            <div class="modal-footer">
+                <button class="btn-tutup" data-popup="popupTotalKlien">Tutup</button>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Modal Klien Tidak Aktif -->
-<div id="popupTidakAktif" class="modal-popup">
-    <div class="modal-content modal-tidak-aktif">
-        <div class="modal-header">
-            <div class="header-title">
-                <img src="{{ asset('img/dangers.png') }}" class="modal-icon" alt="Klien Tidak Aktif">
-                <h2>Klien Tidak Aktif</h2>
+    <!-- Modal Klien Aktif -->
+    <div id="popupKlienAktif" class="modal-popup">
+        <div class="modal-content modal-aktif">
+            <div class="modal-header">
+                <div class="header-title">
+                    <img src="{{ asset('img/upline.png') }}" class="modal-icon" alt="Klien Aktif">
+                    <h2>Klien Aktif</h2>
+                </div>
+                <span class="close-popup" data-popup="popupKlienAktif">&times;</span>
             </div>
-            <span class="close-popup" data-popup="popupTidakAktif">&times;</span>
-        </div>
-        <div class="modal-body">
-            <p class="total-count"><strong id="tidakAktifCount">0</strong> klien dengan langganan berakhir</p>
-            <div class="client-list" id="tidakAktifList">
-                <div class="loading-text">Loading data...</div>
+            <div class="modal-body">
+                <p class="total-count"><strong id="aktifCount">0</strong> klien dengan langganan aktif</p>
+                <div class="client-list" id="klienAktifList">
+                    <div class="loading-text">Loading data...</div>
+                </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-tutup" data-popup="popupTidakAktif">Tutup</button>
+            <div class="modal-footer">
+                <button class="btn-tutup" data-popup="popupKlienAktif">Tutup</button>
+            </div>
         </div>
     </div>
-</div>
 
-
-
-<!-- Modal Total Pendapatan -->
-<div id="popupTotalPendapatan" class="modal-popup">
-    <div class="modal-content modal-pendapatan">
-        <div class="modal-header">
-            <div class="header-title">
-                <img src="{{ asset('img/cash.png') }}" class="modal-icon" alt="Total Pendapatan">
-                <h2>Total Pendapatan</h2>
+    <!-- Modal Klien Tidak Aktif -->
+    <div id="popupTidakAktif" class="modal-popup">
+        <div class="modal-content modal-tidak-aktif">
+            <div class="modal-header">
+                <div class="header-title">
+                    <img src="{{ asset('img/dangers.png') }}" class="modal-icon" alt="Klien Tidak Aktif">
+                    <h2>Klien Tidak Aktif</h2>
+                </div>
+                <span class="close-popup" data-popup="popupTidakAktif">&times;</span>
             </div>
-            <span class="close-popup" data-popup="popupTotalPendapatan">&times;</span>
-        </div>
-        <div class="modal-body">
-            <!-- SELECTOR TAHUN -->
-            <div class="tahun-selector">
-                <button type="button" onclick="changeRevenueYear('prev')" class="tahun-nav">◀</button>
-        <select id="tahunPendapatanSelect" onchange="setRevenueYear()">
-    <option value="">Loading...</option>
-</select>
-                <button type="button" onclick="changeRevenueYear('next')" class="tahun-nav">▶</button>
+            <div class="modal-body">
+                <p class="total-count"><strong id="tidakAktifCount">0</strong> klien dengan langganan berakhir</p>
+                <div class="client-list" id="tidakAktifList">
+                    <div class="loading-text">Loading data...</div>
+                </div>
             </div>
-            
-            <div class="grand-total">
-                <span>Total Pendapatan <span id="tahunPendapatanJudul">Tahun <?php echo date('Y'); ?></span> :</span>
-                <strong id="grandTotalPendapatan">Rp 0</strong>
+            <div class="modal-footer">
+                <button class="btn-tutup" data-popup="popupTidakAktif">Tutup</button>
             </div>
-            
-            <p class="total-count">Rincian pendapatan per klien:</p>
-            <div class="client-list" id="pendapatanList">
-                <div class="loading-text">Loading data...</div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-tutup" data-popup="popupTotalPendapatan">Tutup</button>
         </div>
     </div>
-</div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{{ asset('js/dashboard.js') }}"></script>
-<script>
-// Update logo sidebar dari database
-async function updateSidebarLogo() {
-    try {
-        const response = await fetch('/api/settings');
-        const settings = await response.json();
-        const sidebarLogo = document.getElementById('sidebarLogo');
-        if (sidebarLogo && settings.company_logo) {
-            sidebarLogo.src = settings.company_logo + '?t=' + Date.now();
+
+
+    <!-- Modal Total Pendapatan -->
+    <div id="popupTotalPendapatan" class="modal-popup">
+        <div class="modal-content modal-pendapatan">
+            <div class="modal-header">
+                <div class="header-title">
+                    <img src="{{ asset('img/cash.png') }}" class="modal-icon" alt="Total Pendapatan">
+                    <h2>Total Pendapatan</h2>
+                </div>
+                <span class="close-popup" data-popup="popupTotalPendapatan">&times;</span>
+            </div>
+            <div class="modal-body">
+                <!-- SELECTOR TAHUN -->
+                <div class="tahun-selector">
+                    <button type="button" onclick="changeRevenueYear('prev')" class="tahun-nav">◀</button>
+                    <select id="tahunPendapatanSelect" onchange="setRevenueYear()">
+                        <option value="">Loading...</option>
+                    </select>
+                    <button type="button" onclick="changeRevenueYear('next')" class="tahun-nav">▶</button>
+                </div>
+
+                <div class="grand-total">
+                    <span>Total Pendapatan <span id="tahunPendapatanJudul">Tahun <?php echo date('Y'); ?></span> :</span>
+                    <strong id="grandTotalPendapatan">Rp 0</strong>
+                </div>
+
+                <p class="total-count">Rincian pendapatan per klien:</p>
+                <div class="client-list" id="pendapatanList">
+                    <div class="loading-text">Loading data...</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-tutup" data-popup="popupTotalPendapatan">Tutup</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
+    <script>
+        // Update logo sidebar dari database
+        async function updateSidebarLogo() {
+            try {
+                const response = await fetch('/api/settings');
+                const settings = await response.json();
+                const sidebarLogo = document.getElementById('sidebarLogo');
+                if (sidebarLogo && settings.company_logo) {
+                    sidebarLogo.src = settings.company_logo + '?t=' + Date.now();
+                }
+                // Update juga variable global
+                window.companyName = settings.company_name;
+                window.companyLogo = settings.company_logo;
+            } catch (error) {
+                console.error('Gagal update logo:', error);
+            }
         }
-        // Update juga variable global
-        window.companyName = settings.company_name;
-        window.companyLogo = settings.company_logo;
-    } catch (error) {
-        console.error('Gagal update logo:', error);
-    }
-}
-updateSidebarLogo();
-</script>
+        updateSidebarLogo();
+    </script>
 </body>
+
 </html>

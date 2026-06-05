@@ -214,20 +214,7 @@ async function updateSidebarLogo() {
 }
 updateSidebarLogo();
 
-// Load user data dari localStorage
-function loadUserData() {
-    const userLS = localStorage.getItem("user_name");
-    const emailLS = localStorage.getItem("user_email");
-    const roleLS = localStorage.getItem("user_role");
-    
-    if (userLS && emailLS) {
-        document.getElementById('userNameSidebar').textContent = userLS;
-        document.getElementById('userEmailSidebar').textContent = emailLS;
-        document.getElementById('avatarSidebar').textContent = userLS.charAt(0).toUpperCase();
-        document.getElementById('userRoleSidebar').textContent = roleLS ? roleLS.toUpperCase() : 'ADMIN';
-    }
-}
-loadUserData();
+
 
 // Logout handler
 document.getElementById('logoutBtn')?.addEventListener('click', async (e) => {

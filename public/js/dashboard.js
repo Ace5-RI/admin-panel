@@ -1,6 +1,6 @@
 // ==================== DASHBOARD JS ====================
 
-console.log("DASHBOARD JS LOADED 🔥");
+console.log("DASHBOARD JS LOADED ");
 
 // ================== LOAD INVOICE CSS & JS ==================
 const invoiceCss = document.createElement('link');
