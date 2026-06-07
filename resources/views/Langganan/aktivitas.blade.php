@@ -6,9 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('css/aktivitas.css') }}">
+    <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
     <base href="/">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <title>Aktivitas - Admin Panel</title>
+    <title>Aktivitas</title>
 </head>
 <body>
 
