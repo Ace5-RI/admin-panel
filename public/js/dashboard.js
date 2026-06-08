@@ -314,27 +314,31 @@ if (popupWarning) {
         }
     }
 
-    // Make user-card clickable
-    function initProfileButton() {
-        const userCard = document.querySelector('.user-card');
-        if (!userCard) return;
-
-        // Convert to button if it's a div
-        if (userCard.tagName === 'DIV') {
-            const button = document.createElement('button');
-            button.className = userCard.className;
-            button.setAttribute('data-profile-btn', 'true');
-            button.style.cssText = 'width: 100%; background: none; border: none; cursor: pointer; text-align: left; padding: 0; margin: 0; display: block;';
-            
-            while (userCard.firstChild) {
-                button.appendChild(userCard.firstChild);
-            }
-            userCard.parentNode.replaceChild(button, userCard);
-            button.addEventListener('click', openProfileModal);
-        } else {
-            userCard.addEventListener('click', openProfileModal);
-        }
+// Make user-card clickable - PERBAIKAN: Jangan ubah struktur HTML
+function initProfileButton() {
+    const userCard = document.querySelector('.user-card');
+    if (!userCard) {
+        console.log('User card not found');
+        return;
     }
+
+    // Hapus semua event listener lama dengan clone
+    const newUserCard = userCard.cloneNode(true);
+    userCard.parentNode.replaceChild(newUserCard, userCard);
+    
+    // Tambah event listener - JANGAN ubah tag, tetap sebagai DIV
+    newUserCard.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('User card clicked - opening modal');
+        openProfileModal();
+    });
+    
+    // Pastikan styling tetap seperti semula
+    newUserCard.style.cursor = 'pointer';
+    
+    console.log('Profile button initialized successfully');
+}
 
     // Open profile modal
     async function openProfileModal() {
@@ -429,51 +433,53 @@ if (popupWarning) {
     }
 
     // Delete user account
-    async function deleteUserAccount() {
-        if (!currentUserData.id) return false;
-
-        try {
-            const response = await fetch('/api/user/delete', {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': getCsrfToken(),
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id: currentUserData.id })
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                // Clear local storage and redirect to login
-                localStorage.clear();
-                sessionStorage.clear();
-
-                if (typeof Swal !== 'undefined') {
-                    await Swal.fire('Akun Dihapus', 'Akun Anda telah dihapus. Redirect ke halaman login...', 'warning');
-                }
-
-                window.location.href = '/logout';
-                return true;
-            } else {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire('Gagal!', result.message || 'Gagal menghapus akun', 'error');
-                } else {
-                    alert('Gagal menghapus akun: ' + (result.message || 'Unknown error'));
-                }
-                return false;
+  async function deleteUserAccount() {
+    try {
+        const response = await fetch('/api/user/delete', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': getCsrfToken()
             }
-        } catch (error) {
-            console.error('Delete error:', error);
-            if (typeof Swal !== 'undefined') {
-                Swal.fire('Error!', 'Terjadi kesalahan pada server', 'error');
-            } else {
-                alert('Error: ' + error.message);
-            }
-            return false;
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            localStorage.clear();
+            sessionStorage.clear();
+            await Swal.fire('Akun Dihapus', 'Akun Anda telah dihapus.', 'warning');
+            
+            // PAKAI POST UNTUK LOGOUT
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/logout';
+            form.style.display = 'none';
+            
+            // CSRF Token
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_token';
+            csrfInput.value = getCsrfToken();
+            
+            // Optional: tambah input lain jika perlu
+            const submitInput = document.createElement('input');
+            submitInput.type = 'submit';
+            
+            form.appendChild(csrfInput);
+            form.appendChild(submitInput);
+            document.body.appendChild(form);
+            
+            // Submit form
+            form.submit();
+        } else {
+            Swal.fire('Gagal!', result.message || 'Gagal menghapus akun', 'error');
         }
+    } catch (error) {
+        console.error('Delete error:', error);
+        Swal.fire('Error!', 'Terjadi kesalahan pada server', 'error');
     }
+}
 
     // Open delete confirmation modal
     function openDeleteConfirmation() {

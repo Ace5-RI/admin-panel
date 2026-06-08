@@ -208,25 +208,140 @@ public function api(Request $request)
         ]);
     }
 
-    public function getCurrentUser() {
-    return response()->json(auth()->user());
-}
-
-public function update(Request $request) {
-    $user = auth()->user();
-    $user->name = $request->name;
-    $user->email = $request->email;
-    if ($request->password) {
-        $user->password = bcrypt($request->password);
+/**
+ * GET CURRENT USER DATA
+ */
+public function getCurrentUser() 
+{
+    try {
+        $user = auth()->user();
+        
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+        
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role ?? 'ADMIN'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to fetch user: ' . $e->getMessage()
+        ], 500);
     }
-    $user->save();
-    return response()->json(['success' => true]);
 }
 
-public function delete(Request $request) {
-    $user = auth()->user();
-    $user->delete();
-    return response()->json(['success' => true]);
+/**
+ * UPDATE USER PROFILE
+ */
+public function update(Request $request) 
+{
+    try {
+        $user = auth()->user();
+        
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|min:6'
+        ]);
+        
+        $user->name = $request->name;
+        $user->email = $request->email;
+        
+        if ($request->password && !empty($request->password)) {
+            $user->password = bcrypt($request->password);
+        }
+        
+        $user->save();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile updated successfully',
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role ?? 'ADMIN'
+            ]
+        ]);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return response()->json([
+            'success' => false,
+            'message' => $e->errors()
+        ], 422);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to update profile: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
+/**
+ * DELETE USER ACCOUNT
+ * 
+ * 
+ */
+
+/**
+ * Alias for update method (untuk route)
+ */
+public function updateProfile(Request $request)
+{
+    return $this->update($request);
+}
+
+/**
+ * Alias for delete method (untuk route)
+ */
+public function deleteAccount(Request $request)
+{
+    return $this->delete($request);
+}
+
+public function delete(Request $request) 
+{
+    try {
+        $user = auth()->user();
+        
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+        
+        // Logout dan hapus user
+        $user->delete();
+        auth()->logout();
+        
+        // Invalidate session
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Account deleted successfully'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to delete account: ' . $e->getMessage()
+        ], 500);
+    }
 }
     /**
      * GET DETAIL KLIEN AKAN BERAKHIR (30 HARI)

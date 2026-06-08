@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-    <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="Expires" content="0">
     <title>Dashboard</title>
     <base href="/">
@@ -107,7 +107,6 @@
         </div>
 
         <div class="container2">
-<<<<<<< HEAD
             <div class="table">
                 <h4 class="table-txt"> Tren Klien Aktif</h4>
                 <canvas id="userChart"></canvas>
@@ -119,19 +118,6 @@
 
             </div>
         </div>
-=======
-    <div class="table">
-        <h4 class="table-txt"> Tren Klien Aktif</h4>
-        <canvas id="userChart"></canvas>
-        
-    </div>
-    <div class="table">
-        <h4 class="table-txt"> Tren Klien Baru</h4>
-        <canvas id="activityChart"></canvas>
-       
-    </div>
-</div>
->>>>>>> 37567aae6bff884bf46c6c95873323d38a9678b3
     </div>
 
     <div id="warningContainer" class="warning-grid"></div>
@@ -143,41 +129,10 @@
     </div>
 
     <div class="add" id="popupHapusWarning">
-<<<<<<< HEAD
         <div class="hapusklien">
             <div class="header-konfirmasi">
                 <img src="{{ asset('img/peringatan.png') }}" class="peringatan" alt="">
                 <h2>Konfirmasi Hapus</h2>
-=======
-    <div class="hapusklien">
-        <div class="header-konfirmasi">
-            <img src="{{ asset('img/peringatan.png') }}" class="peringatan" alt="">
-            <h2>Konfirmasi Hapus</h2>
-        </div>
-        <hr>
-        <p style="font-size: 18px">Apakah Anda Yakin Untuk Menghapus Klien Berikut?</p>
-        <p style="font-size: 18px" class="nama-klien-warning">"Client"</p>
-        <div class="danger-box">
-             Peringatan: Tindakan ini tidak dapat dibatalkan. Semua data terkait klien ini akan dihapus secara permanen.
-        </div>
-        <button class="hapusred" id="confirmDeleteWarningBtn">Ya, Hapus</button>
-        <button class="close2" id="cancelDeleteWarningBtn">Batal</button>
-    </div>
-</div>
-</div>
-
-
-
-<!-- ================= MODAL POPUP UNTUK BOX STATISTIK ================= -->
-
-<!-- Modal Total Klien -->
-<div id="popupTotalKlien" class="modal-popup">
-    <div class="modal-content modal-klien">
-        <div class="modal-header">
-            <div class="header-title">
-                <img src="{{ asset('img/profile.png') }}" class="modal-icon" alt="Total Klien">
-                <h2>Total Klien</h2>
->>>>>>> 37567aae6bff884bf46c6c95873323d38a9678b3
             </div>
             <hr>
             <p style="font-size: 18px">Apakah Anda Yakin Untuk Menghapus Klien Berikut?</p>
@@ -419,10 +374,7 @@
         }
         updateSidebarLogo();
     </script>
-    <script src="{{ asset('js/profile-popup.js') }}"></script>
+    
 </body>
-<<<<<<< HEAD
 
-=======
->>>>>>> 37567aae6bff884bf46c6c95873323d38a9678b3
 </html>

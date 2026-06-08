@@ -8,6 +8,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ProfileController; // TAMBAHKAN INI
 
 // ================= GUEST =================
 Route::middleware('guest')->group(function () {
@@ -40,6 +41,11 @@ Route::middleware('auth')->group(function() {
     Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');
     Route::get('/payment/invoice/{client_id}/{invoice_id}', [PaymentController::class, 'invoice'])->name('payment.invoice');
     
+    // ================= PROFILE MANAGEMENT ROUTES =================
+    Route::get('/api/current-user', [DashboardController::class, 'getCurrentUser']);
+    Route::put('/api/user/update', [DashboardController::class, 'updateProfile']);
+    Route::delete('/api/user/delete', [DashboardController::class, 'deleteAccount']);
+    
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
@@ -64,11 +70,9 @@ Route::middleware('auth')->group(function () {
 
 // INVOICE ROUTES
 Route::middleware('auth')->group(function () {
-    
-    // INVOICE ROUTES
-Route::post('/invoice/generate/{id}', [InvoiceController::class, 'generateAndSend']);
-Route::get('/invoice/generate/{id}', [InvoiceController::class, 'generateAndSend']); // buat test
-Route::get('/invoice/print/{id}', [InvoiceController::class, 'show'])->name('invoice.print');
+    Route::post('/invoice/generate/{id}', [InvoiceController::class, 'generateAndSend']);
+    Route::get('/invoice/generate/{id}', [InvoiceController::class, 'generateAndSend']);
+    Route::get('/invoice/print/{id}', [InvoiceController::class, 'show'])->name('invoice.print');
 });
 
 // ================= PUBLIC ACCESS FOR INVOICE PDF =================
@@ -94,13 +98,8 @@ Route::get('/test-logo', function () {
         'db_value' => $companyLogo,
         'full_path' => $logoPath,
         'exists' => file_exists($logoPath),
+
     ]);
+    
 });
 
-<<<<<<< HEAD
-Route::get('/api/current-user', [UserController::class, 'getCurrentUser']);
-Route::put('/api/user/update', [UserController::class, 'update']);
-Route::delete('/api/user/delete', [UserController::class, 'delete']);
-=======
-Route::resource('accounts', App\Http\Controllers\AccountController::class);
->>>>>>> 37567aae6bff884bf46c6c95873323d38a9678b3
