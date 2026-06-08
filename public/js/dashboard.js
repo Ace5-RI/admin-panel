@@ -432,8 +432,7 @@ function initProfileButton() {
         }
     }
 
-    // Delete user account
-  async function deleteUserAccount() {
+async function deleteUserAccount() {
     try {
         const response = await fetch('/api/user/delete', {
             method: 'DELETE',
@@ -450,28 +449,8 @@ function initProfileButton() {
             sessionStorage.clear();
             await Swal.fire('Akun Dihapus', 'Akun Anda telah dihapus.', 'warning');
             
-            // PAKAI POST UNTUK LOGOUT
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/logout';
-            form.style.display = 'none';
-            
-            // CSRF Token
-            const csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = '_token';
-            csrfInput.value = getCsrfToken();
-            
-            // Optional: tambah input lain jika perlu
-            const submitInput = document.createElement('input');
-            submitInput.type = 'submit';
-            
-            form.appendChild(csrfInput);
-            form.appendChild(submitInput);
-            document.body.appendChild(form);
-            
-            // Submit form
-            form.submit();
+            // LANGSUNG KE HALAMAN LOGIN, TIDAK LEWAT LOGOUT
+            window.location.href = '/login';
         } else {
             Swal.fire('Gagal!', result.message || 'Gagal menghapus akun', 'error');
         }
@@ -480,6 +459,7 @@ function initProfileButton() {
         Swal.fire('Error!', 'Terjadi kesalahan pada server', 'error');
     }
 }
+
 
     // Open delete confirmation modal
     function openDeleteConfirmation() {
