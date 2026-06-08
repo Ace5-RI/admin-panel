@@ -70,7 +70,7 @@
 <div class="main-content">
     <div class="settings-container">
         <div class="settings-header">
-            <h1>⚙️ Pengaturan Perusahaan</h1>
+            <h1> Pengaturan Perusahaan</h1>
             <p>Kelola informasi perusahaan, logo, dan data bank yang akan muncul di seluruh sistem</p>
         </div>
 
@@ -78,7 +78,7 @@
             <!-- FORM KIRI -->
             <div class="settings-card">
                 <div class="card-header">
-                    <h2>🏢 Informasi Perusahaan</h2>
+                    <h2> Informasi Perusahaan</h2>
                 </div>
                 <div class="card-body">
                     <div id="alertMessage"></div>
@@ -88,9 +88,9 @@
                         <label>Logo Perusahaan</label>
                         <div class="logo-upload-area" id="logoUploadArea">
                             <div class="logo-preview" id="logoPreview">
-                                <span class="no-logo">🏢</span>
+                                <span class="no-logo"></span>
                             </div>
-                            <div class="upload-icon">📸</div>
+                            <div class="upload-icon"></div>
                             <div class="upload-text">
                                 <strong>Klik untuk upload</strong><br>
                                 JPG, PNG, SVG (Max. 2MB)

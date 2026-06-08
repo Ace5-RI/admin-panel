@@ -259,6 +259,102 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('js/dashboard.js') }}"></script>
+    <!-- Profile Button sudah ada di sidebar (.user-card) -->
+<!-- Yang perlu ditambahkan adalah modal HTML untuk profile management -->
+
+<!-- Profile Management Modal -->
+<div id="profileManagementModal" class="profile-management-modal">
+    <div class="profile-management-overlay"></div>
+    <div class="profile-management-container">
+        <div class="profile-management-header">
+            <div class="profile-header-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <h3>Akun Saya</h3>
+            <button class="profile-management-close" id="closeProfileModalBtn">&times;</button>
+        </div>
+        <div class="profile-management-body">
+            <div class="profile-avatar-section">
+                <div class="profile-avatar-circle" id="profileAvatarCircle">A</div>
+                <div class="profile-role-badge" id="profileRoleBadge">ADMIN</div>
+            </div>
+            
+            <form id="profileEditForm" class="profile-edit-form">
+                <div class="profile-form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="editUserName" name="name" required placeholder="Masukkan nama lengkap">
+                </div>
+                <div class="profile-form-group">
+                    <label>Email</label>
+                    <input type="email" id="editUserEmail" name="email" required placeholder="Masukkan email">
+                </div>
+                <div class="profile-form-group">
+                    <label>Role / Jabatan</label>
+                    <input type="text" id="editUserRole" name="role" placeholder="Contoh: ADMIN, MANAGER">
+                </div>
+                <div class="profile-form-group">
+                    <label>Password Baru (kosongkan jika tidak diubah)</label>
+                    <input type="password" id="editUserPassword" name="password" placeholder="Password baru">
+                </div>
+                <div class="profile-form-group">
+                    <label>Konfirmasi Password Baru</label>
+                    <input type="password" id="editUserPasswordConfirm" placeholder="Konfirmasi password baru">
+                </div>
+                
+                <div class="profile-action-buttons">
+                    <button type="submit" class="profile-save-btn" id="profileSaveBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        Simpan Perubahan
+                    </button>
+                    <button type="button" class="profile-delete-btn" id="profileDeleteAccountBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                        Hapus Akun
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="profile-management-footer">
+            <button class="profile-cancel-btn" id="cancelProfileBtn">Batal</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Account Confirmation Modal -->
+<div id="deleteAccountModal" class="profile-management-modal">
+    <div class="profile-management-overlay"></div>
+    <div class="profile-management-container" style="max-width: 400px;">
+        <div class="profile-management-header" style="background: linear-gradient(135deg, #991b1b, #7f1d1d);">
+            <div class="profile-header-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+            </div>
+            <h3>Hapus Akun</h3>
+            <button class="profile-management-close" id="closeDeleteModalBtn">&times;</button>
+        </div>
+        <div class="profile-management-body" style="text-align: center;">
+            <p style="font-size: 16px; margin-bottom: 20px;">Apakah Anda yakin ingin menghapus akun ini?</p>
+            <div style="background: #fee2e2; padding: 15px; border-radius: 12px; margin-bottom: 20px; color: #991b1b;">
+                ⚠️ Peringatan: Tindakan ini tidak dapat dibatalkan. Semua data Anda akan dihapus secara permanen.
+            </div>
+            <div class="profile-action-buttons">
+                <button type="button" class="profile-cancel-btn" id="cancelDeleteBtn" style="flex: 1;">Batal</button>
+                <button type="button" class="profile-confirm-delete-btn" id="confirmDeleteAccountBtn" style="flex: 1;">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+</div>
     <script>
         // Update logo sidebar dari database
         async function updateSidebarLogo() {
@@ -278,6 +374,7 @@
         }
         updateSidebarLogo();
     </script>
+    <script src="{{ asset('js/profile-popup.js') }}"></script>
 </body>
 
 </html>

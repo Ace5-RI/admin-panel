@@ -96,3 +96,7 @@ Route::get('/test-logo', function () {
         'exists' => file_exists($logoPath),
     ]);
 });
+
+Route::get('/api/current-user', [UserController::class, 'getCurrentUser']);
+Route::put('/api/user/update', [UserController::class, 'update']);
+Route::delete('/api/user/delete', [UserController::class, 'delete']);

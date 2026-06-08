@@ -208,6 +208,26 @@ public function api(Request $request)
         ]);
     }
 
+    public function getCurrentUser() {
+    return response()->json(auth()->user());
+}
+
+public function update(Request $request) {
+    $user = auth()->user();
+    $user->name = $request->name;
+    $user->email = $request->email;
+    if ($request->password) {
+        $user->password = bcrypt($request->password);
+    }
+    $user->save();
+    return response()->json(['success' => true]);
+}
+
+public function delete(Request $request) {
+    $user = auth()->user();
+    $user->delete();
+    return response()->json(['success' => true]);
+}
     /**
      * GET DETAIL KLIEN AKAN BERAKHIR (30 HARI)
      */

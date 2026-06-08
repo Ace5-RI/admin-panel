@@ -246,6 +246,339 @@ if (popupWarning) {
     });
 }
 
+// ============================================
+// PROFILE MANAGEMENT - EDIT & DELETE USER ACCOUNT
+// Connected to Laravel Users Database
+// ============================================
+
+(function() {
+    'use strict';
+
+    let currentUserData = {
+        id: null,
+        name: '',
+        email: '',
+        role: ''
+    };
+
+    // Get CSRF token
+    function getCsrfToken() {
+        return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+    }
+
+    // Fetch current user data from server
+    async function fetchCurrentUser() {
+        try {
+            const response = await fetch('/api/current-user', {
+                headers: {
+                    'X-CSRF-TOKEN': getCsrfToken(),
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const user = await response.json();
+                currentUserData = {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role || 'ADMIN'
+                };
+                updateSidebarDisplay(currentUserData);
+                return currentUserData;
+            }
+        } catch (error) {
+            console.error('Error fetching current user:', error);
+        }
+
+        // Fallback: extract from DOM
+        currentUserData.name = document.getElementById('userNameSidebar')?.innerText || 'Admin User';
+        currentUserData.email = document.getElementById('userEmailSidebar')?.innerText || '';
+        currentUserData.role = document.getElementById('userRoleSidebar')?.innerText || 'ADMIN';
+        return currentUserData;
+    }
+
+    // Update sidebar display
+    function updateSidebarDisplay(user) {
+        const userNameEl = document.getElementById('userNameSidebar');
+        const userEmailEl = document.getElementById('userEmailSidebar');
+        const userRoleEl = document.getElementById('userRoleSidebar');
+        const avatarEl = document.getElementById('avatarSidebar');
+
+        if (userNameEl) userNameEl.innerText = user.name;
+        if (userEmailEl) userEmailEl.innerText = user.email;
+        if (userRoleEl) userRoleEl.innerText = user.role;
+        if (avatarEl && user.name) {
+            avatarEl.innerText = user.name.charAt(0).toUpperCase();
+        }
+    }
+
+    // Make user-card clickable
+    function initProfileButton() {
+        const userCard = document.querySelector('.user-card');
+        if (!userCard) return;
+
+        // Convert to button if it's a div
+        if (userCard.tagName === 'DIV') {
+            const button = document.createElement('button');
+            button.className = userCard.className;
+            button.setAttribute('data-profile-btn', 'true');
+            button.style.cssText = 'width: 100%; background: none; border: none; cursor: pointer; text-align: left; padding: 0; margin: 0; display: block;';
+            
+            while (userCard.firstChild) {
+                button.appendChild(userCard.firstChild);
+            }
+            userCard.parentNode.replaceChild(button, userCard);
+            button.addEventListener('click', openProfileModal);
+        } else {
+            userCard.addEventListener('click', openProfileModal);
+        }
+    }
+
+    // Open profile modal
+    async function openProfileModal() {
+        const modal = document.getElementById('profileManagementModal');
+        if (!modal) return;
+
+        // Fetch latest user data
+        await fetchCurrentUser();
+
+        // Populate form
+        document.getElementById('editUserName').value = currentUserData.name;
+        document.getElementById('editUserEmail').value = currentUserData.email;
+        document.getElementById('editUserRole').value = currentUserData.role;
+        document.getElementById('editUserPassword').value = '';
+        document.getElementById('editUserPasswordConfirm').value = '';
+
+        // Update avatar
+        const avatarCircle = document.getElementById('profileAvatarCircle');
+        if (avatarCircle) {
+            avatarCircle.innerText = currentUserData.name.charAt(0).toUpperCase();
+        }
+        const roleBadge = document.getElementById('profileRoleBadge');
+        if (roleBadge) {
+            roleBadge.innerText = currentUserData.role;
+        }
+
+        modal.classList.add('active');
+    }
+
+    // Close modals
+    function closeProfileModal() {
+        const modal = document.getElementById('profileManagementModal');
+        if (modal) modal.classList.remove('active');
+    }
+
+    function closeDeleteModal() {
+        const modal = document.getElementById('deleteAccountModal');
+        if (modal) modal.classList.remove('active');
+    }
+
+    // Update user profile
+    async function updateUserProfile(formData) {
+        try {
+            const response = await fetch('/api/user/update', {
+                method: 'PUT',
+                headers: {
+                    'X-CSRF-TOKEN': getCsrfToken(),
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Update current user data
+                currentUserData.name = formData.name;
+                currentUserData.email = formData.email;
+                currentUserData.role = formData.role;
+
+                // Update sidebar
+                updateSidebarDisplay(currentUserData);
+
+                // Close modal and show success
+                closeProfileModal();
+
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire('Berhasil!', 'Profil berhasil diperbarui', 'success');
+                } else {
+                    alert('Profil berhasil diperbarui');
+                }
+
+                return true;
+            } else {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire('Gagal!', result.message || 'Gagal memperbarui profil', 'error');
+                } else {
+                    alert('Gagal: ' + (result.message || 'Unknown error'));
+                }
+                return false;
+            }
+        } catch (error) {
+            console.error('Update error:', error);
+            if (typeof Swal !== 'undefined') {
+                Swal.fire('Error!', 'Terjadi kesalahan pada server', 'error');
+            } else {
+                alert('Error: ' + error.message);
+            }
+            return false;
+        }
+    }
+
+    // Delete user account
+    async function deleteUserAccount() {
+        if (!currentUserData.id) return false;
+
+        try {
+            const response = await fetch('/api/user/delete', {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': getCsrfToken(),
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: currentUserData.id })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Clear local storage and redirect to login
+                localStorage.clear();
+                sessionStorage.clear();
+
+                if (typeof Swal !== 'undefined') {
+                    await Swal.fire('Akun Dihapus', 'Akun Anda telah dihapus. Redirect ke halaman login...', 'warning');
+                }
+
+                window.location.href = '/logout';
+                return true;
+            } else {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire('Gagal!', result.message || 'Gagal menghapus akun', 'error');
+                } else {
+                    alert('Gagal menghapus akun: ' + (result.message || 'Unknown error'));
+                }
+                return false;
+            }
+        } catch (error) {
+            console.error('Delete error:', error);
+            if (typeof Swal !== 'undefined') {
+                Swal.fire('Error!', 'Terjadi kesalahan pada server', 'error');
+            } else {
+                alert('Error: ' + error.message);
+            }
+            return false;
+        }
+    }
+
+    // Open delete confirmation modal
+    function openDeleteConfirmation() {
+        closeProfileModal();
+        const deleteModal = document.getElementById('deleteAccountModal');
+        if (deleteModal) deleteModal.classList.add('active');
+    }
+
+    // Setup form submission
+    function setupFormHandlers() {
+        const form = document.getElementById('profileEditForm');
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const name = document.getElementById('editUserName').value.trim();
+                const email = document.getElementById('editUserEmail').value.trim();
+                const role = document.getElementById('editUserRole').value.trim();
+                const password = document.getElementById('editUserPassword').value;
+                const passwordConfirm = document.getElementById('editUserPasswordConfirm').value;
+
+                // Validation
+                if (!name || !email) {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire('Error', 'Nama dan Email wajib diisi', 'error');
+                    } else {
+                        alert('Nama dan Email wajib diisi');
+                    }
+                    return;
+                }
+
+                if (password !== passwordConfirm) {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire('Error', 'Password baru tidak cocok', 'error');
+                    } else {
+                        alert('Password baru tidak cocok');
+                    }
+                    return;
+                }
+
+                const formData = {
+                    id: currentUserData.id,
+                    name: name,
+                    email: email,
+                    role: role || 'ADMIN',
+                    password: password || null
+                };
+
+                await updateUserProfile(formData);
+            });
+        }
+
+        // Delete button in profile modal
+        const deleteBtn = document.getElementById('profileDeleteAccountBtn');
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', openDeleteConfirmation);
+        }
+
+        // Confirm delete
+        const confirmDeleteBtn = document.getElementById('confirmDeleteAccountBtn');
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', async () => {
+                closeDeleteModal();
+                await deleteUserAccount();
+            });
+        }
+
+        // Cancel delete
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        if (cancelDeleteBtn) {
+            cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+        }
+
+        // Close modal buttons
+        const closeBtns = document.querySelectorAll('.profile-management-close');
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                closeProfileModal();
+                closeDeleteModal();
+            });
+        });
+
+        const cancelBtn = document.getElementById('cancelProfileBtn');
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', closeProfileModal);
+        }
+
+        // Close on overlay click
+        document.querySelectorAll('.profile-management-overlay').forEach(overlay => {
+            overlay.addEventListener('click', () => {
+                closeProfileModal();
+                closeDeleteModal();
+            });
+        });
+    }
+
+    // Initialize everything
+    document.addEventListener('DOMContentLoaded', async () => {
+        await fetchCurrentUser();
+        initProfileButton();
+        setupFormHandlers();
+    });
+
+})();
+
 // ================== EVENT LISTENER TOMBOL TAHUN ==================
 document.getElementById('prevYearBtn')?.addEventListener('click', () => changeYear('prev'));
 document.getElementById('nextYearBtn')?.addEventListener('click', () => changeYear('next'));
