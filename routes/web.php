@@ -96,3 +96,5 @@ Route::get('/test-logo', function () {
         'exists' => file_exists($logoPath),
     ]);
 });
+
+Route::resource('accounts', App\Http\Controllers\AccountController::class);
