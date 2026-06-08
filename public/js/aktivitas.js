@@ -259,9 +259,13 @@ function updateSidebar(user) {
     if (nameSidebar) nameSidebar.textContent = user.name;
     if (emailSidebar) emailSidebar.textContent = user.email;
     if (avatarSidebar) {
-        const nameParts = user.name.split(" ").slice(0, 2);
+    const nameParts = user.name.split(" ").slice(0, 2);
+    if (nameParts.length === 1) {
+        avatarSidebar.textContent = nameParts[0].substring(0, 2).toUpperCase();
+    } else {
         avatarSidebar.textContent = nameParts.map(w => w[0]).join("").toUpperCase();
     }
+}
 }
 
 const userLS = localStorage.getItem("user_name");
@@ -276,20 +280,32 @@ if (userLS && emailLS) {
 }
 
 // ==================== LOGOUT ====================
-const logoutBtn = document.getElementById("logoutBtn");
 if (logoutBtn) {
     logoutBtn.addEventListener("click", async (e) => {
-        e.preventDefault();
-        const result = await Swal.fire({ title: 'Yakin ingin logout?', icon: 'question', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Ya, Logout!', cancelButtonText: 'Batal' });
-        if (!result.isConfirmed) return;
-        try {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
-            await fetch('/logout', { method: 'POST', headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' } });
-            localStorage.clear();
-            sessionStorage.clear();
-            await Swal.fire({ title: 'Logout Berhasil!', icon: 'success', timer: 1200, showConfirmButton: false });
-            window.location.href = '/';
-        } catch (err) { console.error(err); Swal.fire('Error!', 'Gagal logout!', 'error'); }
+        const result = await Swal.fire({ 
+            title: 'Yakin ingin logout?', 
+            icon: 'question', 
+            showCancelButton: true, 
+            confirmButtonColor: '#d33', 
+            confirmButtonText: 'Ya, Logout!', 
+            cancelButtonText: 'Batal' 
+        });
+        
+        if (result.isConfirmed) {
+            // Buat form POST dan submit — cara paling reliable
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/logout';
+            
+            const csrf = document.createElement('input');
+            csrf.type = 'hidden';
+            csrf.name = '_token';
+            csrf.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+            form.appendChild(csrf);
+            document.body.appendChild(form);
+            form.submit();
+        }
     });
 }
 

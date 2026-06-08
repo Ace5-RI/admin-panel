@@ -630,7 +630,7 @@ async function openInvoicePopup(data) {
             
             let finalLink = pdfLink;
             if (!finalLink) {
-                finalLink = 'https://earwig-tidings-ranked.ngrok-free.dev/invoices/invoice_' + data.id + '.pdf';
+              finalLink = window.location.origin + '/invoice/generate/' + data.id;
             }
             
             // Bank info

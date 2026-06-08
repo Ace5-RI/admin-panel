@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
     <base href="/">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <title>Dashboard</title>
+    <title>Klien</title>
 </head>
 <body>
 
@@ -318,9 +318,10 @@
                 <td>Rp {{ number_format($client->revenue, 0, ',', '.') }}</td>
                 <td>
                     <div class="aksi">
-                        <span class="icon lihat">👁️</span>
-                        <span class="icon edit">✏️</span>
-                        <span class="icon delete">🗑️</span>
+                         <span class="icon lihat">👁️</span>
+                         <span class="icon edit">✏️</span>
+                         <span class="icon delete">🗑️</span>
+                         <a href="/invoice/generate/{{ $client->id }}" target="_blank" class="icon" title="Generate Invoice">🧾</a>
                     </div>
                 </td>
             </tr>

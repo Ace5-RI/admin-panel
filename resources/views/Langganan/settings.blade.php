@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
-    <title>Pengaturan Perusahaan</title>
+    <title>Pengaturan</title>
     
     <base href="/">
     <link rel="stylesheet" href="{{ asset('css/settings.css') }}">
@@ -78,7 +79,11 @@
             <!-- FORM KIRI -->
             <div class="settings-card">
                 <div class="card-header">
+<<<<<<< HEAD
                     <h2> Informasi Perusahaan</h2>
+=======
+                    <h2>Informasi Perusahaan</h2>
+>>>>>>> 37567aae6bff884bf46c6c95873323d38a9678b3
                 </div>
                 <div class="card-body">
                     <div id="alertMessage"></div>
@@ -125,28 +130,28 @@
                     <!-- Bank Section -->
                     <div style="margin-top: 32px;">
                         <div class="card-header" style="padding: 0 0 16px 0; background: none;">
-                            <h2 style="font-size: 16px;">🏦 Informasi Rekening Bank</h2>
+                            <h2 style="font-size: 16px;">Informasi Rekening Bank</h2>
                         </div>
 
                         <div class="bank-section">
-                            <h3>🟢 Bank BCA</h3>
+                            <h3>Bank BCA</h3>
                             <input type="text" id="bankBCA" placeholder="Nomor Rekening BCA">
                         </div>
 
                         <div class="bank-section">
-                            <h3>🔴 Bank Mandiri</h3>
+                            <h3>Bank Mandiri</h3>
                             <input type="text" id="bankMandiri" placeholder="Nomor Rekening Mandiri">
                         </div>
 
                         <div class="bank-section">
-                            <h3>👤 Atas Nama</h3>
+                            <h3>Atas Nama</h3>
                             <input type="text" id="bankAccountName" placeholder="Nama Pemilik Rekening">
                         </div>
                     </div>
 
                     <!-- Actions -->
 <div class="form-actions">
-    <button type="button" class="btn btn-primary" id="saveSettingsBtn">💾 Simpan Pengaturan</button>
+    <button type="button" class="btn btn-primary" id="saveSettingsBtn">Simpan Pengaturan</button>
     <button type="button" class="btn btn-secondary" id="resetBtn">↺ Reset</button>
 </div>
                 </div>
@@ -169,20 +174,20 @@
                     </div>
 
                     <div class="info-row">
-                        <span class="info-label">💳 BCA</span>
+                        <span class="info-label">BCA</span>
                         <span class="info-value" id="previewBCA">-</span>
                     </div>
                     <div class="info-row">
-                        <span class="info-label">💳 Mandiri</span>
+                        <span class="info-label">Mandiri</span>
                         <span class="info-value" id="previewMandiri">-</span>
                     </div>
                     <div class="info-row">
-                        <span class="info-label">👤 A.n</span>
+                        <span class="info-label"A.n</span>
                         <span class="info-value" id="previewAccountName">-</span>
                     </div>
 
                     <div class="alert alert-warning" style="margin-top: 20px;">
-                        <span>ℹ️</span>
+                        <span></span>
                         <span>Perubahan akan langsung diterapkan ke seluruh sistem</span>
                     </div>
                 </div>
@@ -194,8 +199,7 @@
 <!-- SCRIPTS (SAMA PERSIS KAYAK DASHBOARD) -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('js/settings.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('js/settings.js') }}"></script>
+
 <script>
 // Update logo sidebar dari database
 async function updateSidebarLogo() {

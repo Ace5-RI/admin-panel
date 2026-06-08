@@ -97,6 +97,10 @@ Route::get('/test-logo', function () {
     ]);
 });
 
+<<<<<<< HEAD
 Route::get('/api/current-user', [UserController::class, 'getCurrentUser']);
 Route::put('/api/user/update', [UserController::class, 'update']);
 Route::delete('/api/user/delete', [UserController::class, 'delete']);
+=======
+Route::resource('accounts', App\Http\Controllers\AccountController::class);
+>>>>>>> 37567aae6bff884bf46c6c95873323d38a9678b3

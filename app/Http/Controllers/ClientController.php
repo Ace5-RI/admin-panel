@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Client;
-use App\Models\Activity;  // ✅ TAMBAHKAN INI
+use App\Models\Activity;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -24,17 +24,14 @@ class ClientController extends Controller
             'email' => 'required|email|unique:clients,email',
             'description' => 'nullable|string',
             'pendapatan' => 'required|numeric|min:0',
-            'mulai' => 'required|date', 
-            'akhir' => 'required|date', 
+            'mulai' => 'required|date',
+            'akhir' => 'required|date',
             'nomer' => 'required|string|max:15',
         ]);
 
         if ($validator->fails()) {
             if ($request->ajax() || $request->wantsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'errors' => $validator->errors()
-                ], 422);
+                return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
             }
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -51,25 +48,21 @@ class ClientController extends Controller
             'status' => 'aktif',
         ]);
 
-        // ✅ LOG: Tambah Klien
-        Activity::create([
-            'type' => 'create',
-            'title' => 'Menambah Klien Baru',
-            'detail' => "Menambahkan klien: {$client->name} ({$client->company})",
-            'user_name' => auth()->user()->name ?? 'System',
-            'user_email' => auth()->user()->email ?? 'system',
-            'status' => 'success',
-            'ip_address' => $request->ip()
-        ]);
+        try {
+            Activity::create([
+                'type' => 'create',
+                'title' => 'Menambah Klien Baru',
+                'detail' => "Menambahkan klien: {$client->name} ({$client->company})",
+                'user_name' => auth()->user()->name ?? 'System',
+                'user_email' => auth()->user()->email ?? 'system',
+                'status' => 'success',
+                'ip_address' => $request->ip()
+            ]);
+        } catch (\Exception $e) {}
 
         if ($request->ajax() || $request->wantsJson()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Klien berhasil ditambahkan!',
-                'data' => $client
-            ], 201);
+            return response()->json(['success' => true, 'message' => 'Klien berhasil ditambahkan!', 'data' => $client], 201);
         }
-
         return redirect()->back()->with('success', 'Klien berhasil ditambahkan!');
     }
 
@@ -77,7 +70,7 @@ class ClientController extends Controller
     {
         $clientId = $request->id ?: $id;
         $client = Client::findOrFail($clientId);
-        $oldName = $client->name;  // ✅ SIMPAN NAMA LAMA
+        $oldName = $client->name;
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -92,10 +85,7 @@ class ClientController extends Controller
 
         if ($validator->fails()) {
             if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'errors' => $validator->errors()
-                ], 422);
+                return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
             }
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -111,23 +101,20 @@ class ClientController extends Controller
             'status' => $request->status,
         ]);
 
-        // ✅ LOG: Edit Klien
-        Activity::create([
-            'type' => 'edit',
-            'title' => 'Mengubah Data Klien',
-            'detail' => "Mengubah data klien: {$oldName} → {$client->name}",
-            'user_name' => auth()->user()->name ?? 'System',
-            'user_email' => auth()->user()->email ?? 'system',
-            'status' => 'success',
-            'ip_address' => $request->ip()
-        ]);
+        try {
+            Activity::create([
+                'type' => 'edit',
+                'title' => 'Mengubah Data Klien',
+                'detail' => "Mengubah data klien: {$oldName} → {$client->name}",
+                'user_name' => auth()->user()->name ?? 'System',
+                'user_email' => auth()->user()->email ?? 'system',
+                'status' => 'success',
+                'ip_address' => $request->ip()
+            ]);
+        } catch (\Exception $e) {}
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Klien berhasil diupdate!',
-            'data' => $client,
-        ]);
-    } 
+        return response()->json(['success' => true, 'message' => 'Klien berhasil diupdate!', 'data' => $client]);
+    }
 
     public function destroy($id)
     {
@@ -136,48 +123,25 @@ class ClientController extends Controller
             $clientName = $client->name;
             $client->delete();
 
-            // ✅ LOG: Hapus Klien
-            Activity::create([
-                'type' => 'delete',
-                'title' => 'Menghapus Klien',
-                'detail' => "Menghapus klien: {$clientName}",
-                'user_name' => auth()->user()->name ?? 'System',
-                'user_email' => auth()->user()->email ?? 'system',
-                'status' => 'warning',    
-                'ip_address' => request()->ip()
-            ]);
+            try {
+                Activity::create([
+                    'type' => 'delete',
+                    'title' => 'Menghapus Klien',
+                    'detail' => "Menghapus klien: {$clientName}",
+                    'user_name' => auth()->user()->name ?? 'System',
+                    'user_email' => auth()->user()->email ?? 'system',
+                    'status' => 'warning',
+                    'ip_address' => request()->ip()
+                ]);
+            } catch (\Exception $e) {}
 
             if (request()->expectsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Data klien berhasil dihapus!'
-                ]);
+                return response()->json(['success' => true, 'message' => 'Data klien berhasil dihapus!']);
             }
             return redirect()->route('klien.index')->with('success', 'Klien berhasil dihapus!');
 
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Klien gagal dihapus!'
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Klien gagal dihapus!'], 500);
         }
-    }
-
-    public function getData()
-    {
-        $clients = Client::orderBy('created_at', 'desc')->get();
-        return response()->json([
-            'success' => true,
-            'data' => $clients
-        ]);
-    }
-
-    public function sendReminder($id)
-    {
-        $client = Client::findOrFail($id);
-        
-        $response = Fonnte::sendMessage($client->phone, 'Halo, ini pesan dari sistem');
-
-        return back()->with('success', 'Pesan Terkirim!');
     }
 }
